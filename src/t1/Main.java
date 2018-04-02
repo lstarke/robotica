@@ -7,25 +7,26 @@ import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 
 public class Main {
-
+	
+	private static final int DENTRO     = 7;
+	private static final int FORA       = 6;		
+	private static final int VELOCIDADE = 300;
+	
+	private static boolean   direita    = false;
+	private static boolean   esquerda   = true;	
+	private static int       valorLuz   = 0;
 	
 	public static void main(String[] args) throws InterruptedException {
 		
-		ColorSensor sensorCor = new ColorSensor(SensorPort.S2);
-		
-		final int DENTRO = 7;
-		final int FORA   = 6;
-		
-		int valorLuz = 0;
+		ColorSensor sensorCor = new ColorSensor(SensorPort.S2);		
 
-		Motor.B.setSpeed(velocidade_Atual);
-		Motor.C.setSpeed(velocidade_Atual);
-		
+		// seta a velovidade que deverá ser utilizada nos motores
+		Motor.B.setSpeed(VELOCIDADE);
+		Motor.C.setSpeed(VELOCIDADE);		
 
 		int cont = 0;
 		int mod  = 0;
 		int cont2 =0;
-
 		
 		while (true) {
 			
@@ -101,14 +102,17 @@ public class Main {
 	private static int grau_90_velocidade_100 = 1900; 
 	private static int distancia_10_velocidade_100= 2300; //10 cm
 	private static int vel_calibragem_100 = 100;
-	private static boolean direita = false;
-	private static boolean esquerda = true;
+	
+	
+	
+	
+	
 	private static int tamanhoRobo = 0;
 	
 	private static int tamanhoObstaculo = 10;
 	private static int direitaContador= 0;
 	private static int esquerdaContador = 0;
-	private static int velocidade_Atual = 300;
+	
 	private static int buraco_Tamanho =10;
 	private static int modificador_curva =20;
 	private static boolean esta_no_buraco = false;
@@ -121,8 +125,8 @@ public class Main {
 	public static void calibragem(){
 		System.out.println("Graux:"+grauX(90));
 		
-		Motor.B.setSpeed(velocidade_Atual);
-		Motor.C.setSpeed(velocidade_Atual);
+		Motor.B.setSpeed(VELOCIDADE);
+		Motor.C.setSpeed(VELOCIDADE);
 		//vira(grauX(90), false);
 		andar(distanciaX(20));
 	
@@ -219,14 +223,14 @@ public class Main {
 	
 	public static int grauX(int grau) {
 		//divide pela a velocidade de teste 100
-		int graux =  (vel_calibragem_100*grau_vel_100(grau))/velocidade_Atual ;
+		int graux =  (vel_calibragem_100*grau_vel_100(grau))/VELOCIDADE ;
 				
 		return graux;
 	}
 	
 	public static int distanciaX(int distancia) {
 		//divide pela a velocidade de teste 100
-		int distanciax =  (vel_calibragem_100* Distancia_vel_100(distancia))/velocidade_Atual ;
+		int distanciax =  (vel_calibragem_100* Distancia_vel_100(distancia))/VELOCIDADE ;
 		
 		return distanciax;
 		
