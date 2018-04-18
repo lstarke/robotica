@@ -239,7 +239,7 @@ public class Main {
 			}
 			
 		}
-		vira(grauX(45), false);//vira para esquerda
+		vira(grauX(4-5), false);//vira para esquerda
 		
 
 		/*while(true){
