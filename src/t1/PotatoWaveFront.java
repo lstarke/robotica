@@ -1,5 +1,7 @@
 package t1;
 
+import java.util.ArrayList;
+
 public class PotatoWaveFront {
 
 	//@franciscaedyrXavier
@@ -27,6 +29,15 @@ public class PotatoWaveFront {
 				 {0,0,0,0,-1,0,0},
 				 {0,0,0,0,-1,0,0},
 				 {0,0,0,0,0,0,0}};*/
+		int [][]matrizMapX = 
+			  {{-1,2,0 ,0,0,0,0,0,0,0,},
+				{-1,0,0 ,0,0,0,0,0,0,0,},
+				{-1,-1,-1,-1,-1,0,0,0,0,0,},
+				{0,0,-1,-1,-1,0,0,0,-1,0,},
+				{0,0,-1,-1,-1,0,0,-1, 0,-1,},
+				{-1,-1,-1,0,0,0,0,0,-1,0,},
+				{0,0,0,0,0,0,0,0,0,0,},
+				{0,0,0,0,0,0,0,0,0,0,}};
 		/*int [][]matrizMapX =  {{0,0,0 ,0,0,0,0,0,0,0,},
 				{0,0,0 ,0,0,0,0,0,0,0,},
 				{0,0,-1,-1,-1,0,0,0,0,0,},
@@ -34,15 +45,8 @@ public class PotatoWaveFront {
 				{0,0,-1,-1,-1,0,0,0, 2,0,},
 				{0,0,-1,0,0,0,0,0,0,0,},
 				{0,-1,0,0,0,0,0,0,0,0,},
-				{-1,0,0,0,0,0,0,0,0,0,}};*/
-		int [][]matrizMapX =  {{0,0,0 ,0,0,0,0,0,0,0,},
-				{0,0,0 ,0,0,0,0,0,0,0,},
-				{0,0,-1,-1,-1,0,0,0,0,0,},
-				{0,0,-1,-1,-1,0,0,0,0,0,},
-				{0,0,-1,-1,-1,0,0,0, 2,0,},
-				{0,0,-1,0,0,0,0,0,0,0,},
-				{0,-1,0,0,0,0,0,0,0,0,},
 				{-1,0,0,0,0,0,0,0,0,0,}};
+				*/
 
 		
 		matrizMap = matrizMapX;
@@ -51,9 +55,10 @@ public class PotatoWaveFront {
 	public static int[] procuraObjetivo(int[][] matriz) {
 		int[] objetivo = {-1,-1};
 		int sizeI = matriz.length;
-		int SizeJ =matriz[0].length;
+		int SizeJ =matriz[0].length;		
 		//System.out.println(sizeI);
 		//System.out.println(SizeJ);
+		
 		
 		for(int i = 0; i < sizeI; i++) {
 			for(int j = 0; j < SizeJ; j++) {
@@ -81,6 +86,7 @@ public class PotatoWaveFront {
 		int sizeI = matriz.length;
 		int sizeJ = matriz[0].length;
 		//
+		
 		//int valor = matriz[objetivoI][objetivoJ];
 		for(int i = objetivoI, negI= objetivoI; i < sizeI || negI >=0; i++, negI--) {				
 			for(int j = objetivoJ, negJ= objetivoJ; j < sizeJ || negJ >=0; j++, negJ--) {			
@@ -109,11 +115,19 @@ public class PotatoWaveFront {
 				}					
 			}				
 		}
-		//metodo em teste preencheZeros(matriz);
+		imprimeMatriz(matriz);		
+		preencheZeros(matriz);
+		
+		/*for(int i = 0; i< sizeI ; i++ ) {
+			for(int j = 0; j< sizeJ ; j++ ) {	
+				if(matriz[i][j] == 0) {
+				indentificapontoInalcacavel(i, j, matriz);
+				}
+			}
+		}*/
 		
 	
 		return matriz;
-		
 						
 
 		
@@ -165,106 +179,233 @@ public class PotatoWaveFront {
 	private static int[][] preencheZeros( int [][]matriz) {
 		int sizeI = matriz.length;
 		int sizeJ = matriz[0].length;
+		boolean existeZeros = false;
+		int cont = 0;
 		
-		for(int i = 0 ; i< sizeI ; i++) {
-			for(int j = 0; j< sizeJ; j++) {
-				
-				preencheZerosXR(i, j, matriz);
+		do {
+			existeZeros = false; // tem de considerar que não tem nenhum para poder reiniciar a verificação
+			for(int i = 0 ; i< sizeI ; i++) {
+				for(int j = 0; j< sizeJ; j++) {
+					
+					if(matriz[i][j]  == Mapa.CAMINHO.id) {
+						 if(preencheZerosBuscaValor(i, j, matriz) == 0) { // se depois de tratar continua zero
+							 if(cont == (sizeI * sizeJ)) {
+								  matriz[i][j] = -1;
+							 }else {								 
+							 existeZeros = true;
+							 }
+							 
+						 }else{
+							 if(!existeZeros) { //se  não existe nenhum zero até então  i
+								 //System.out.println(matriz[i][j]);
+								 existeZeros = false;
+							 }
+							
+						 }
+						
+					}else {
+						 if(!existeZeros) { //se  não existe nenhum zero até então  i
+							 existeZeros = false;
+						 }
+					}
+					
+				}
 			}
-		}
+			cont++;
+			//imprimeMatriz(matriz);
+		}while(existeZeros);		
+		
 		return matriz;
 	
 	}
-	/** Verefica e corrige os quadrantes na direção=  direita baixo
-	 * 
-	 * @param i
-	 * @param j
-	 * @param matriz
-	 */
-	private static int preencheZerosXR(int i, int j, int [][]matriz) {
+	/*
+	private static void indentificapontoInalcacavel(int i, int j, int [][]matriz) {
+		ArrayList<int[]> caminho = new ArrayList<>();
+		ArrayList<int[]> alterado= new ArrayList<>();
 		int sizeI = matriz.length;
 		int sizeJ = matriz[0].length;
-		int valor = 0;
+		boolean corrigir = false;
+		int valor;
+		int positionx[] = {i,j} ;
+		int position[] = new int[2];
+		int positionInicial[] = {i,j};
+		caminho.add(positionx);
+		alterado.add(positionInicial);
 		
-		if(matriz[i][j] == Mapa.CAMINHO.id) {
-			
-			if(i+1 < sizeI) {
-				if(matriz[i+1][j] > 0 ) { // maior que zero par anão pegar os obstaculos
-					valor = matriz[i+1][j]+1;
-					matriz[i][j] =  valor ;
-				}else {
-					if(matriz[i+1][j] == Mapa.OBSTACULO.id) {					
-					valor = 0;
-					//valor = preencheZerosXL(i-1, j, matriz);
+		
+		matriz[i][j] = -2;
+	
+		boolean volta = true;
+		boolean mudaDirecao = false;
+		boolean saida = false;
+		
+		//for(int ix = i; ix < sizeI ; ix++ ) {
+		//	for(int jx = j; jx < sizeJ ; jx++ ) {
+		//System.out.println("batata1");
+				//direita
+				while(positionInicial != position && saida == false ) {
+					mudaDirecao = false;
+					saida = false;
+					//System.out.println("batata2");
+					//position = new int[2];					
+					position = caminho.get(caminho.size()-1);
+					i = position[0] ;
+					j = position[1] ;
+					
+					//System.out.println("inicioa:" +  i +", "+ j);
+					
+				if(i+1 < sizeI) {
+					if(matriz[i+1][j]  == Mapa.OBSTACULO.id || matriz[i+1][j]  == -2) {
+					 mudaDirecao = true;
 					}else {
-					 valor = preencheZerosXR(i+1, j ,matriz)+1;
-					 matriz[i][j] =  valor;
+					if(matriz[i+1][j]  == Mapa.CAMINHO.id) { 
+					 matriz[i][j] = -2;					 
+					 position[0] = i+1;
+					 position[1] = j;					 
+					 caminho.add(position);
+					}else {
+						saida = true;
 					}
-				}	
-			// se  o valor continua 0 verifica par ao J
-			if(j+1 < sizeJ && valor == 0) {				
+					
+					}
+					
+				}else {
+					mudaDirecao = true;
+				}
+				//baixo
+				if(mudaDirecao){					
+					if(j+1 < sizeJ) {
+						if(matriz[i][j+1]  == Mapa.OBSTACULO.id || matriz[i+1][j] == -2) {
+						 mudaDirecao = true;
+						}else {
+						if(matriz[i][j+1]  == Mapa.CAMINHO.id) { 
+							 matriz[i][j] = -2;									
+							 position[0] = i;
+							 position[1] = j+1;							
+							 caminho.add(position);
+						}else {
+							saida = true;
+						}
+						}
+					}else {
+						mudaDirecao = true;
+					}
+		
+				}
+				//esqueda
+				if(mudaDirecao){
+					
+					if(i-1 >=0) {
+						if(matriz[i-1][j]  == Mapa.OBSTACULO.id | matriz[i+1][j] == -2) {
+						 mudaDirecao = true;
+						}else {
+							if(matriz[i-1][j]  == Mapa.CAMINHO.id) { 
+							 matriz[i][j] = -2;									 
+							 position[0] = i-1;
+							 position[1] = j;							
+							 caminho.add(position);
+							}else {
+								saida = true;
+							}
+							}
+					}else {
+						mudaDirecao = true;
+					}
+						
+					
+				}
+				//cima
+				if(mudaDirecao){
+					
+					if(j-1 >= 0) {
+						if(matriz[i][j-1]  == Mapa.OBSTACULO.id || matriz[i][j-1]  == -2) {
+						volta = true;
+						}else {
+							if(matriz[i-1][j]  == Mapa.CAMINHO.id){
+							 
+							 matriz[i][j] = -2;							 
+							 position[0] = i-1;
+							 position[1] = j;
+							 caminho.add(position);
+							}else {
+								saida = true;
+							}
+						}
+						
+					}else {
+						matriz[i][j] = -2;
+						position = caminho.get(caminho.size()-1);						
+						volta = true;
+					}
 				
-				if(matriz[i][j+1] > 0 ) { // maior que zero par anão pegar os obstaculos
-					valor = matriz[i][j+1] +1;
-					matriz[i][j] =  valor ;
-				}else {
-					if(matriz[i][1+j] == Mapa.OBSTACULO.id) {					
-						valor = 0;
-						//valor = preencheZerosXL(i, j, matriz);
-					}else {
-					valor = preencheZerosXR(i, j+1 ,matriz)+1;
-					matriz[i][j] =  valor;
-					}
+					
+				}
+				//System.out.println("AAA");
+				//imprimeMatriz(matriz);
+				//System.out.println("AA");
+		
+				
 				}
 				
-			}
-			
-			}
-			//System.out.println("");
-			//imprimeMatriz(matriz);
-		}
-		return valor;
-		
+				for(int[] p : alterado){
+					System.out.println("saida:" +saida +"|"+  p[0] +", "+ p[1]);	
+					if(saida) {
+						
+						int iz =p[0];
+						int jz =p[1];
+						matriz[iz][jz] = 0; 
+						//imprimeMatriz(matriz);
+					}else {
+						int iz =p[0];
+						int jz =p[1];
+						matriz[ iz][jz] = -1;
+					}
+						
+					
+				}
+				///System.out.println("BBB");
+				//imprimeMatriz(matriz);
+				//System.out.println("BBB");
+	
 	}
+	*/
 	
-	private static int preencheZerosXL(int i, int j, int [][]matriz) {
+	private static int preencheZerosBuscaValor(int i, int j, int [][]matriz) {
 		int sizeI = matriz.length;
 		int sizeJ = matriz[0].length;
 		int valor = 0;
-	
-		if(j-1 >= 0 ) {				
-			
-			if(matriz[i][j-1] > 0 ) { // maior que zero par anão pegar os obstaculos
-				valor = matriz[i][j-1] +1;
-				matriz[i][j] =  valor ;
-			}else {
-				if(matriz[i][j-1] == Mapa.OBSTACULO.id) {					
-					valor = 0;
-				}else {
-					valor = preencheZerosXL(i,j-1,matriz);
-				//matriz[i][j] =  valor;
-				}
-			}
-		}
 		
-		if(i-1 >= 0 && valor == 0) {				
-			
-			if(matriz[i-1][j] > 0 ) { // maior que zero par anão pegar os obstaculos
-				valor = matriz[i-1][j] +1;
-				matriz[i][j] =  valor ;
-			}else {
-				if(matriz[i-1][j] == Mapa.OBSTACULO.id) {					
-					valor = 0;
-				}else {
-				valor = preencheZerosXL(i-1, j ,matriz)+1;
-				//matriz[i][j] =  valor;
-				}
+		if(i+1 < sizeI) {
+			if(matriz[i+1][j]  != Mapa.OBSTACULO.id  && matriz[i+1][j] != Mapa.CAMINHO.id  ) {
+			valor = matriz[i+1][j] +1;	
+			matriz[i][j] = valor;
 			}
 		}
+		if(j+1 < sizeJ) {
+			if(matriz[i][j+1]  != Mapa.OBSTACULO.id && matriz[i][j] == Mapa.CAMINHO.id  && matriz[i][j+1] != Mapa.CAMINHO.id ) {
+				valor = matriz[i][j+1] +1;	
+				matriz[i][j] = valor;
+				}		
+		}
+		if(i-1 >= 0) {
+			if(matriz[i-1][j]  != Mapa.OBSTACULO.id && matriz[i][j] == Mapa.CAMINHO.id  && matriz[i-1][j] != Mapa.CAMINHO.id ) {
+				valor = matriz[i-1][j] +1;	
+				matriz[i][j] = valor;
+				}			
+		}
+		if(j-1 >= 0) {
+			if(matriz[i][j-1]  != Mapa.OBSTACULO.id && matriz[i][j] == Mapa.CAMINHO.id && matriz[i][j-1] != Mapa.CAMINHO.id ) {
+				valor = matriz[i][j-1] +1;	
+				matriz[i][j] = valor;
+				}			
+		}
+		//imprimeMatriz(matriz);
 		return valor;
+		
 	}
 	
 	public static void imprimeMatriz(int[][] m){
+		 System.out.println("_________________");
 	    try{
 	        int rows = m.length;
 	        int columns = m[0].length;
