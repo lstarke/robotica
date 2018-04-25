@@ -20,6 +20,7 @@ public class Main2 {
 
 		Motor.B.setSpeed(velocidade_Atual);
 		Motor.C.setSpeed(velocidade_Atual);
+		String batta;
 		
 
 		int cont = 0;

@@ -4,7 +4,7 @@ import lejos.nxt.Button;
 import lejos.nxt.Motor;
 
 
-public class potatoManager {
+public class PotatoManager {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -23,10 +23,10 @@ public class potatoManager {
 	private static int distancia_10_MotorRotate_100 = 200; 
 	private static int rotate_Calibragem_100 = 100;	
 	
-	public static enum Direcao {
+	/*public static enum EnumDirecao {
 	       DIREITA,ESQUERDA,FRENTE,TRAZ;
 	} 
-	
+	*/
 	
 	
 	public static void calibragemTeste() throws InterruptedException {
@@ -133,7 +133,7 @@ public class potatoManager {
 	/** A partir de um ponto parado o Bot vira contadorX para a direita se true,
 	ou contadorx para esquerda se direita  for false
 	*/
-	public static void vira (int motorRotate, Direcao direcao) {
+	public static void vira (int motorRotate, EnumDirecao direcao) {
 			
 		switch (direcao) {
 			case DIREITA:
@@ -180,11 +180,62 @@ public class potatoManager {
 	 * @return
 	 */
 	
-	public static int dintanceToMotorRotate(int distance){
+	public static int dintanceToMotorRotate(int distancia){
 	
-		int motorRotate = (distancia_10_MotorRotate_100 * distance ) / 10;
+		int motorRotate = (distancia_10_MotorRotate_100 * distancia ) / 10;
 		return motorRotate ;
 	}
+	
+	/**
+	 * Move para tal direção em relação a posição atual do robo
+	 * @param direcao
+	 * @param distancia
+	 */
+	public static void Move4d(EnumDirecao direcao, int distancia) {
+		
+		switch (direcao) {
+		
+		case FRENTE:
+			andar(distancia);			
+			break;
+		case TRAZ:
+			vira(180, EnumDirecao.DIREITA);
+			andar(distancia);
+			break;
+			
+		case DIREITA:
+			vira(90, EnumDirecao.DIREITA);
+			andar(distancia);
+			
+		case ESQUERDA:
+			vira(90, EnumDirecao.ESQUERDA );
+			andar(distancia);
+
+		default:
+			break;
+		}
+		
+	}
+	
+	/**
+	 * Rotaciona o Robo 90 graus * valor direcional
+	 * ex:
+	 *  0, não rotaciona	 *  
+	 *  1 , rotaciona 90 , 90 graus para direita
+	 *  2 , rotaciona 180, 180 graus para direita
+	 *  -1 , rotaciona -90 , 90 graus para esquerda
+	 *  -2 , rotaciona -180, 180 graus para esquerda
+	 * @param valorDirecional
+	 */
+	
+	public static void rotacaoDirecionada4d(int valorDirecional) {		
+		
+		vira(90 * valorDirecional, EnumDirecao.DIREITA);		
+		
+	}
+	
+	
+	
 
 
 
