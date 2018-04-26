@@ -9,15 +9,46 @@ import lejos.util.Matrix;
 public class PotatoWaveFront {
 
 	// @franciscaedyrXavier
+	
+	private static PotatoManager pM = new PotatoManager();
+	private static PotatoWaveFront pWF = new PotatoWaveFront();
+	private static EnumDirecao direcaoAtual = EnumDirecao.FRENTE;
+	private static int posicaoRoboI = 1;
+	private static int posicaoRoboJ = 9;
+	private static int objetivoI, objetivoJ;	
+	private static int[][] matrizNavegacao; 
+	private static ArrayList<int[]> caminho;
+	//| |0|
+		//|3|x|1| = 2 frente, 1 = direita; 3 = esquerda 0 = tráz;
+		//| |2|
+	
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
 
-		matrizEntrada();
-		// imprimeMatriz(matrizMap);
-		// int objetivo[] = procuraObjetivo(matrizMap);
-		// waveFront(objetivo, matrizMap);
-		imprimeMatriz(waveFront2(matrizMap));
+		
+		matrizNavegacao  =waveFront2(matrizEntrada());		
+		System.out.println(imprimeMatrizEmString(matrizNavegacao));
+		System.out.println(imprimeRoboEmString(matrizNavegacao, posicaoRoboI, posicaoRoboJ, direcaoAtual));
+		
+		int [] posicao = procuraObjetivo(matrizNavegacao);
+		objetivoI = posicao[0];
+		objetivoJ = posicao[1];
+		
+		caminho =  pWF.menorCaminho(matrizNavegacao, posicaoRoboI, posicaoRoboJ);
+		
+		pM.andaCaminho(caminho, direcaoAtual, 10,  posicaoRoboI, posicaoRoboJ);
+		
+		/*for(int[] p : caminho) {
+			//System.out.print(p[0]+ "," + p[1]+"; ");
+			Thread.sleep(500);
+			direcaoAtual = PotatoWaveFront.vira(matrizNavegacao, p[0], p[1], direcaoAtual);
+			Thread.sleep(500);
+			System.out.println(PotatoWaveFront.imprimeRoboEmString(matrizNavegacao, p[0], p[1], direcaoAtual));
+		}*/
+		
+		
+		
 
 	}
 
@@ -468,14 +499,14 @@ public class PotatoWaveFront {
 	 * @param matriz
 	 * @param PosicaoI
 	 * @param posicaoJ
-	 * @param direcaoAtual
+	 * @param direcaoRobo
 	 * @return
 	 */
 
-	public static String imprimeRoboEmString(int[][] matriz, int PosicaoI, int posicaoJ, EnumDirecao direcaoAtual) {
+	public static String imprimeRoboEmString(int[][] matriz, int PosicaoI, int posicaoJ, EnumDirecao direcaoRobo) {
 		String robo = "V";
 
-		switch (direcaoAtual) {
+		switch (direcaoRobo) {
 		case FRENTE:
 			robo = "V";
 			break;
@@ -515,6 +546,8 @@ public class PotatoWaveFront {
 		// batata.replace ~~ não funciona
 
 	}
+	
+	
 
 	// @franciscaedyrXavier
 }

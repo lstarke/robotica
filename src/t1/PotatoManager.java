@@ -1,5 +1,7 @@
 package t1;
 
+import java.util.ArrayList;
+
 import lejos.nxt.Button;
 import lejos.nxt.Motor;
 
@@ -215,6 +217,75 @@ public class PotatoManager {
 			break;
 		}
 		
+	}
+	
+	public static EnumDirecao direcaoParaIr(int posicaoAtualI, int posicaoAtualJ, int posicaoProximaI, int posicaoProximaJ){
+
+		EnumDirecao direcaoParaIr = null;
+
+		if(posicaoAtualI > posicaoProximaI){
+
+			direcaoParaIr = EnumDirecao.TRAZ;
+
+		}
+
+		if(posicaoAtualI < posicaoProximaI){
+
+			direcaoParaIr = EnumDirecao.FRENTE;
+
+		}
+
+		if(posicaoAtualJ > posicaoProximaJ){
+
+			direcaoParaIr = EnumDirecao.ESQUERDA;
+
+		}
+
+		if(posicaoAtualJ < posicaoProximaI){
+
+			direcaoParaIr = EnumDirecao.DIREITA;
+
+		}
+
+		
+
+		return direcaoParaIr;
+
+		
+
+	}
+
+	
+
+	public static void andaCaminho(ArrayList<int[]> caminho,EnumDirecao direcaoRobo, int distanciaMapa, int posicaoRoboI, int posicaoRoboJ){
+
+		//direcaoAtual = EnumDirecao.FRENTE;
+		////Adicionar posicao inical do robo no caminho
+
+		//int posicaoAtualI = 0; 
+		//int posicaoAtualJ = 0;
+		int posicaoProximaI = 0;
+	    int posicaoProximaJ = 0;
+	    int valoDirecional = 0;
+	   
+		for(int[] p : caminho) {
+
+			
+			posicaoProximaI = p[0];
+			posicaoProximaJ = p[1];		
+			
+			EnumDirecao direcao= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
+			valoDirecional  =  direcao.valorDirecional(direcaoRobo.valor);	
+
+			rotacaoDirecionada4d(valoDirecional);
+
+			andar(distanciaMapa);
+
+
+		}
+
+		
+
 	}
 	
 	/**
