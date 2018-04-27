@@ -11,8 +11,7 @@ public class PotatoManager {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-	}
-	
+	}	
 	
 	
 	/**
@@ -267,6 +266,8 @@ public class PotatoManager {
 		int posicaoProximaI = 0;
 	    int posicaoProximaJ = 0;
 	    int valoDirecional = 0;
+	    
+	   System.out.println( posicaoRoboI +"," +  posicaoRoboJ + "-" + direcaoRobo);
 	   
 		for(int[] p : caminho) {
 
@@ -274,12 +275,15 @@ public class PotatoManager {
 			posicaoProximaI = p[0];
 			posicaoProximaJ = p[1];		
 			
-			EnumDirecao direcao= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
+			EnumDirecao direcao= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);			
+		
 			valoDirecional  =  direcao.valorDirecional(direcaoRobo.valor);	
+			//rotacaoDirecionada4d(valoDirecional);
+			System.out.println( "Rotaciona:" + valoDirecional * 90);			
 
-			rotacaoDirecionada4d(valoDirecional);
-
-			andar(distanciaMapa);
+			//andar(distanciaMapa);
+			System.out.println( "Andar:" + distanciaMapa );
+			System.out.println(  p[0] +"," + p[1]+ "-" + direcao);
 
 
 		}

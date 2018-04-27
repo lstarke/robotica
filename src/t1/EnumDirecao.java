@@ -5,8 +5,7 @@ public enum EnumDirecao {
 	TRAZ(0),	
 	DIREITA(1),
 	FRENTE(2),	
-	ESQUERDA(3);
-	
+	ESQUERDA(3);	
 	
 	//| |0|
 	//|3|x|1|
@@ -19,6 +18,11 @@ public enum EnumDirecao {
 	}
 	
 	public int valorDirecional(int valorAtual) {
-		return valorAtual - valor;
+		//if(Math.abs(valorAtual - valor) >= 3) {
+		//	return 4 - Math.abs((valorAtual - valor));
+		//}else {
+		
+			return valorAtual - valor ;
+		//}
 	}
 }

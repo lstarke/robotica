@@ -10,11 +10,11 @@ public class PotatoWaveFront {
 
 	// @franciscaedyrXavier
 	
-	private static PotatoManager pM = new PotatoManager();
+	//private static PotatoManager pM = new PotatoManager();
 	private static PotatoWaveFront pWF = new PotatoWaveFront();
-	private static EnumDirecao direcaoAtual = EnumDirecao.FRENTE;
-	private static int posicaoRoboI = 1;
-	private static int posicaoRoboJ = 9;
+	private static EnumDirecao direcaoAtual = EnumDirecao.TRAZ;
+	private static int posicaoRoboI;
+	private static int posicaoRoboJ;
 	private static int objetivoI, objetivoJ;	
 	private static int[][] matrizNavegacao; 
 	private static ArrayList<int[]> caminho;
@@ -25,29 +25,44 @@ public class PotatoWaveFront {
 
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
-
+		
 		
 		matrizNavegacao  =waveFront2(matrizEntrada());		
 		System.out.println(imprimeMatrizEmString(matrizNavegacao));
-		System.out.println(imprimeRoboEmString(matrizNavegacao, posicaoRoboI, posicaoRoboJ, direcaoAtual));
 		
-		int [] posicao = procuraObjetivo(matrizNavegacao);
-		objetivoI = posicao[0];
-		objetivoJ = posicao[1];
-		
-		caminho =  pWF.menorCaminho(matrizNavegacao, posicaoRoboI, posicaoRoboJ);
-		
-		pM.andaCaminho(caminho, direcaoAtual, 10,  posicaoRoboI, posicaoRoboJ);
-		
-		/*for(int[] p : caminho) {
-			//System.out.print(p[0]+ "," + p[1]+"; ");
-			Thread.sleep(500);
-			direcaoAtual = PotatoWaveFront.vira(matrizNavegacao, p[0], p[1], direcaoAtual);
-			Thread.sleep(500);
-			System.out.println(PotatoWaveFront.imprimeRoboEmString(matrizNavegacao, p[0], p[1], direcaoAtual));
-		}*/
-		
-		
+		int [] robo = procuraRobo(matrizNavegacao);
+		if(robo[0] != -1 && robo[1] != -1) { 
+			posicaoRoboI =  robo[0];
+			posicaoRoboJ =  robo[1];
+			System.out.println("PosicaoRobo:"  + robo[0]+", " + robo[1]);
+			
+			//System.out.println(imprimeRoboEmString(matrizNavegacao, posicaoRoboI, posicaoRoboJ, direcaoAtual));
+			
+			int [] posicao = procuraObjetivo(matrizNavegacao);
+			if(posicao[0] != -1 && posicao[1] != -1) {
+				objetivoI = posicao[0];
+				objetivoJ = posicao[1];
+				System.out.println("Objetivo:"  + posicao[0]+", " + posicao[1]+"\n");
+				
+				caminho =  pWF.menorCaminho(matrizNavegacao, posicaoRoboI, posicaoRoboJ);				
+				PotatoManager.andaCaminho(caminho, direcaoAtual, 10,  posicaoRoboI, posicaoRoboJ);
+				
+				/*for(int[] p : caminho) {
+					//System.out.print(p[0]+ "," + p[1]+"; ");
+					Thread.sleep(500);
+					direcaoAtual = PotatoWaveFront.vira(matrizNavegacao, p[0], p[1], direcaoAtual);
+					Thread.sleep(500);
+					System.out.println(PotatoWaveFront.imprimeRoboEmString(matrizNavegacao, p[0], p[1], direcaoAtual));
+				}*/
+				
+			}else {
+				System.out.println("Posição do objetivo não encontrado!");
+			}			
+			
+		}else {
+			System.out.println("Robo não encontrado!");
+		}
+			
 		
 
 	}
@@ -66,10 +81,15 @@ public class PotatoWaveFront {
 		 * int [][]matrizMapX = {{0,0,0,0,0,0,0}, {0,0,0,0,-1,-1,-1}, {0,0,0,0,-1,0,0},
 		 * {0,0,2,0,-1,-1,0}, {0,0,0,0,-1,0,0}, {0,0,0,0,-1,0,0}, {0,0,0,0,0,0,0}};
 		 */
-		int[][] matrizMapX = { { -1, 2, 0, 0, 0, 0, 0, 0, 0, 0, }, { -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
-				{ -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, }, { 0, 0, -1, -1, -1, 0, 0, 0, -1, 0, },
-				{ 0, 0, -1, -1, -1, 0, 0, -1, 0, -1, }, { -1, -1, -1, 0, 0, 0, 0, 0, -1, 0, },
-				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, } };
+		int[][] matrizMapX = {
+				{ -1, 0, 0, 0, 0, 0, 0, 0, 0, 2, },
+				{ -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, },
+				{ -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, },
+				{ 0, 0, -1, -1, -1, 0, 0, 0, -1, 0, },
+				{ 0, 0, -1, -1, -1, 0, 0, -1, 0, -1, },
+				{ -1, -1, -1, 0, 0, 0, 0, 0, -1, 0, },
+				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, },
+				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, } };
 		/*
 		 * int [][]matrizMapX = {{0,0,0 ,0,0,0,0,0,0,0,}, {0,0,0 ,0,0,0,0,0,0,0,},
 		 * {0,0,-1,-1,-1,0,0,0,0,0,}, {0,0,-1,-1,-1,0,0,0,0,0,}, {0,0,-1,-1,-1,0,0,0,
@@ -92,6 +112,29 @@ public class PotatoWaveFront {
 			for (int j = 0; j < SizeJ; j++) {
 
 				if (matriz[i][j] == Mapa.OBJETIVO.id) {
+					objetivo[0] = i;
+					objetivo[1] = j;
+				}
+
+			}
+
+		}
+		// System.out.println(objetivo[0]+","+objetivo[1]);
+
+		return objetivo;
+	}
+	
+	public static int[] procuraRobo(int[][] matriz) {
+		int[] objetivo = { -1, -1 };
+		int sizeI = matriz.length;
+		int SizeJ = matriz[0].length;
+		// System.out.println(sizeI);
+		// System.out.println(SizeJ);
+
+		for (int i = 0; i < sizeI; i++) {
+			for (int j = 0; j < SizeJ; j++) {
+
+				if (matriz[i][j] == Mapa.ROBO.id) {
 					objetivo[0] = i;
 					objetivo[1] = j;
 				}
@@ -168,7 +211,8 @@ public class PotatoWaveFront {
 		int sizeI = matriz.length;
 		int sizeJ = matriz[0].length;
 
-		if (matriz[i][j] > 0) {
+		//if (matriz[i][j] > 1) {
+		if (matriz[i][j] != Mapa.CAMINHO.id && matriz[i][j] != Mapa.OBSTACULO.id && matriz[i][j] != Mapa.ROBO.id) {
 			if (j + 1 < sizeJ) {
 				if (matriz[i][j + 1] == Mapa.CAMINHO.id) {
 					matriz[i][j + 1] = valor;
@@ -359,6 +403,7 @@ public class PotatoWaveFront {
 		return matriz;
 	}
 
+	
 	public enum Mapa {
 		CAMINHO(0), OBJETIVO(2), OBSTACULO(-1), ROBO(1);
 		private int id;
@@ -422,12 +467,21 @@ public class PotatoWaveFront {
 
 	}
 
+	/**
+	 * Retorna um Array lista com o menor caminho da matriz tratada pelo o wavefront
+	 * @param matriz tratada pelo waveFront
+	 * @param posicaoI
+	 * @param posicaoJ
+	 * @return
+	 */
 	public ArrayList<int[]> menorCaminho(int[][] matriz, int posicaoI, int posicaoJ) {
 		int sizeI = matriz.length;
 		int sizeJ = matriz[0].length;
 		ArrayList<int[]> caminho = new ArrayList<>();
 		int i = posicaoI;
 		int j = posicaoJ;
+		///para se o caminho não for definido  não entrar em loop
+		int contadoCaminho = 0;
 
 		do {
 			
@@ -435,8 +489,8 @@ public class PotatoWaveFront {
 			int menor = Integer.MAX_VALUE;
 
 			// verifica baixo
-			if (posicaoI + 1 > sizeI) {
-				if (menor > matriz[posicaoI + 1][posicaoJ] && matriz[posicaoI + 1][posicaoJ] != Mapa.OBSTACULO.id ) {
+			if (posicaoI + 1 <= sizeI) {
+				if (menor > matriz[posicaoI + 1][posicaoJ] && matriz[posicaoI + 1][posicaoJ] != Mapa.OBSTACULO.id  && matriz[posicaoI + 1][posicaoJ] != Mapa.ROBO.id ) {
 					//System.out.println("baixo");
 					menor = matriz[posicaoI + 1][posicaoJ];
 					i = posicaoI+1;
@@ -447,7 +501,7 @@ public class PotatoWaveFront {
 
 			// verifica eCima
 			if (posicaoI - 1 >= 0) {
-				if (menor > matriz[posicaoI - 1][posicaoJ]  && matriz[posicaoI - 1][posicaoJ] != Mapa.OBSTACULO.id) {
+				if (menor > matriz[posicaoI - 1][posicaoJ]  && matriz[posicaoI - 1][posicaoJ] != Mapa.OBSTACULO.id  && matriz[posicaoI - 1][posicaoJ] != Mapa.ROBO.id) {
 					//System.out.println("Cima");
 					menor = matriz[posicaoI - 1][posicaoJ];
 					i = posicaoI-1;
@@ -457,8 +511,10 @@ public class PotatoWaveFront {
 
 			}
 			// verifica direita
-			if (posicaoJ + 1 > sizeJ) {				
-				if (menor > matriz[posicaoI][posicaoJ + 1]  && matriz[posicaoI ][posicaoJ +1] != Mapa.OBSTACULO.id) {
+			//System.out.println((posicaoJ+1) +"<="+sizeJ+"|"+ menor);
+			if (posicaoJ + 1 <= sizeJ) {
+				//System.out.println("EntrouDireita");
+				if (menor > matriz[posicaoI][posicaoJ + 1]  && matriz[posicaoI ][posicaoJ +1] != Mapa.OBSTACULO.id  && matriz[posicaoI][posicaoJ +1] != Mapa.ROBO.id) {
 					//System.out.println("direita");
 					menor = matriz[posicaoI][posicaoJ + 1];
 					i = posicaoI;
@@ -470,7 +526,7 @@ public class PotatoWaveFront {
 
 			// verifica esquerda
 			if (posicaoJ - 1 >= 0) {				
-				if (menor > matriz[posicaoI][posicaoJ - 1] && matriz[posicaoI ][posicaoJ -1] != Mapa.OBSTACULO.id) {
+				if (menor > matriz[posicaoI][posicaoJ - 1] && matriz[posicaoI ][posicaoJ -1] != Mapa.OBSTACULO.id  && matriz[posicaoI ][posicaoJ -1] != Mapa.ROBO.id) {
 					//System.out.println("esquerda");
 					menor = matriz[posicaoI][posicaoJ - 1];
 					i = posicaoI;
@@ -484,9 +540,11 @@ public class PotatoWaveFront {
 			posicaoI = i;
 			posicaoJ = j;
 			//System.out.print(i+ "," + j+"; ");
+			
+			contadoCaminho++;
 
 			
-		} while (matriz[i][j] != Mapa.OBJETIVO.id);
+		} while (matriz[i][j] != Mapa.OBJETIVO.id && contadoCaminho < (sizeI*sizeJ));
 
 
 		return caminho;
@@ -494,7 +552,7 @@ public class PotatoWaveFront {
 	}
 
 	/**
-	 * Para usar na simulação
+	 * Defini imagem do robo no mapa para usar nos testes
 	 * 
 	 * @param matriz
 	 * @param PosicaoI
