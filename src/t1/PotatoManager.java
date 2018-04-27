@@ -240,7 +240,7 @@ public class PotatoManager {
 
 		}
 
-		if(posicaoAtualJ < posicaoProximaI){
+		if(posicaoAtualJ < posicaoProximaJ){
 
 			direcaoParaIr = EnumDirecao.DIREITA;
 
@@ -278,12 +278,15 @@ public class PotatoManager {
 			EnumDirecao direcao= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);			
 		
 			valoDirecional  =  direcao.valorDirecional(direcaoRobo.valor);	
-			//rotacaoDirecionada4d(valoDirecional);
+		//	rotacaoDirecionada4d(valoDirecional);
 			System.out.println( "Rotaciona:" + valoDirecional * 90);			
 
 			//andar(distanciaMapa);
 			System.out.println( "Andar:" + distanciaMapa );
 			System.out.println(  p[0] +"," + p[1]+ "-" + direcao);
+			
+			posicaoRoboI = posicaoProximaI;
+			posicaoRoboJ = posicaoProximaJ;
 
 
 		}

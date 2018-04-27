@@ -18,11 +18,20 @@ public enum EnumDirecao {
 	}
 	
 	public int valorDirecional(int valorAtual) {
-		//if(Math.abs(valorAtual - valor) >= 3) {
-		//	return 4 - Math.abs((valorAtual - valor));
-		//}else {
-		
-			return valorAtual - valor ;
-		//}
+		if(valor - valorAtual  == 3) {
+			//System.out.println(valorAtual);
+			//System.out.println(valor);
+			return -1 ;
+		}else {
+			if(valor - valorAtual  == -3) {
+				//System.out.println(valorAtual);
+				//System.out.println(valor);
+			return  1	;
+			}else {
+				//System.out.println(valorAtual);
+			//	System.out.println(valor);	
+			return valor - valorAtual  ;
+			}
+		}
 	}
 }
