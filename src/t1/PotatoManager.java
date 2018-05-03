@@ -8,8 +8,10 @@ import lejos.nxt.Motor;
 
 public class PotatoManager {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
+		//menuCalibragemDistanca();
+		calibragemTeste();
 
 	}	
 	
@@ -19,9 +21,9 @@ public class PotatoManager {
 	 * @author fexavier
 	 *
 	 */
-	private static final int VELOCIDADE = 320;
-	private static int grau_90_MotorRotate_100  = 200;
-	private static int distancia_10_MotorRotate_100 = 200; 
+	private static final int VELOCIDADE = 150 ;
+	private static int grau_90_MotorRotate_100  = 190;
+	private static int distancia_10_MotorRotate_100 = 2400; 
 	private static int rotate_Calibragem_100 = 100;	
 	
 	/*public static enum EnumDirecao {
@@ -31,9 +33,13 @@ public class PotatoManager {
 	
 	
 	public static void calibragemTeste() throws InterruptedException {
+		
+		defineVelocidade(100);
+	//	vira(grausToMotorRotate(90), EnumDirecao.DIREITA);
+		
+		
+		
 		/*Thread.sleep (3000);
-		vira(grauX(90), Direcao.DIREITA);
-		Thread.sleep (3000);
 		vira(grauX(90), Direcao.DIREITA);
 		Thread.sleep (3000);
 		vira(grauX(90), Direcao.DIREITA);
@@ -121,13 +127,12 @@ public class PotatoManager {
 			}
 			
 			
-		}
+		}	
 	
 	
-	
-	public void defineVelocidade(int velocidade) {
-		Motor.B.setSpeed(VELOCIDADE);
-		Motor.C.setSpeed(VELOCIDADE);
+	public static void defineVelocidade(int velocidade) {
+		Motor.B.setSpeed(velocidade);
+		Motor.C.setSpeed(velocidade);
 		
 	}
 	
@@ -136,9 +141,19 @@ public class PotatoManager {
 	*/
 	public static void vira (int motorRotate, EnumDirecao direcao) {
 			
+		Motor.B.stop(true);
+		Motor.C.stop(true);
+		
+		boolean isMoving = false;
+		while (isMoving){	
+		isMoving = Motor.B.isMoving() ||  Motor.C.isMoving();			
+		}	
+	
+		
+		
 		switch (direcao) {
 			case DIREITA:
-			Motor.B.rotate(motorRotate);
+			Motor.B.rotate(motorRotate);			
 			Motor.C.rotate(-motorRotate);
 			break;
 			
@@ -155,11 +170,29 @@ public class PotatoManager {
 	}
 	
 
-	public static void andar(int motorRotate) {		
+	/*public static void andar(int motorRotate) {		
 			 Motor.B.rotate(motorRotate);
 			 Motor.C.rotate(motorRotate);					
 		
-	}
+	}*/
+	
+	public static void andar(int motorRotate) {	
+		boolean isMoving = false;
+		/*while (isMoving){	
+			isMoving = Motor.B.isMoving() ||  Motor.C.isMoving();			
+		}
+		*/
+		
+		for(int i = 0; i< motorRotate; i++){
+			Motor.B.forward();
+			Motor.C.forward();
+		}
+		
+		//Motor.B.stop(true);
+		//Motor.C.stop(true);
+		
+	
+}
 
 	
 	/**Tranforma o valor do angulo em valores de rotacoes do motor
@@ -256,7 +289,7 @@ public class PotatoManager {
 
 	
 
-	public static void andaCaminho(ArrayList<int[]> caminho,EnumDirecao direcaoRobo, int distanciaMapa, int posicaoRoboI, int posicaoRoboJ){
+	public static void andaCaminho(ArrayList<int[]> caminho,EnumDirecao direcaoRobo, int distanciaMapa, int posicaoRoboI, int posicaoRoboJ) throws InterruptedException{
 
 		//direcaoAtual = EnumDirecao.FRENTE;
 		////Adicionar posicao inical do robo no caminho
@@ -275,18 +308,23 @@ public class PotatoManager {
 			posicaoProximaI = p[0];
 			posicaoProximaJ = p[1];		
 			
-			EnumDirecao direcao= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);			
+			EnumDirecao direcao= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
+			
 		
 			valoDirecional  =  direcao.valorDirecional(direcaoRobo.valor);	
-		//	rotacaoDirecionada4d(valoDirecional);
+			rotacaoDirecionada4d(valoDirecional);
+			
 			System.out.println( "Rotaciona:" + valoDirecional * 90);			
 
-			//andar(distanciaMapa);
-			System.out.println( "Andar:" + distanciaMapa );
-			System.out.println(  p[0] +"," + p[1]+ "-" + direcao);
+			andar(dintanceToMotorRotate(distanciaMapa));
+			//System.out.println( "Andar:" + distanciaMapa );
+			//System.out.println(  p[0] +"," + p[1]+ "-" + direcao);
+			//Thread.sleep(1000);
 			
 			posicaoRoboI = posicaoProximaI;
 			posicaoRoboJ = posicaoProximaJ;
+			
+			direcaoRobo = direcao;
 
 
 		}
@@ -308,7 +346,7 @@ public class PotatoManager {
 	
 	public static void rotacaoDirecionada4d(int valorDirecional) {		
 		
-		vira(90 * valorDirecional, EnumDirecao.DIREITA);		
+		vira(grausToMotorRotate(90 * valorDirecional), EnumDirecao.DIREITA);		
 		
 	}
 	

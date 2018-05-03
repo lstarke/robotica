@@ -26,7 +26,9 @@ public class PotatoWaveFront {
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
 		
+		
 		matrizNavegacao = matrizEntrada();
+		PotatoManager.defineVelocidade(400);
 		
 		int [] posicao = procuraObjetivo(matrizNavegacao);
 		if(posicao[0] != -1 && posicao[1] != -1) {
@@ -35,33 +37,30 @@ public class PotatoWaveFront {
 			objetivoI = posicao[0];
 			objetivoJ = posicao[1];
 			System.out.println("Objetivo:"  + posicao[0]+", " + posicao[1]+"");
+			Thread.sleep(1000);
 			
 		int [] robo = procuraRobo(matrizNavegacao);
 		if(robo[0] != -1 && robo[1] != -1) { 
 			posicaoRoboI =  robo[0];
 			posicaoRoboJ =  robo[1];
 			System.out.println("PosicaoRobo:"  + robo[0]+", " + robo[1]+"\n");
-			
-			//System.out.println(imprimeRoboEmString(matrizNavegacao, posicaoRoboI, posicaoRoboJ, direcaoAtual));
+			Thread.sleep(1000);
+		   System.out.println(imprimeRoboEmString(matrizNavegacao, posicaoRoboI, posicaoRoboJ, direcaoAtual));
 				
-				
+		   Thread.sleep(1000);
 				caminho =  pWF.menorCaminho(matrizNavegacao, posicaoRoboI, posicaoRoboJ);				
-				PotatoManager.andaCaminho(caminho, direcaoAtual, 10,  posicaoRoboI, posicaoRoboJ);
+				PotatoManager.andaCaminho(caminho, direcaoAtual, 7,  posicaoRoboI, posicaoRoboJ);
 				
-				/*for(int[] p : caminho) {
-					//System.out.print(p[0]+ "," + p[1]+"; ");
-					Thread.sleep(500);
-					direcaoAtual = PotatoWaveFront.vira(matrizNavegacao, p[0], p[1], direcaoAtual);
-					Thread.sleep(500);
-					System.out.println(PotatoWaveFront.imprimeRoboEmString(matrizNavegacao, p[0], p[1], direcaoAtual));
-				}*/
+				//Thread.sleep(1000);
 				
 			}else {
 				System.out.println("Posição do objetivo não encontrado!");
+				//Thread.sleep(1000);
 			}			
 			
 		}else {
 			System.out.println("Robo não encontrado!");
+			Thread.sleep(1000);
 		}
 			
 		
@@ -82,7 +81,7 @@ public class PotatoWaveFront {
 		 * int [][]matrizMapX = {{0,0,0,0,0,0,0}, {0,0,0,0,-1,-1,-1}, {0,0,0,0,-1,0,0},
 		 * {0,0,2,0,-1,-1,0}, {0,0,0,0,-1,0,0}, {0,0,0,0,-1,0,0}, {0,0,0,0,0,0,0}};
 		 */
-		int[][] matrizMapX = {
+		/*int[][] matrizMapX = {
 				{ -1, 0, 2, 0, 0, 0, 0, 0, 0, 0, },
 				{ -1, 0, 0, 0, 0, 0,0 ,0 , 0, 0, },
 				{ -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, },
@@ -90,7 +89,17 @@ public class PotatoWaveFront {
 				{ 0, 0, -1, -1, -1, 0, 0, -1, 0, -1, },
 				{ -1, -1, -1, 0, 0, 0, 0, 0, -1, 0, },
 				{ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, },
-				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, } };
+				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, } };*/
+		
+		int [][] matrizMapX = 
+		{{2, -1, 0, 0, 0, 0, 0},
+		 {0, 0, 0, 0, -1, 0, 0},
+		 {0, -1, 0, 0, 0, 0, 0},
+		 {-1, 0, 0, -1, -1, 0, 0},
+		 {-1, 1, 0, 0, 0, 0, 0},
+		 {0, -1, 0, 0, 0, 0, 0},
+		 {0, 0, 0, -1, 0, 0, 1}};
+				
 		/*
 		 * int [][]matrizMapX = {{0,0,0 ,0,0,0,0,0,0,0,}, {0,0,0 ,0,0,0,0,0,0,0,},
 		 * {0,0,-1,-1,-1,0,0,0,0,0,}, {0,0,-1,-1,-1,0,0,0,0,0,}, {0,0,-1,-1,-1,0,0,0,
@@ -478,7 +487,7 @@ public class PotatoWaveFront {
 	public ArrayList<int[]> menorCaminho(int[][] matriz, int posicaoI, int posicaoJ) {
 		int sizeI = matriz.length;
 		int sizeJ = matriz[0].length;
-		ArrayList<int[]> caminho = new ArrayList<>();
+		ArrayList<int[]> caminho = new ArrayList();
 		int i = posicaoI;
 		int j = posicaoJ;
 		///para se o caminho não for definido  não entrar em loop

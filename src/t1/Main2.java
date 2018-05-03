@@ -1,7 +1,5 @@
 package t1;
 
-import java.util.Date;
-
 import lejos.nxt.ColorSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;

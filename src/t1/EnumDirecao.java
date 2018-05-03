@@ -7,6 +7,7 @@ public enum EnumDirecao {
 	FRENTE(2),	
 	ESQUERDA(3);	
 	
+	
 	//| |0|
 	//|3|x|1|
 	//| |2|

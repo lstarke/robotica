@@ -1,0 +1,91 @@
+Escreva uma visão geral executiva da história em prosa
+
+Esta é a parte mais importante do script do jogo e é isso que
+afundará ou flutuará seu script. Esta visão geral tem que dizer uma convincente
+e toda a história e deve contar a história completa do
+cena de abertura do jogo através dos principais passos todo o caminho para o
+conclusão do jogo. Uma visão geral como esta pode ser quase qualquer
+tamanho e seria muito fácil para isso ser escrito
+Mais. Lembre-se que os videogames de hoje são muito complexos e
+histórias podem ser muito complexas. Esta visão geral é também a mais
+parte importante do roteiro. Você gostaria deste jogo para desenvolvedores?
+Página 1
+para ver se eles estão interessados ​​em desenvolvê-lo em um jogo.
+Escreva uma história e antecedentes do mundo
+Os videogames são mundos completos e os designers de jogos precisam saber
+como é o mundo e que tipo de história é isso? Isso vai ajudar
+os designers para visualizar como o mundo será.
+Crie um fluxograma para o jogo inteiro - seu jogo vai ser
+muito complexo e haverá muitas decisões que o jogador vai
+tem que fazer e cada decisão abre um novo caminho para o
+jogador a tomar. Criar um fluxograma é a melhor maneira de acompanhar
+todos os caminhos possíveis através do jogo.
+Crie sub-missões e escreva uma visão geral da prosa de cada missão
+Sub quests podem ser simples ou complexas, mas cada uma é uma história em si
+e você deve contar essas histórias.
+Crie descrições de personagens e biografias para todos os principais
+personagens no jogo. Os designers de jogos precisam de uma imagem completa de
+os personagens do jogo. Muitos dos personagens que não são jogadores você
+irá criar pop-up e outra vez. E a história deles é tecida.
+profundamente no tecido do seu mundo. Você precisa descrever isso
+relacionamento em detalhe para os designers de jogos.
+Escrever interações com personagens que não são jogadores
+Seu jogo provavelmente envolverá interação com não-jogador
+personagens (NPCs). Você deve escrever o diálogo e o fluxograma
+o jogador do jogo pode fazer. Essas interações são frequentemente
+fundamental para a história e eles podem levar o jogador em muito diferente
+até a conclusão do jogo.
+Escrever cenas cortadas - Cenas cortadas são animações curtas ou filmes que
+Página 2
+coma antes ou depois dos principais pontos da história. Uma cena cortada
+deve sempre ser escrito para melhorar ou descrever a história. Cortar
+cena também é uma recompensa dada ao jogador para conseguir um grande
+marco no jogo.
+Escrevendo o script atual do storyboard
+Este é o passo final em todo o processo de escrita de scripts de videojogos
+e é o mais detalhado. Você faz este último passo porque você precisa de tudo
+os materiais de suporte para entender e descrever isso corretamente.
+Essa parte é muito parecida com a de um roteiro de filme. Você progride
+através de cada cena de sua história e você detalha todo o necessário
+em formação. Aqui está um exemplo:
+Cena 1:
+Localização: uma catedral escura com vitrais. Um NPC é
+ajoelhando-se diante de um caixão de pedra no centro da sala principal
+Música: música de fundo de um órgão tocando introduz a cena
+mas desaparece
+Personagens: Jogador principal, NPC chamado Thomas
+Objetivo do jogador: descobrir a localização do covil subterrâneo
+Ação: O jogador deve iniciar a discussão com Thomas, primeiro
+entre em contato conosco ativar cena cortada (1) onde Thomas se transforma em um werecreature
+e convoca seus lacaios. Personagem principal deve batalha
+os minions foram então reiniciam a discussão com Thomas.
+Fluxograma: Nenhuma decisão tomada neste momento: Se a batalha estiver concluída
+Thomas revela a entrada para o covil subterrâneo e jogador
+avança para esse nível. Se o jogador for derrotado na batalha, reverta para a morte
+cena cortada (11) e mova para tentar novamente a tela.
+Página 3
+Notas: O jogador está trancado na catedral e não há saída. O único
+Uma saída viável é iniciar o contato com Thomas. Aleatório werecreatures
+pode ser ativado se o jogador
+com NPC.
+Ao escrever um roteiro de videogame, você precisa lembrar que
+audiência primária não é o jogador do jogo, mas o desenvolvedor do jogo e
+o que o desenvolvedor precisa é de uma imagem completa do que seu jogo é
+Isso significa que você não está apenas escrevendo uma história, mas você está
+criando um mundo completo com um tom, sons, personagens, história, enredo,
+e subtramas. Para comunicar com sucesso isso ao desenvolvedor você
+precisa usar todo um conjunto de ferramentas criativas e é aí que o vídeo
+Scripts de jogos partem de scripts normais e abrem um reino inteiro
+de possibilidades criativas
+Escrevendo um roteiro para um videogame
+Existem dois componentes para escrever um script para um video game.
+é um fluxograma que estabelece a tomada de decisão do jogo e
+os vários caminhos lógicos que o usuário pode tomar e há o
+roteiro de prosa que descreve o que acontece.
+Deixe-me mostrar um pequeno exemplo de cada um. Eu escrevi o roteiro
+para um videogame chamado "The Book of the Dead" ..
+Escrevendo o Fluxograma
+Aqui está um exemplo do fluxograma que estabelece a decisão
+fazendo parte do primeiro capítulo:
+Página 4
+Vamos dar uma olhada mais de perto

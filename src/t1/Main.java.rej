@@ -1,0 +1,22 @@
+diff a/src/t1/Main.java b/src/t1/Main.java	(rejected hunks)
+@@ -99,14 +99,18 @@
+ 		
+ 		
+ 	}
++	
++		
++	/**Parametros usados na calibragem do robo
++	**/
+ 	private static int grau_90_velocidade_100 = 1900; 
+ 	private static int distancia_10_velocidade_100= 2300; //10 cm
+ 	private static int vel_calibragem_100 = 100;
+ 	
+ 	
+ 	
+-	
+-	
++	/**Informa��es sobre o mundo
++	**/
+ 	private static int tamanhoRobo = 0;
+ 	
+ 	private static int tamanhoObstaculo = 10;
