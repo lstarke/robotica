@@ -23,6 +23,7 @@ public class PotatoManager {
 	public static void calibragemTeste() throws InterruptedException {
 		
 		defineVelocidade(100);
+	
 
 	}
 	

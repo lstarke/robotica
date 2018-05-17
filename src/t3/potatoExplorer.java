@@ -2,7 +2,7 @@ package t3;
 
 import lejos.robotics.kinematics.RobotArm;
 
-public class potatoExplorer {
+public class PotatoExplorer {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -38,7 +38,7 @@ public void potatoExprorer(PotatoRobo robo, Mapa mapa) {
 	private void nodosAdjacentes(Nodo nodoAtual) {
 		
 		if(isCaminho(EnumDirecao.FRENTE)){
-			
+			//nodoAtual.setNodoFrente();
 			
 		}else if(isCaminho(EnumDirecao.TRAZ)) {
 			

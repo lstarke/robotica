@@ -14,6 +14,59 @@ public class PotatoManager {
 
 	
 	
+	public static void main(String[] args) {
+		
+		//defineVelocidade(100);
+		//motorCabeca.setSpeed(70);
+		//motorCabeca.lock(70);
+		/*String cor ="";
+
+		cor += ",R"+ sensorCor.getColor().getRed();
+		cor += ",G"+ sensorCor.getColor().getGreen();
+		cor += ",B"+ sensorCor.getColor().getBlue()+"\n";
+		
+		
+		int redmin = 999;
+		int gremin =999;
+		int blumin = 999;
+		
+		int redmax = 999;
+		int gremax =999;
+		int blumax = 999;
+		
+		
+		while(!Button.ENTER.isDown()){
+		
+		System.out.println(cor);
+		
+		}
+		
+		while(!Button.ENTER.isDown()){
+			
+		}*/
+		
+		for (int i = 1 ; i<7; i++){
+		andar(PotatoManager.dintanceToMotorRotate(26));
+		motorCabeca.setSpeed(100);
+		PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.DIREITA);
+		System.out.println("   "+sensorUltrasonico.getDistance());
+		//PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.DIREITA);
+		//PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.ESQUERDA);
+		PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.ESQUERDA);
+		System.out.println("   "+sensorUltrasonico.getDistance());
+		PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.ESQUERDA);
+		System.out.println("   "+sensorUltrasonico.getDistance());
+		PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.DIREITA);
+		System.out.println("   "+sensorUltrasonico.getDistance());
+		}
+		//para();
+		//motorCabeca.rotate(10);
+		//Motor.A.rotate(3000);
+		
+		
+		//PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.DIREITA);
+	}
+	
 	/**
 	 * Parametros de calibragem baseados na rotacao do motor
 	 * @author fexavier
@@ -21,24 +74,30 @@ public class PotatoManager {
 	 */
 	
 	
-	private static final int VELOCIDADE = 150 ;
+	//private static final int VELOCIDADE = 150 ;
 	private static int grau_90_MotorRotate_100  = 190;
-	private static int grau_90_CabecaMotorRotate_100  = 190;
-	private static int distancia_10_MotorRotate_100 = 2400; 
+	private static int grau_90_CabecaMotorRotate =100 ;
+	///private static int distancia_10_MotorRotate_100 = 2400; 
+	private static int distancia_10_MotorRotate_100 = 265; 
 	private static int rotate_Calibragem_100 = 100;	
 	private static NXTRegulatedMotor motorRodaDireita = Motor.B;
 	private static NXTRegulatedMotor motorRodaEsquerda = Motor.C;
 	private static NXTRegulatedMotor motorCabeca = Motor.A;
 	private static int distancia_paredeUltraSonico;
 	
-	public static ColorSensor sensorCor = new ColorSensor(SensorPort.S2);
+	public static ColorSensor sensorCor = new ColorSensor(SensorPort.S4);
 	public static UltrasonicSensor sensorUltrasonico = new UltrasonicSensor(SensorPort.S3);	
 	
 	public static void calibragemTeste() throws InterruptedException {
 		
 		defineVelocidade(100);
 		
+		
 
+	}
+	
+	public PotatoManager(){
+		motorCabeca.setSpeed(70);
 	}
 	
 	public static void  menuCalibragemDistanca(){
@@ -123,8 +182,8 @@ public class PotatoManager {
 	
 	
 	public static void defineVelocidade(int velocidade) {
-		Motor.B.setSpeed(velocidade);
-		Motor.C.setSpeed(velocidade);
+		motorRodaDireita.setSpeed(velocidade);
+		motorRodaEsquerda.setSpeed(velocidade);
 		
 	}
 	
@@ -132,25 +191,25 @@ public class PotatoManager {
 	*/
 	public static void vira (int motorRotate, EnumDirecao direcao) {
 			
-		Motor.B.stop(true);
-		Motor.C.stop(true);
+		motorRodaDireita.stop(true);
+		motorRodaEsquerda.stop(true);
 		
 		boolean isMoving = false;
 		while (isMoving){	
-		isMoving = Motor.B.isMoving() ||  Motor.C.isMoving();			
+		isMoving = motorRodaDireita.isMoving() ||  motorRodaEsquerda.isMoving();			
 		}	
 	
 		
 		
 		switch (direcao) {
 			case DIREITA:
-			Motor.B.rotate(motorRotate);			
-			Motor.C.rotate(-motorRotate);
+			motorRodaDireita.rotate(motorRotate);			
+			motorRodaEsquerda.rotate(-motorRotate);
 			break;
 			
 			case ESQUERDA:
-				Motor.B.rotate(-motorRotate);
-				Motor.C.rotate(motorRotate);
+				motorRodaDireita.rotate(-motorRotate);
+				motorRodaEsquerda.rotate(motorRotate);
 			break;	
 
 		default:
@@ -159,11 +218,17 @@ public class PotatoManager {
 		
 		
 	}
+	public static void para(){
+		//while (
+		//}
+		motorRodaDireita.stop(true);
+		motorRodaEsquerda.stop(true);
+	}
 	
 
 	public static void andar(int motorRotate) {		
-			 Motor.B.rotate(motorRotate,true);
-			 Motor.C.rotate(motorRotate);					
+			 motorRodaDireita.rotate(motorRotate,true);
+			 motorRodaEsquerda.rotate(motorRotate);					
 		
 	}
 	/*
@@ -171,12 +236,12 @@ public class PotatoManager {
 		boolean isMoving = false;
 		
 		for(int i = 0; i< motorRotate; i++){
-			Motor.B.forward();
-			Motor.C.forward();
+			motorRodaDireita.forward();
+			motorRodaEsquerda.forward();
 		}
 		
-		//Motor.B.stop(true);
-		//Motor.C.stop(true);
+		//motorRodaDireita.stop(true);
+		//motorRodaEsquerda.stop(true);
 		
 	
 	}
@@ -203,7 +268,7 @@ public class PotatoManager {
 	
 	
 	public static int grausToCabecaMotorRotate(int grau){
-		int motorRotate = (grau_90_CabecaMotorRotate_100 * grau) /90;
+		int motorRotate = (grau_90_CabecaMotorRotate * grau) /90;
 				
 		return  motorRotate;
 	}
@@ -367,7 +432,7 @@ public class PotatoManager {
 		if(direcao == EnumDirecao.DIREITA){
 		motorCabeca.rotate(motorRotate);
 		
-		}else if(direcao == EnumDirecao.DIREITA){
+		}else if(direcao == EnumDirecao.ESQUERDA){
 			motorCabeca.rotate(-motorRotate);
 		}				
 
