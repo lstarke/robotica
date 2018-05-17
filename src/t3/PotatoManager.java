@@ -9,9 +9,12 @@ import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 
+/** * 
+ * @author Francisca
+ *
+ */
 
 public class PotatoManager {
-
 	
 	
 	public static void main(String[] args) {
@@ -69,7 +72,7 @@ public class PotatoManager {
 	
 	/**
 	 * Parametros de calibragem baseados na rotacao do motor
-	 * @author fexavier
+	 * 
 	 *
 	 */
 	
@@ -440,7 +443,7 @@ public class PotatoManager {
 	
 	public static Boolean encontrouParede() {
 		//sensorUltrasonico.capture();
-		if(sensorUltrasonico.getDistance()> distancia_paredeUltraSonico) {
+		if(sensorUltrasonico.getDistance()< distancia_paredeUltraSonico) {
 			return true;
 		}else {
 			return false;

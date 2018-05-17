@@ -1,11 +1,14 @@
 package t3;
+/** * 
+ * @author Francisca
+ *
+ */
 
 public enum EnumDirecao {
 	TRAZ(0),	
 	DIREITA(1),
 	FRENTE(2),	
-	ESQUERDA(3);	
-	
+	ESQUERDA(3);		
 	
 	//| |0|
 	//|3|x|1|

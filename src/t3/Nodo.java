@@ -1,25 +1,34 @@
 package t3;
 
 import java.util.ArrayList;
+/** * 
+ * @author Francisca
+ *
+ */
 
 
 public class Nodo {
 	
-	private String nome;
-	private int x;
-	private int y;		
+	private String nome ="";
+	private int i;
+	private int j;		
 	private Nodo NodoFrente;
 	private Nodo NodoTraz;
 	private Nodo NodoDireita;
 	private Nodo NodoEsquerda;
+	private EnumStatus status = EnumStatus.N_EXPLORADO;
+	public enum EnumStatus{
+		EXPLORADO,
+		N_EXPLORADO,		
+		
+				}
+		
 	
 	
-	public void Vertice(String nome, int x, int y) {
-		setNome(nome);
-		setX(x);
-		setY(y);
-		
-		
+	public Nodo(int i, int j) {
+		setNome("("+ i + ","+ j+ ")");
+		setI(i);
+		setJ(j);
 	}
 	
 	public String getNome() {
@@ -28,22 +37,22 @@ public class Nodo {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public int getX() {
-		return x;
+	public int getI() {
+		return i;
 	}
-	public void setX(int x) {
-		this.x = x;
+	public void setI(int i) {
+		this.i = i;
 	}
-	public int getY() {
-		return y;
+	public int getJ() {
+		return j;
 	}
-	public void setY(int y) {
-		this.y = y;
+	public void setJ(int j) {
+		this.j = j;
 	}
 	public Nodo getNodoFrente() {
 		return NodoFrente;
 	}
-	public void setNodoFrente(Nodo nodoFrente) {
+	public void setNodoFrente(Nodo nodoFrente) {		
 		NodoFrente = nodoFrente;
 	}
 	public Nodo getNodoTraz() {
@@ -63,6 +72,14 @@ public class Nodo {
 	}
 	public void setNodoEsquerda(Nodo nodoEsquerda) {
 		NodoEsquerda = nodoEsquerda;
+	}
+
+	public EnumStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(EnumStatus status) {
+		this.status = status;
 	}
 	
 	
