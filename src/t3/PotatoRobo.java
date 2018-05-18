@@ -1,7 +1,5 @@
 package t3;
 
-import org.apache.bcel.generic.RETURN;
-
 public class PotatoRobo {
 	private static EnumDirecao direcaoRobo = EnumDirecao.FRENTE;
 	private static EnumDirecao direcaoCabeca = EnumDirecao.FRENTE;

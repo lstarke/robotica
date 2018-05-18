@@ -7,13 +7,13 @@ import java.util.ArrayList;
  */
 
 public class Mapa {
-	
-	
+
+
 	private static Nodo[][] matrizNavegacao;
 	private static Mapa instance = null;
-	private static ArrayList<Nodo> nodoList = new ArrayList<Nodo>();
 	public static int sizeI =7;
 	public static int sizeJ =7;
+	public static int tamanhoQuadros =26;
 	//private static Nodo menorI = null;
 	//private static Nodo menorJ = null;
 	//private static int menorI_Int = Integer.MAX_VALUE;
@@ -65,10 +65,12 @@ public class Mapa {
 		
 	}
 	
-	public static void addNodo(Nodo nodo){
-		nodoList.add(nodo);	
+
+
 	
-	}
+
+	
+	
 	
 	/**
 	 * Se não existe o Nodo, ele cria um na posicação i j

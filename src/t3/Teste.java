@@ -21,6 +21,16 @@ public class Teste {
 		System.out.println(nodoAtual.getNodoFrente().getNome());
 		System.out.println(nodoAtual.getNodoFrente().getNodoTraz().getNome());
 		
+		/*
+		MapearCaminho
+		MapearProduto
+
+		AndarCaminho
+		EncontraProduto
+		
+		*/
+
+		 
 		//System.out.println(getNome() );
 		
 	}
