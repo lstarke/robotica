@@ -1,6 +1,9 @@
 package t3;
 
 import java.util.ArrayList;
+import java.util.Collection;
+
+import com.intel.bluetooth.Utils;
 
 import lejos.nxt.Button;
 import lejos.nxt.ColorSensor;
@@ -74,8 +77,7 @@ public class PotatoManager {
 	 * Parametros de calibragem baseados na rotacao do motor
 	 * 
 	 *
-	 */
-	
+	 */	
 	
 	//private static final int VELOCIDADE = 150 ;
 	private static int grau_90_MotorRotate_100  = 190;
@@ -90,11 +92,11 @@ public class PotatoManager {
 	
 	public static ColorSensor sensorCor = new ColorSensor(SensorPort.S4);
 	public static UltrasonicSensor sensorUltrasonico = new UltrasonicSensor(SensorPort.S3);	
+	public static boolean modoTeste = false;
 	
 	public static void calibragemTeste() throws InterruptedException {
 		
-		defineVelocidade(100);
-		
+		defineVelocidade(100);	
 		
 
 	}
@@ -175,8 +177,7 @@ public class PotatoManager {
 				default:
 					break;
 				}
-				
-				
+								
 				
 			}
 			
@@ -400,9 +401,8 @@ public class PotatoManager {
 
 		return direcaoParaIr;
 
-		
-
 	}
+	
 
 	
 /**
@@ -457,6 +457,62 @@ public class PotatoManager {
 		
 
 	}
+	
+	/**
+	 * Percorre um  Array de caminho. 
+	 * @param caminho Aray com os nodos que compoem o caminho.
+	 * @param direcaoRobo
+	 * @param distanciaMapa
+	 * @param posicaoRoboI
+	 * @param posicaoRoboJ
+	 * @throws InterruptedException
+	 */
+	
+	public static void andaCaminho(ArrayList<Nodo> caminho,EnumDirecao direcaoRobo, int distanciaMapa, Boolean inverso) throws InterruptedException{
+
+		int posicaoRoboI = caminho.get(0).getI(); 
+		int posicaoRoboJ = caminho.get(0).getJ();
+		int posicaoProximaI = 0;
+	    int posicaoProximaJ = 0;
+	   // int valoDirecional = 0;	    
+	  // System.out.println( posicaoRoboI +"," +  posicaoRoboJ + "-" + direcaoRobo);
+	    if(!inverso) {    	    
+	   
+		for(Nodo p : caminho) {
+			
+			posicaoProximaI = p.getI();
+			posicaoProximaJ = p.getJ();			
+		
+			EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
+			Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
+			
+			posicaoRoboI = posicaoProximaI;
+			posicaoRoboJ = posicaoProximaJ;			
+			
+			direcaoRobo = direcaoParaIr;
+
+		}
+	    }else {
+		
+		for(int i =  caminho.size(); i >= 0; i--)  {
+			
+			Nodo p = caminho.get(i);
+			posicaoProximaI = p.getI();
+			posicaoProximaJ = p.getJ();			
+		
+			EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
+			Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
+			
+			posicaoRoboI = posicaoProximaI;
+			posicaoRoboJ = posicaoProximaJ;			
+			
+			direcaoRobo = direcaoParaIr;
+
+			}	
+		}	    
+
+	}
+	
 	
 	/**
 	 * Rotaciona o Robo 90 graus * valor direcional

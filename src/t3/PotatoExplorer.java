@@ -33,35 +33,37 @@ public void potatoExprorer(PotatoRobo robo, Mapa mapa) {
 	}	
 	
 	
-	public void explorerMapa(Nodo nodoAtual) {
+	public void explorerMapa(Nodo nodoAtual, ArrayList<Nodo> caminho) {
 	
 		addAdjacentes(nodoAtual);
-		//caminho.add(nodo Atual)
+		caminho.add(nodoAtual);
 		
 		if(nodoAtual.getStatus() == EnumStatus.N_EXPLORADO) {
 		
 		if(nodoAtual.getNodoFrente() != null && nodoAtual.getNodoFrente().getStatus()  == EnumStatus.EXPLORADO) {
 			robo.manager.Move4dDistancia(EnumDirecao.FRENTE, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
-			explorerMapa(nodoAtual.getNodoFrente());
+			explorerMapa(nodoAtual.getNodoFrente(), caminho);
 			
 		}
 		if(nodoAtual.getNodoEsquerda() != null && nodoAtual.getNodoEsquerda().getStatus()  == EnumStatus.EXPLORADO) {
 			robo.manager.Move4dDistancia(EnumDirecao.ESQUERDA, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
-			explorerMapa(nodoAtual.getNodoEsquerda());
+			explorerMapa(nodoAtual.getNodoEsquerda(),caminho);
 		}
 		if(nodoAtual.getNodoDireita() != null && nodoAtual.getNodoDireita().getStatus()  == EnumStatus.EXPLORADO) {
 			robo.manager.Move4dDistancia(EnumDirecao.DIREITA, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
-			explorerMapa(nodoAtual.getNodoDireita());
+			explorerMapa(nodoAtual.getNodoDireita(),caminho);
 			
 		}
 		if(nodoAtual.getNodoTraz() != null && nodoAtual.getNodoTraz().getStatus()  == EnumStatus.EXPLORADO) {
 			robo.manager.Move4dDistancia(EnumDirecao.TRAZ, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
-			explorerMapa(nodoAtual.getNodoTraz());
+			explorerMapa(nodoAtual.getNodoTraz(),caminho);
 		}
 		
 			
 			addNodoEplorado(nodoAtual);			
 			nodoAtual.setStatus(EnumStatus.EXPLORADO);
+		}else {
+			
 		}
 		
 		//caminho inverso
