@@ -1,15 +1,12 @@
 package t3;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
-import com.intel.bluetooth.Utils;
+import org.apache.commons.cli.PosixParser;
+import org.jfree.chart.plot.dial.DialTextAnnotation;
 
-import lejos.nxt.Button;
 import lejos.nxt.ColorSensor;
-import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
-import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 
 /** * 
@@ -17,60 +14,12 @@ import lejos.nxt.UltrasonicSensor;
  *
  */
 
-public class PotatoManager {
+public class PotatoManegerTeste {
 	
 	
 	public static void main(String[] args) {
 		
-		//defineVelocidade(100);
-		//motorCabeca.setSpeed(70);
-		//motorCabeca.lock(70);
-		/*String cor ="";
-
-		cor += ",R"+ sensorCor.getColor().getRed();
-		cor += ",G"+ sensorCor.getColor().getGreen();
-		cor += ",B"+ sensorCor.getColor().getBlue()+"\n";
-		
-		
-		int redmin = 999;
-		int gremin =999;
-		int blumin = 999;
-		
-		int redmax = 999;
-		int gremax =999;
-		int blumax = 999;
-		
-		
-		while(!Button.ENTER.isDown()){
-		
-		System.out.println(cor);
-		
-		}
-		
-		while(!Button.ENTER.isDown()){
-			
-		}*/
-		
-		for (int i = 1 ; i<7; i++){
-		andarRotate(PotatoManager.dintanceToMotorRotate(26));
-		motorCabeca.setSpeed(100);
-		PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.DIREITA);
-		System.out.println("   "+sensorUltrasonico.getDistance());
-		//PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.DIREITA);
-		//PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.ESQUERDA);
-		PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.ESQUERDA);
-		System.out.println("   "+sensorUltrasonico.getDistance());
-		PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.ESQUERDA);
-		System.out.println("   "+sensorUltrasonico.getDistance());
-		PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.DIREITA);
-		System.out.println("   "+sensorUltrasonico.getDistance());
-		}
-		//para();
-		//motorCabeca.rotate(10);
-		//Motor.A.rotate(3000);
-		
-		
-		//PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.DIREITA);
+	
 	}
 	
 	/**
@@ -79,110 +28,31 @@ public class PotatoManager {
 	 *
 	 */	
 	
-	//private static final int VELOCIDADE = 150 ;
+	private static final int VELOCIDADE = 150 ;
 	private static int grau_90_MotorRotate_100  = 190;
 	private static int grau_90_CabecaMotorRotate =100 ;
 	///private static int distancia_10_MotorRotate_100 = 2400; 
 	private static int distancia_10_MotorRotate_100 = 265; 
 	private static int rotate_Calibragem_100 = 100;	
-	private static NXTRegulatedMotor motorRodaDireita = Motor.B;
-	private static NXTRegulatedMotor motorRodaEsquerda = Motor.C;
-	private static NXTRegulatedMotor motorCabeca = Motor.A;
+	private static NXTRegulatedMotor motorRodaDireita;
+	private static NXTRegulatedMotor motorRodaEsquerda;
+	private static NXTRegulatedMotor motorCabeca;
 	private static int distancia_paredeUltraSonico;
 	
-	public static ColorSensor sensorCor = new ColorSensor(SensorPort.S4);
-	public static UltrasonicSensor sensorUltrasonico = new UltrasonicSensor(SensorPort.S3);	
+	public static ColorSensor sensorCor;
+	public static UltrasonicSensor sensorUltrasonico;	
 	public static boolean modoTeste = false;
+	public static PotatoRobo robo = PotatoRobo.getInstance(); 
 	
 	public static void calibragemTeste() throws InterruptedException {
 		
-		defineVelocidade(100);	
 		
 
 	}
 	
-	public PotatoManager(){
-		motorCabeca.setSpeed(70);
+	public PotatoManegerTeste(){
+		System.out.println("Iniciaa ManeGer SIMULACAO");
 	}
-	
-	public static void  menuCalibragemDistanca(){
-	Boolean sair = false;
-	System.out.println("Distancia_10");
-	System.out.println("Atuaal:"+ distancia_10_MotorRotate_100 );
-	
-		while(sair){
-			
-			
-			int buttonPress =Button.readButtons();
-			
-			switch (buttonPress) {
-			
-			case Button.ID_RIGHT:
-				
-				distancia_10_MotorRotate_100  += 10;
-				
-			break;
-			case Button.ID_LEFT:
-
-				distancia_10_MotorRotate_100  -= 10;
-				
-			break;
-					
-			case Button.ID_ENTER:
-
-				sair = true;
-				
-			break;
-				
-
-			default:
-				break;
-			}
-		
-		}
-		
-		
-	}
-	
-	public static void  menuCalibragemGrau(){
-		Boolean sair = false;
-		System.out.println("Grau_90");
-		System.out.println("Atual:"+ grau_90_MotorRotate_100 );
-		
-			while(sair){
-				
-				
-				int buttonPress =Button.readButtons();
-				
-				switch (buttonPress) {
-				
-				case Button.ID_RIGHT:
-					
-					grau_90_MotorRotate_100  += 10;
-					
-				break;
-				case Button.ID_LEFT:
-
-					grau_90_MotorRotate_100  -= 10;
-					
-				break;
-						
-				case Button.ID_ENTER:
-
-					sair = true;
-					
-				break;
-					
-
-				default:
-					break;
-				}
-								
-				
-			}
-			
-			
-		}	
 	
 	
 	public static void defineVelocidade(int velocidade) {
@@ -198,30 +68,44 @@ public class PotatoManager {
  	*/
 	public static void viraRotate (int motorRotate, EnumDirecao direcao) {
 			
-		motorRodaDireita.stop(true);
-		motorRodaEsquerda.stop(true);
+		//motorRodaDireita.stop(true);
+		//motorRodaEsquerda.stop(true);
 		
-		boolean isMoving = false;
-		while (isMoving){	
-		isMoving = motorRodaDireita.isMoving() ||  motorRodaEsquerda.isMoving();			
-		}	
+		//boolean isMoving = false;
+		//while (isMoving){	
+		//isMoving = motorRodaDireita.isMoving() ||  motorRodaEsquerda.isMoving();			
+		//}	
+		
+		
 	
+		int mod = 0;
+		mod  = motorRotate/ grausToMotorRotate(90) ;
 		
-		
-		switch (direcao) {
-			case DIREITA:
-			motorRodaDireita.rotate(motorRotate);			
-			motorRodaEsquerda.rotate(-motorRotate);
-			break;
-			
-			case ESQUERDA:
-				motorRodaDireita.rotate(-motorRotate);
-				motorRodaEsquerda.rotate(motorRotate);
-			break;	
-
-		default:
-			break;
+		if(mod < 0){
+			mod = -mod;
+			if(direcao == EnumDirecao.DIREITA){
+				direcao = EnumDirecao.ESQUERDA;
+			}else{
+				direcao = EnumDirecao.DIREITA;
+			}
 		}
+					
+			
+			for (int i = 0; i < mod; i++) {
+
+				EnumDirecao direcaoParaIr = direcaoParaIrGlobal(PotatoRobo.getDirecaoRobo(), direcao);				
+				
+				System.out.println("ViraMotor: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoRobo());
+				PotatoRobo.setDirecaoRobo(direcaoParaIr);	
+				System.out.println("VIRAMotor: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoRobo());
+				
+			}
+			//motorRodaDireita.rotate(motorRotate);			
+			//motorRodaEsquerda.rotate(-motorRotate);
+		
+		
+		System.out.println(Mapa.imprimeRoboEmString());
+		
 				
 	}
 	
@@ -235,8 +119,8 @@ public class PotatoManager {
 	public static void para(){
 		//while (
 		//}
-		motorRodaDireita.stop(true);
-		motorRodaEsquerda.stop(true);
+		//motorRodaDireita.stop(true);
+		//motorRodaEsquerda.stop(true);
 	}
 	
 	/**
@@ -244,6 +128,7 @@ public class PotatoManager {
 	 * @param distancia cm
 	 */
 	public static void andarDistancia(int distancia){
+		
 		andarRotate(dintanceToMotorRotate(distancia));
 	}
 	
@@ -253,10 +138,55 @@ public class PotatoManager {
 	 * @param motorRotate rotacao do motor
 	 */
 	public static void andarRotate(int motorRotate) {		
-			 motorRodaDireita.rotate(motorRotate,true);
-			 motorRodaEsquerda.rotate(motorRotate);					
+		
+		int mod = 0;
+		int mod2  = motorRotate/ distancia_10_MotorRotate_100 ;
+		mod  = (Mapa.tamanhoQuadros /10) /mod2 ;
+		
+		System.out.println("Anda : MotorRotae<" + motorRotate + ", mod:" + mod);	
+		EnumDirecao direcaoParaIr = direcaoParaIrGlobal(PotatoRobo.getDirecaoRobo(), EnumDirecao.FRENTE);
+		
+		for(int i = 0 ; i < mod; i++){
+			
+			moveMatriz( direcaoParaIr, 1);
+			//robo.nodoAtual
+		}
+			// motorRodaDireita.rotate(motorRotate,true);
+			 //motorRodaEsquerda.rotate(motorRotate);	
+		
+		//Mapa.tamanhoQuadros
+		
+					
+	}
+	
+	
+	private static void moveMatriz( EnumDirecao direcao, int distancia){
+		
+		int posI = PotatoRobo.nodoAtual.getI();
+		int posJ = PotatoRobo.nodoAtual.getJ();
+		
+		switch (direcao) {
+		case FRENTE:		
+			PotatoRobo.nodoAtual = Mapa.getNodo(posI+distancia, posJ);
+			;
+		case TRAZ:
+			PotatoRobo.nodoAtual = Mapa.getNodo(posI-distancia, posJ);
+			
+		case DIREITA:
+			PotatoRobo.nodoAtual = Mapa.getNodo(posI, posJ + 1);
+		case ESQUERDA:
+			PotatoRobo.nodoAtual = Mapa.getNodo(posI, posJ-1);
+			
+		
+
+		default:			
+			
+			PotatoRobo.nodoAtual = Mapa.getNodo(posI, posJ);
+			break;
+		}
 		
 	}
+	
 
 	
 	/**Tranforma o valor do angulo em valores de rotacoes do motor
@@ -403,6 +333,100 @@ public class PotatoManager {
 
 	}
 	
+	public static EnumDirecao direcaoParaIrGlobal(EnumDirecao direcao, EnumDirecao direcaoProxima){
+
+		EnumDirecao direcaoParaIr = null;
+		
+		switch (direcao) {
+		case FRENTE:		
+			
+			switch (direcaoProxima) {
+			case FRENTE:		
+				direcaoParaIr = EnumDirecao.FRENTE; 
+				break;
+			case TRAZ:
+				direcaoParaIr = EnumDirecao.TRAZ;
+				break;
+			case DIREITA:
+				direcaoParaIr = EnumDirecao.ESQUERDA;
+				break;
+			case ESQUERDA:
+				direcaoParaIr = EnumDirecao.DIREITA;
+				break;			
+
+			default:
+				break;
+			}		
+			
+			break;
+		case TRAZ:
+			
+			switch (direcaoProxima) {
+			case FRENTE:		
+				direcaoParaIr = EnumDirecao.TRAZ; 
+				break;
+			case TRAZ:
+				direcaoParaIr = EnumDirecao.FRENTE;
+				break;
+			case DIREITA:
+				direcaoParaIr = EnumDirecao.DIREITA;
+				break;
+			case ESQUERDA:
+				direcaoParaIr = EnumDirecao.ESQUERDA;
+				break;			
+
+			default:
+				break;
+			}	
+			break;
+		case DIREITA:
+			switch (direcaoProxima) {
+			case FRENTE:		
+				direcaoParaIr = EnumDirecao.DIREITA; 
+				break;
+			case TRAZ:
+				direcaoParaIr = EnumDirecao.ESQUERDA;
+				break;
+			case DIREITA:
+				direcaoParaIr = EnumDirecao.FRENTE;
+				break;
+			case ESQUERDA:
+				direcaoParaIr = EnumDirecao.TRAZ;
+				break;			
+
+			default:
+				break;
+			}		
+			break;
+		case ESQUERDA:
+			switch (direcaoProxima) {
+			case FRENTE:		
+				direcaoParaIr = EnumDirecao.ESQUERDA; 
+				break;
+			case TRAZ:
+				direcaoParaIr = EnumDirecao.DIREITA;
+				break;
+			case DIREITA:
+				direcaoParaIr = EnumDirecao.TRAZ;
+				break;
+			case ESQUERDA:
+				direcaoParaIr = EnumDirecao.FRENTE;
+				break;			
+
+			default:
+				break;
+			}		
+			break;			
+
+		default:
+			break;
+		}		
+		
+
+		return direcaoParaIr;
+
+	}
+	
 
 	
 /**
@@ -416,11 +440,6 @@ public class PotatoManager {
  */
 	public static void andaCaminho(ArrayList<int[]> caminho,EnumDirecao direcaoRobo, int distanciaMapa, int posicaoRoboI, int posicaoRoboJ) throws InterruptedException{
 
-		//direcaoAtual = EnumDirecao.FRENTE;
-		////Adicionar posicao inical do robo no caminho
-
-		//int posicaoAtualI = 0; 
-		//int posicaoAtualJ = 0;
 		int posicaoProximaI = 0;
 	    int posicaoProximaJ = 0;
 	    int valoDirecional = 0;
@@ -533,7 +552,7 @@ public class PotatoManager {
 	
 	public static void viraDirecionadaCabeca4d(int valorDirecional) {		
 		
-		viraCabeca(grausToMotorRotate(90 * valorDirecional), EnumDirecao.DIREITA);	
+		viraCabeca(grausToCabecaMotorRotate(90 * valorDirecional), EnumDirecao.DIREITA);	
 		
 	}
 	/**
@@ -544,25 +563,83 @@ public class PotatoManager {
 	 */
 
 	public static void viraCabeca(int motorRotate, EnumDirecao direcao) {		
+
+		int mod = 0;
+		mod  = motorRotate/ grausToCabecaMotorRotate(90) ;
 		
-		if(direcao == EnumDirecao.DIREITA){
-		motorCabeca.rotate(motorRotate);
-		
-		}else if(direcao == EnumDirecao.ESQUERDA){
-			motorCabeca.rotate(-motorRotate);
-		}				
+
+		if(mod < 0){
+			mod = -mod;
+			if(direcao == EnumDirecao.DIREITA){
+				direcao = EnumDirecao.ESQUERDA;
+			}else{
+				direcao = EnumDirecao.DIREITA;
+			}
+		}
+			
+		for (int i = 0; i < mod; i++) {
+			EnumDirecao direcaoRobo = PotatoRobo.getDirecaoCabeca();
+			EnumDirecao direcaoParaIr = direcaoParaIrGlobal(direcaoRobo, direcao);				
+			System.out.println("VIRACabeca: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoCabeca());
+			PotatoRobo.setDirecaoCabeca(direcaoParaIr);	
+			System.out.println("VIRACabeca: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoCabeca());
+			
+			
+		}		
+
+		System.out.println(Mapa.imprimeRoboEmString());
+				
 
 	}
 	
 	public static Boolean encontrouParede() {
 		//sensorUltrasonico.capture();
+		int posI = PotatoRobo.nodoAtual.getI()*2;
+		int posJ = PotatoRobo.nodoAtual.getJ()*2;
+		boolean retorno = false;
+		
+		switch (PotatoRobo.getDirecaoCabeca()) {
+		case DIREITA:
+			
+		if(Mapa.getMatrizSimulacao()[posI][posJ+1] == Mapa.EnumMapa.OBSTACULO.id){
+			retorno = true;
+		}			
+			break;
+		case ESQUERDA:
+			if(Mapa.getMatrizSimulacao()[posI][posJ -1] == Mapa.EnumMapa.OBSTACULO.id){
+				retorno = true;
+			}
+			break;
+		case FRENTE:
+			if(Mapa.getMatrizSimulacao()[posI+1][posJ] == Mapa.EnumMapa.OBSTACULO.id){
+				retorno = true;
+			}
+			break;
+		case TRAZ:
+			
+			if(Mapa.getMatrizSimulacao()[posI-1][posJ] == Mapa.EnumMapa.OBSTACULO.id){
+				retorno = true;
+			}
+			break;
+			
+
+		default:
+			break;
+		}
+		
+		return retorno;
+		
+		/*
 		if(sensorUltrasonico.getDistance()< distancia_paredeUltraSonico) {
 			return true;
 		}else {
 			return false;
 		}
+		*/
+		
 		
 	}
+	
 	
 	
 	

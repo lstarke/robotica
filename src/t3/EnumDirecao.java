@@ -18,6 +18,7 @@ public enum EnumDirecao {
 	
 	EnumDirecao(int i) {
 		this.valor = i;
+		
 	}
 	
 	public int valorDirecional(int valorAtual) {
@@ -37,4 +38,5 @@ public enum EnumDirecao {
 			}
 		}
 	}
+	
 }

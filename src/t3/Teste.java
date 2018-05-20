@@ -1,15 +1,28 @@
 package t3;
 
+import java.util.ArrayList;
+
+import lejos.robotics.kinematics.RobotArm;
+
 public class Teste {
 
+	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
 
 
-		Mapa mapa = Mapa.getInstance();
+		PotatoExplorer pe = new PotatoExplorer(6,0);		
+		
+		String mapaS = "";
+		
+		//mapaS = pe.mapa.imprimeMatrizEmString(pe.mapa.getMatrizSimulacao());
+		
+		mapaS += "\n"+ pe.mapa.imprimeRoboEmString(pe.robo.desenhaRobo(),pe.robo.nodoAtual.getI(),pe.robo.nodoAtual.getJ(),true);
+		
+		System.out.println(mapaS);
 		
 		
-		
-		Nodo nodoAtual = mapa.getNodo(0, 2);
+		pe.explorerMapa(pe.robo.nodoAtual, new ArrayList<Nodo>());
+		/*Nodo nodoAtual = mapa.getNodo(0, 2);
 		
 				
 		nodoAtual.setNodoFrente(Mapa.getNodo(0, 1));		
@@ -30,9 +43,7 @@ public class Teste {
 		
 		*/
 
-		 
-		//System.out.println(getNome() );
-		
+
 	}
 
 }
