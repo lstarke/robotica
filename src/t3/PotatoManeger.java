@@ -321,10 +321,12 @@ public class PotatoManeger {
 		case DIREITA:
 			viraAngulo(90, EnumDirecao.DIREITA);
 			andarDistancia(distancia);
+			break;
 			
 		case ESQUERDA:
 			viraAngulo(90, EnumDirecao.ESQUERDA );
 			andarDistancia(distancia);
+			break;
 
 		default:
 			break;

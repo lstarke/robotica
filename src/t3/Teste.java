@@ -7,7 +7,7 @@ import lejos.robotics.kinematics.RobotArm;
 public class Teste {
 
 	@SuppressWarnings("static-access")
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 
 
 		PotatoExplorer pe = new PotatoExplorer(6,0);		

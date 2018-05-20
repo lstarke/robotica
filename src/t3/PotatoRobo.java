@@ -4,7 +4,9 @@ import org.apache.bcel.generic.CALOAD;
 import org.apache.bcel.generic.SWITCH;
 
 public class PotatoRobo {
+	//posicao global
 	private static EnumDirecao direcaoRobo = EnumDirecao.FRENTE;
+	//posicaoGlobal
 	private static EnumDirecao direcaoCabeca = EnumDirecao.FRENTE;
 	private static PotatoRobo instance = null;
 	public static PotatoManegerTeste manager = new  PotatoManegerTeste();//new PotatoManager();	
@@ -100,6 +102,7 @@ public class PotatoRobo {
 				
 		return robo +"."+ cabeca;
 	}
+	/*
 	
 	private static String desenhaCabeca(){
 		
@@ -117,6 +120,7 @@ public class PotatoRobo {
 		return cabeca;
 	}
 	
+	*/
 @SuppressWarnings("static-access")
 
 /**

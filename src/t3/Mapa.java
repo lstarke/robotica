@@ -159,7 +159,7 @@ public class Mapa {
 		return matriz;
 	}
 	
-	public static String imprimeMatrizEmString(String[][] m) {
+	public static String imprimeMatrizEmString(String[][] m, boolean isMapaDobrado) {
 		String matriz = "";
 		// System.out.println("_________________");
 		matriz = "_________________\n";
@@ -171,7 +171,13 @@ public class Mapa {
 
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < columns; j++) {
+					//if (j % 2 != 0  && m[i][j].contentEquals("-1")){
+					//str += " | "+ "\t";	
+					//}else{					
 					str += m[i][j] + "\t";
+						
+					//}
+						
 				}
 
 				matriz += (str + "|\n");
@@ -219,7 +225,7 @@ public class Mapa {
 
 		}
 
-		return imprimeMatrizEmString(matrizS);
+		return imprimeMatrizEmString(matrizS, isMapaDobrado);
 	}
 	
 	public static int[] procuraRobo(int[][] matriz) {

@@ -76,7 +76,12 @@ public class PotatoManegerTeste {
 		//isMoving = motorRodaDireita.isMoving() ||  motorRodaEsquerda.isMoving();			
 		//}	
 		
-		
+		try {
+			Thread.sleep(300);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 		int mod = 0;
 		mod  = motorRotate/ grausToMotorRotate(90) ;
@@ -95,9 +100,9 @@ public class PotatoManegerTeste {
 
 				EnumDirecao direcaoParaIr = direcaoParaIrGlobal(PotatoRobo.getDirecaoRobo(), direcao);				
 				
-				System.out.println("ViraMotor: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoRobo());
+				///System.out.println("ViraMotor: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoRobo());
 				PotatoRobo.setDirecaoRobo(direcaoParaIr);	
-				System.out.println("VIRAMotor: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoRobo());
+				//System.out.println("VIRAMotor: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoRobo());
 				
 			}
 			//motorRodaDireita.rotate(motorRotate);			
@@ -137,18 +142,25 @@ public class PotatoManegerTeste {
 	 * Anda para frente  
 	 * @param motorRotate rotacao do motor
 	 */
-	public static void andarRotate(int motorRotate) {		
+	public static void andarRotate(int motorRotate) {	
+		
+		try {
+			Thread.sleep(300);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		int mod = 0;
 		int mod2  = motorRotate/ distancia_10_MotorRotate_100 ;
 		mod  = (Mapa.tamanhoQuadros /10) /mod2 ;
 		
-		System.out.println("Anda : MotorRotae<" + motorRotate + ", mod:" + mod);	
-		EnumDirecao direcaoParaIr = direcaoParaIrGlobal(PotatoRobo.getDirecaoRobo(), EnumDirecao.FRENTE);
+		//System.out.println("Anda : MotorRotae:" + motorRotate + ", mod:" + mod + ",Direcao:" + PotatoRobo.getDirecaoRobo());	
+		//EnumDirecao direcaoParaIr = direcaoParaIrGlobal(PotatoRobo.getDirecaoRobo(), EnumDirecao.FRENTE);
 		
 		for(int i = 0 ; i < mod; i++){
-			
-			moveMatriz( direcaoParaIr, 1);
+			//Robo já foi virado;
+			moveMatriz( PotatoRobo.getDirecaoRobo(), 1);
 			//robo.nodoAtual
 		}
 			// motorRodaDireita.rotate(motorRotate,true);
@@ -168,14 +180,17 @@ public class PotatoManegerTeste {
 		switch (direcao) {
 		case FRENTE:		
 			PotatoRobo.nodoAtual = Mapa.getNodo(posI+distancia, posJ);
-			;
+			break;
+			
 		case TRAZ:
 			PotatoRobo.nodoAtual = Mapa.getNodo(posI-distancia, posJ);
-			
+			break;
 		case DIREITA:
 			PotatoRobo.nodoAtual = Mapa.getNodo(posI, posJ + 1);
+			break;
 		case ESQUERDA:
 			PotatoRobo.nodoAtual = Mapa.getNodo(posI, posJ-1);
+			break;
 			
 		
 
@@ -288,6 +303,7 @@ public class PotatoManegerTeste {
 		
 		int valoDirecional  =  direcaoParaIr.valorDirecional(direcaoRobo.valor);	
 		viraDirecionada4d(valoDirecional);
+		andarDistancia(distancia);
 	}
 	
 	/**
@@ -564,6 +580,13 @@ public class PotatoManegerTeste {
 
 	public static void viraCabeca(int motorRotate, EnumDirecao direcao) {		
 
+		try {
+			Thread.sleep(300);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		int mod = 0;
 		mod  = motorRotate/ grausToCabecaMotorRotate(90) ;
 		
@@ -580,9 +603,9 @@ public class PotatoManegerTeste {
 		for (int i = 0; i < mod; i++) {
 			EnumDirecao direcaoRobo = PotatoRobo.getDirecaoCabeca();
 			EnumDirecao direcaoParaIr = direcaoParaIrGlobal(direcaoRobo, direcao);				
-			System.out.println("VIRACabeca: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoCabeca());
+			//System.out.println("VIRACabeca: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoCabeca());
 			PotatoRobo.setDirecaoCabeca(direcaoParaIr);	
-			System.out.println("VIRACabeca: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoCabeca());
+			//System.out.println("VIRACabeca: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoCabeca());
 			
 			
 		}		
