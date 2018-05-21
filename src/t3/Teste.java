@@ -21,7 +21,7 @@ public class Teste {
 		System.out.println(mapaS);
 		
 		pe.getProdutoToColetar().add(EnumProduto.PRODUTO_1_PRETO);
-		pe.explorerMapa(pe.robo.nodoAtual, new ArrayList<Nodo>());
+		pe.explorerMapa(pe.robo.nodoAtual, new ArrayList<Nodo>(),0);
 		
 		Thread.sleep(400);
 		

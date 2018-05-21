@@ -59,7 +59,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 
 	
 	@SuppressWarnings("static-access")
-	public void explorerMapa(Nodo nodoAtual, ArrayList<Nodo> caminho) throws InterruptedException {
+	public void explorerMapa(Nodo nodoAtual, ArrayList<Nodo> caminho,int volta) throws InterruptedException {
 	//System.out.println(cont++);
 		if(mapa.getMatrizSimulacao()[nodoAtual.getI()*2][nodoAtual.getJ()*2] == 0) {
 			mapa.getMatrizSimulacao()[nodoAtual.getI()*2][nodoAtual.getJ()*2] = 1;
@@ -86,21 +86,21 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	
 			if(nodoFrente!= null && nodoFrente.getStatus()  == EnumStatus.N_EXPLORADO && !nodoFrente.isNodoPercorrido() ) {
 				robo.Move4dDistancia(EnumDirecao.FRENTE, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
-				explorerMapa(nodoFrente, caminho);
+				explorerMapa(nodoFrente, caminho, 0);
 				
 			}
 			if(nodoEsquerda != null && nodoEsquerda.getStatus()  == EnumStatus.N_EXPLORADO && !nodoEsquerda.isNodoPercorrido()) {
 				robo.Move4dDistancia(EnumDirecao.ESQUERDA, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
-				explorerMapa(nodoEsquerda,caminho);
+				explorerMapa(nodoEsquerda,caminho, 0);
 			}
 			if(nodoDireita!= null && nodoDireita.getStatus()  == EnumStatus.N_EXPLORADO && !nodoDireita.isNodoPercorrido()) {
 				robo.Move4dDistancia(EnumDirecao.DIREITA, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
-				explorerMapa(nodoDireita,caminho);
+				explorerMapa(nodoDireita,caminho, 0);
 				
 			}
 			if(nodoTraz != null && nodoTraz.getStatus()  == EnumStatus.N_EXPLORADO && !nodoTraz.isNodoPercorrido()) {
 				robo.Move4dDistancia(EnumDirecao.TRAZ, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
-				explorerMapa(nodoTraz,caminho);
+				explorerMapa(nodoTraz,caminho , 0);
 			}			
 			addNodoEplorado(nodoAtual);			
 			nodoAtual.setStatus(EnumStatus.EXPLORADO);
@@ -114,8 +114,8 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 				
 			
 		}else{
-			
-			voltaCaminho(nodoAtual, caminho);
+			volta++;
+			voltaCaminho(nodoAtual, caminho, volta);
 			
 			//robo.manager.andaCaminho(caminho, robo.getDirecaoRobo(), mapa.tamanhoQuadros, true);
 		}
@@ -128,25 +128,29 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 	}
 	
-	public void voltaCaminho(Nodo nodoAtual, ArrayList<Nodo> caminho) throws InterruptedException {
+	public void voltaCaminho(Nodo nodoAtual, ArrayList<Nodo> caminho, int volta) throws InterruptedException {
 		robo.nodoAtual = nodoAtual;
-		Nodo volta = caminho.get(caminho.size()-1);
-		caminho.remove(caminho.size()-1);
-		EnumDirecao direcao = direcaoNodoAdjacente(nodoAtual, volta);
+		int idx = caminho.size()- (volta +1);		
+		Nodo nodoAnterior = caminho.get(idx);
+		EnumDirecao direcao = direcaoNodoAdjacente(nodoAtual, nodoAnterior);	
+		volta++;
+		//caminho.add(volta);
+		//caminho.remove(caminho.size()-1);
+		
 		
 		robo.Move4dDistancia(direcao, robo.getDirecaoRobo(), mapa.tamanhoQuadros);	
-		explorerMapa(volta, caminho);
+		explorerMapa(nodoAnterior, caminho, volta);
 	}
 	
 	public EnumDirecao direcaoNodoAdjacente(Nodo pai ,Nodo adjacente) {
 		
-		if(pai.getNodoFrente()  == adjacente) {
+		if(pai.getNodoFrente() != null && pai.getNodoFrente().equals(adjacente)) {
 			return EnumDirecao.FRENTE;
-		}else if (pai.getNodoEsquerda() == adjacente) {
+		}else if (pai.getNodoEsquerda() != null && pai.getNodoEsquerda().equals(adjacente)) {
 			return EnumDirecao.ESQUERDA;
-		}else if (pai.getNodoDireita() == adjacente) {
+		}else if (pai.getNodoDireita() != null && pai.getNodoDireita().equals(adjacente)) {
 			return EnumDirecao.DIREITA;
-		}else if(pai.getNodoTraz() == adjacente) {
+		}else if(pai.getNodoTraz() != null && pai.getNodoTraz().equals(adjacente)) {
 			return EnumDirecao.TRAZ;			
 		}
 				
