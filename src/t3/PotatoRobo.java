@@ -28,19 +28,27 @@ public class PotatoRobo {
 	public static EnumDirecao getDirecaoRobo() {
 		return direcaoRobo;
 	}
+	
+	/**
+	 * Define Direcao global do robo;
+	 */
 	public static void setDirecaoRobo(EnumDirecao direcaoRobo) {
 		PotatoRobo.direcaoRobo = direcaoRobo;
 	}
 	public static EnumDirecao getDirecaoCabeca() {
 		return direcaoCabeca;
 	}
+	/**
+	 * Define a Direção global da cabeça.
+	 * @param direcaoCabeca
+	 */
 	public static void setDirecaoCabeca(EnumDirecao direcaoCabeca) {
 		PotatoRobo.direcaoCabeca = direcaoCabeca;
 		
 	}
 	
-	public static int[] observaCor(){
-		
+	@SuppressWarnings("static-access")
+	public static int[] observaCor(){		
 		return manager.observaCor();
 		
 	}

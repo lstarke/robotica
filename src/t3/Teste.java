@@ -10,7 +10,7 @@ public class Teste {
 	public static void main(String[] args) throws InterruptedException {
 
 
-		PotatoExplorer pe = new PotatoExplorer(6,0);		
+		PotatoExplorer pe = new PotatoExplorer(6,0, EnumDirecao.DIREITA, false);		
 		
 		String mapaS = "";
 		
@@ -23,34 +23,11 @@ public class Teste {
 		pe.getProdutoToColetar().add(EnumProduto.PRODUTO_1_PRETO);
 		pe.explorerMapa(pe.robo.nodoAtual, new ArrayList<Nodo>());
 		
+		Thread.sleep(400);
 		
-		///pe.menorCaminhoAteprodutos(Mapa.getNodo(6, 0));
-		//System.out.println("\n/////////MENOR CAMINHO ////////////");
-		//pe.menorCaminhoAteprodutos2(Mapa.getNodo(6, 0),0);
+		pe.coletaProduto(Mapa.getNodo(6, 0));
 		
-		//System.out.println(pe.imprimeProdutoPosiçoes());
 		
-		/*Nodo nodoAtual = mapa.getNodo(0, 2);
-		
-				
-		nodoAtual.setNodoFrente(Mapa.getNodo(0, 1));		
-		nodoAtual.getNodoFrente().setNodoTraz(nodoAtual);
-		
-		nodoAtual.setNodoDireita(Mapa.getNodo(0, 1));
-		
-		System.out.println(nodoAtual.getNome() );
-		System.out.println(nodoAtual.getNodoFrente().getNome());
-		System.out.println(nodoAtual.getNodoFrente().getNodoTraz().getNome());
-		
-		/*
-		MapearCaminho
-		MapearProduto
-
-		AndarCaminho
-		EncontraProduto
-		
-		*/
-
 
 	}
 

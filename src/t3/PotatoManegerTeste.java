@@ -9,6 +9,7 @@ import t3.Mapa.EnumMapa;
 import lejos.nxt.ColorSensor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.UltrasonicSensor;
+import lejos.robotics.mapping.SliderPanel;
 
 /** * 
  * @author Francisca
@@ -43,12 +44,25 @@ public class PotatoManegerTeste {
 	public static ColorSensor sensorCor;
 	public static UltrasonicSensor sensorUltrasonico;	
 	public static boolean modoTeste = false;
-	public static PotatoRobo robo = PotatoRobo.getInstance(); 
+	public static PotatoRobo robo = PotatoRobo.getInstance();
+	
+	private static boolean  sleepMode = false;
 	
 	public static void calibragemTeste() throws InterruptedException {
 		
 		
 
+	}
+	
+	public static void dorme(int i) {
+		if(sleepMode)
+		try {
+			Thread.sleep(i);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}			
+	
 	}
 	
 	public PotatoManegerTeste(){
@@ -153,16 +167,7 @@ public class PotatoManegerTeste {
 	*/
 	public static void viraRotate (int motorRotate, EnumDirecao direcao) {
 			
-		/*
-		
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	
-	*/
 		int mod = 0;
 		mod  = motorRotate/ grausToMotorRotate(90) ;
 		
@@ -177,6 +182,9 @@ public class PotatoManegerTeste {
 					
 			
 			for (int i = 0; i < mod; i++) {
+				
+				dorme(100);		
+				
 	
 				EnumDirecao direcaoParaIr = direcaoParaIrGlobal(PotatoRobo.getDirecaoRobo(), direcao);				
 				
@@ -184,10 +192,7 @@ public class PotatoManegerTeste {
 				PotatoRobo.setDirecaoRobo(direcaoParaIr);	
 				//System.out.println("VIRAMotor: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoRobo());
 				
-			}
-			//motorRodaDireita.rotate(motorRotate);			
-			//motorRodaEsquerda.rotate(-motorRotate);
-		
+			}		
 		
 		System.out.println(Mapa.imprimeRoboEmString());
 		
@@ -205,14 +210,7 @@ public class PotatoManegerTeste {
 	 * @param motorRotate rotacao do motor
 	 */
 	public static void andarRotate(int motorRotate) {	
-		/*
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+	
 		
 		int mod = 0;
 		int mod2  = motorRotate/ distancia_10_MotorRotate_100 ;
@@ -222,6 +220,9 @@ public class PotatoManegerTeste {
 		//EnumDirecao direcaoParaIr = direcaoParaIrGlobal(PotatoRobo.getDirecaoRobo(), EnumDirecao.FRENTE);
 		
 		for(int i = 0 ; i < mod; i++){
+						
+			dorme(100);
+			
 			//Robo já foi virado;
 			moveMatriz( PotatoRobo.getDirecaoRobo(), 1);
 			//robo.nodoAtual
@@ -252,14 +253,6 @@ public class PotatoManegerTeste {
 		 */
 	
 		public static void viraCabeca(int motorRotate, EnumDirecao direcao) {		
-	/*
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			*/
 			
 			int mod = 0;
 			mod  = motorRotate/ grausToCabecaMotorRotate(90) ;
@@ -275,14 +268,8 @@ public class PotatoManegerTeste {
 			}
 				
 			for (int i = 0; i < mod; i++) {
-				/*
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				*/
+				
+				dorme(300);
 				
 				EnumDirecao direcaoRobo = PotatoRobo.getDirecaoCabeca();
 				EnumDirecao direcaoParaIr = direcaoParaIrGlobal(direcaoRobo, direcao);				
@@ -456,6 +443,7 @@ public class PotatoManegerTeste {
 			posicaoProximaI = caminho.get(i).getI();
 			posicaoProximaJ = caminho.get(i).getJ();			
 		
+			//System.out.println(caminho.get(i).getNome());
 			EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
 			robo.Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);
 			//Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
@@ -464,7 +452,14 @@ public class PotatoManegerTeste {
 			posicaoRoboJ = posicaoProximaJ;			
 			
 			direcaoRobo = direcaoParaIr;
-	
+			
+			if(Mapa.getMatrizSimulacao()[robo.nodoAtual.getI()*2][robo.nodoAtual.getJ()*2] == 3) {
+				Mapa.getMatrizSimulacao()[robo.nodoAtual.getI()*2][robo.nodoAtual.getJ()*2] = 99;
+			}else {
+				Mapa.getMatrizSimulacao()[robo.nodoAtual.getI()*2][robo.nodoAtual.getJ()*2] = 2;
+			}
+			System.out.println( Mapa.imprimeRoboEmString(robo.desenhaRobo(), robo.nodoAtual.getI(), robo.nodoAtual.getJ(), true));
+			
 		}
 	    }else {
 	    	
@@ -475,8 +470,9 @@ public class PotatoManegerTeste {
 				
 				Nodo p = caminho.get(i);
 				posicaoProximaI = p.getI();
-				posicaoProximaJ = p.getJ();			
-			
+				posicaoProximaJ = p.getJ();		
+				
+				System.out.println(caminho.get(i).getNome());			
 				EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
 				robo.Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);
 				//Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
@@ -485,6 +481,8 @@ public class PotatoManegerTeste {
 				posicaoRoboJ = posicaoProximaJ;			
 				
 				direcaoRobo = direcaoParaIr;
+				
+				System.out.println( Mapa.imprimeRoboEmString(robo.desenhaRobo(), robo.nodoAtual.getI(), robo.nodoAtual.getJ(), true));
 	
 				}	
 		}	    

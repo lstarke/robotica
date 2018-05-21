@@ -63,28 +63,38 @@ public class Nodo {
 		this.j = j;
 	}
 	public Nodo getNodoFrente() {
+
 		return NodoFrente;
+
 	}
-	public void setNodoFrente(Nodo nodoFrente) {			
+	public void setNodoFrente(Nodo nodoFrente) {	
+		if(NodoFrente == null) {
 		NodoFrente = nodoFrente;
+		}
 	}
 	public Nodo getNodoTraz() {
 		return NodoTraz;
 	}
 	public void setNodoTraz(Nodo nodoTraz) {
+		if(NodoTraz== null) {
 		NodoTraz = nodoTraz;
+		}
 	}
 	public Nodo getNodoDireita() {
 		return NodoDireita;
 	}
 	public void setNodoDireita(Nodo nodoDireita) {
+		if(NodoDireita == null) {
 		NodoDireita = nodoDireita;
+		}
 	}
 	public Nodo getNodoEsquerda() {
 		return NodoEsquerda;
 	}
 	public void setNodoEsquerda(Nodo nodoEsquerda) {
+		if(NodoEsquerda == null) {
 		NodoEsquerda = nodoEsquerda;
+		}
 	}
 
 	public EnumStatus getStatus() {

@@ -17,7 +17,7 @@ public class Mapa {
 	private static Mapa instance = null;
 	public static int sizeI =7;
 	public static int sizeJ =7;
-	public static int tamanhoQuadros =26;
+	public static int tamanhoQuadros =26;	
 	
 	private static boolean isTodoExplorado = false;
 	//private static Nodo menorI = null;
@@ -106,8 +106,8 @@ public class Mapa {
 		 * Definir apenas paredes que se encontram Abaixo e á esquerda
 		 */
 		int [][] matrizMapX = 
-			{{0,  0,    0,  0,    0,  0,   0,  0,   0,  0,   0,  0,   0, 0},
-			 {0,  0,    0,  0,    0,  0,   0,  0,   0,  0,   0,  0,   0, 0},
+			{{0,  0,    0,  0,    0, -1,   0,  0,   0,  0,   0,  0,   0, 0},
+			 {0,  0,    0,  0,    0, -1,   0,  0,   0,  0,   0,  0,   0, 0},
 			 {0, -1,    0,  0,    0, -1,   0,  0,   0, -1,   0,  0,   0, 0},
 			 {0, -1,    0,  0,    0, -1,   0,  0,   0, -1,   0,  0,   0, 0},
 			 {0, -1,    0,  0,    0, -1,   3,  0,   0, -1,   0,  0,   0, 0},
@@ -280,13 +280,13 @@ public static boolean isTodoExplorado() {
 	if(!isTodoExplorado){
 		
 			int sizeI= matrizNavegacao.length;
-			int sizeJ = matrizNavegacao.length;			
+			int sizeJ = matrizNavegacao[0].length;			
 			
 
 			for (int i = 0; i < sizeI; i++) {
 				for (int j = 0; j < sizeJ; j++) {
 				
-					if(matrizNavegacao[i][j].isNodoPercorrido() == false){
+					if(Mapa.getNodo(i, j).isNodoPercorrido() == false){
 						return false;
 					}
 					

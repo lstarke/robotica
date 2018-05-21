@@ -29,14 +29,18 @@ public static PotatoRobo robo = PotatoRobo.getInstance();
 public static Mapa mapa = Mapa.getInstance();
 public static ArrayList<Nodo> nodoListExplorados = new ArrayList<Nodo>();
 private int cont = 0;
+private static boolean olharParaTraz =  true;
 
 private static ArrayList<Nodo> produtoList = new ArrayList<Nodo>();
 private static ArrayList<EnumProduto> produtoToColetar = new ArrayList<EnumProduto>();
 private static ArrayList<ArrayList<Nodo>> caminhoProdutoList = new ArrayList<ArrayList<Nodo>>();
 
 @SuppressWarnings("static-access")
-public PotatoExplorer( int  posicaoRoboI, int posicaoRoboJ){
-	
+public PotatoExplorer( int  posicaoRoboI, int posicaoRoboJ, EnumDirecao direcaoRobo, boolean olharParaTraz){
+	robo.setDirecaoRobo(direcaoRobo);
+	//considera que a cabeça esta sempre a mesma direcao do robo
+	//A direção da cabeça é global e não em relação ao robo
+	robo.setDirecaoCabeca(direcaoRobo);
 	robo.nodoAtual = Mapa.getNodo(posicaoRoboI, posicaoRoboJ);
 	mapa.setMatrizSimulacao(mapa.createDefaultMapa());
 	
@@ -64,15 +68,6 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		nodoAtual.setNodoPercorrido(true);		
 		robo.nodoAtual = nodoAtual;
 		
-		/*
-		if(caminho.size() > 0) {
-			nodoAtual.setPai(nodoAtual.getNodoTraz());
-		}
-		*/
-		
-		
-		
-	    
 		if(nodoAtual.getStatus() == EnumStatus.N_EXPLORADO)
 		{
 			
@@ -119,7 +114,10 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 				
 			
 		}else{
-			robo.manager.andaCaminho(caminho, robo.getDirecaoRobo(), mapa.tamanhoQuadros, true);
+			
+			voltaCaminho(nodoAtual, caminho);
+			
+			//robo.manager.andaCaminho(caminho, robo.getDirecaoRobo(), mapa.tamanhoQuadros, true);
 		}
 		//String mapaS = "\n"+ mapa.imprimeRoboEmString(robo.desenhaRobo(),robo.nodoAtual.getI(),robo.nodoAtual.getJ(),true);
 		
@@ -130,18 +128,68 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 	}
 	
-	public static String imprimeProdutoPosiçoes() {
+	public void voltaCaminho(Nodo nodoAtual, ArrayList<Nodo> caminho) throws InterruptedException {
+		robo.nodoAtual = nodoAtual;
+		Nodo volta = caminho.get(caminho.size()-1);
+		caminho.remove(caminho.size()-1);
+		EnumDirecao direcao = direcaoNodoAdjacente(nodoAtual, volta);
+		
+		robo.Move4dDistancia(direcao, robo.getDirecaoRobo(), mapa.tamanhoQuadros);	
+		explorerMapa(volta, caminho);
+	}
+	
+	public EnumDirecao direcaoNodoAdjacente(Nodo pai ,Nodo adjacente) {
+		
+		if(pai.getNodoFrente()  == adjacente) {
+			return EnumDirecao.FRENTE;
+		}else if (pai.getNodoEsquerda() == adjacente) {
+			return EnumDirecao.ESQUERDA;
+		}else if (pai.getNodoDireita() == adjacente) {
+			return EnumDirecao.DIREITA;
+		}else if(pai.getNodoTraz() == adjacente) {
+			return EnumDirecao.TRAZ;			
+		}
+				
+		
+		return null;
+		
+	}
+	
+	public static String imprimeProdutoPosicoes() {
 		String listaProdutos = "Produtos:";
 		for(Nodo n : produtoList) {
 		 listaProdutos += n.getNome()+";"; 
-		}
-		
+		}		
 		
 		return listaProdutos;
 	}
+	
+	@SuppressWarnings("static-access")
+	public static void coletaProduto(Nodo nodoOrigem) {
+		robo.nodoAtual = Mapa.getNodo(6, 0);		
+		ArrayList<ArrayList<Nodo>>  caminhosList = getCaminhoProdutoList(nodoOrigem);
+		
+		for(ArrayList<Nodo> caminho : caminhosList) {
+			try {
+				robo.manager.andaCaminho(caminho, robo.getDirecaoRobo(), Mapa.tamanhoQuadros, false);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+	}
+	
+	
 
-
-
+/**
+ * Nodo faz parte do caminho do percorrido atualmentes? 
+ * @param nodo
+ * @param caminho
+ * @return
+ */
 	private boolean isNodoNoCaminho(Nodo nodo, ArrayList<Nodo> caminho){
 
 		boolean  isNodoInCaminho = false;
@@ -168,18 +216,9 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	private void addAdjacentes(Nodo nodoAtual) {
 		int i = nodoAtual.getI();
 		int j = nodoAtual.getJ();
-		String adjacentes = "";
-		
-		if(isCaminho(EnumDirecao.FRENTE, nodoAtual)){
-			
-			Nodo n = Mapa.getNodo(i+1, j);
-					
-			nodoAtual.setNodoFrente(n);
-			nodoAtual.getNodoFrente().setNodoTraz(nodoAtual);	
-			adjacentes+= ";Frente-" + n.getNome();
-		}	
-		
-		if(isCaminho(EnumDirecao.DIREITA, nodoAtual)) {
+		String adjacentes = "";		
+	
+		if(isCaminho(EnumDirecao.DIREITA, nodoAtual) ) {
 			
 			Nodo n = Mapa.getNodo(i, j+1);
 			
@@ -200,7 +239,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			
 		}
 		
-		if(isCaminho(EnumDirecao.TRAZ, nodoAtual)) {
+		if(isCaminho(EnumDirecao.TRAZ, nodoAtual) && olharParaTraz) {
 			
 			Nodo n = Mapa.getNodo(i -1, j);
 			
@@ -209,6 +248,16 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			adjacentes+= ";traz"+ n.getNome();;
 			
 		}
+		
+		if(isCaminho(EnumDirecao.FRENTE, nodoAtual)){
+			
+			Nodo n = Mapa.getNodo(i+1, j);
+					
+			nodoAtual.setNodoFrente(n);
+			nodoAtual.getNodoFrente().setNodoTraz(nodoAtual);	
+			adjacentes+= ";Frente-" + n.getNome();
+		}	
+		
 		
 		
 		
@@ -406,8 +455,9 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	
 	
 	public static ArrayList<ArrayList<Nodo>> getCaminhoProdutoList(Nodo nodoOrigem) {
-		if(caminhoProdutoList.size() < 0) {
-			menorCaminhoAteprodutos(nodoOrigem);
+		int size = caminhoProdutoList.size() ;
+		if(size <= 0) {
+			//menorCaminhoAteprodutos(nodoOrigem);
 			System.err.println("ESCOLHER UM DOS CAMINHOS!");
 			menorCaminhoAteprodutos2(nodoOrigem, 0);
 		}
