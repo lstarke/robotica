@@ -462,7 +462,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		int size = caminhoProdutoList.size() ;
 		if(size <= 0) {
 			//menorCaminhoAteprodutos(nodoOrigem);
-			System.err.println("ESCOLHER UM DOS CAMINHOS!");
+			//System.err.println("ESCOLHER UM DOS CAMINHOS!");
 			menorCaminhoAteprodutos2(nodoOrigem, 0);
 		}
 		
