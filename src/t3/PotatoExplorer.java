@@ -2,10 +2,13 @@ package t3;
 
 import java.util.ArrayList;
 
+import javax.microedition.location.Orientation;
+
 import org.apache.commons.cli.PosixParser;
 import org.jfree.date.AnnualDateRule;
 
 import lejos.robotics.kinematics.RobotArm;
+import t3.Mapa.EnumMapa;
 import t3.Nodo.EnumStatus;
 
 /** * 
@@ -26,6 +29,9 @@ public static Mapa mapa = Mapa.getInstance();
 public static ArrayList<Nodo> nodoListExplorados = new ArrayList<Nodo>();
 private int cont = 0;
 
+public static ArrayList<Nodo> produtoList = new ArrayList<Nodo>();
+
+@SuppressWarnings("static-access")
 public PotatoExplorer( int  posicaoRoboI, int posicaoRoboJ){
 	
 	robo.nodoAtual = Mapa.getNodo(posicaoRoboI, posicaoRoboJ);
@@ -44,59 +50,100 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 	}	*/
 
+
+	public void menorCaminhoAteprodutos(Nodo nodoOrigem){
+		Dijkstra d = new Dijkstra();
+		for(Nodo objetivo : produtoList){
+			d.dijkstra(nodoOrigem, objetivo);
+			///retorna caminho e addnuma lista;
+			
+			nodoOrigem = objetivo;
+			
+		}
+	}
+
 	
 	
 	@SuppressWarnings("static-access")
 	public void explorerMapa(Nodo nodoAtual, ArrayList<Nodo> caminho) throws InterruptedException {
-	System.out.println(cont++);
-		addAdjacentes(nodoAtual);
-		Nodo nodoAnterior = null;
-		if(caminho.size() >1){
-			nodoAnterior = caminho.get(caminho.size()-1);
-		}
+	//System.out.println(cont++);
 		
-	    Nodo nodoFrente = nodoAtual.getNodoFrente();
-	    Nodo nodoEsquerda = nodoAtual.getNodoEsquerda();
-	    Nodo nodoDireita = nodoAtual.getNodoDireita();
-	    Nodo nodoTraz = nodoAtual.getNodoTraz();
-		caminho.add(nodoAtual);
+		mapa.getMatrizSimulacao()[nodoAtual.getI()*2][nodoAtual.getJ()*2] = 1;
+		nodoAtual.setNodoPercorrido(true);
 		
+		robo.nodoAtual = nodoAtual;
 		
 	    
-		if(nodoAtual.getStatus() == EnumStatus.N_EXPLORADO) {
-		
-
-			if(nodoFrente!= null && nodoFrente.getStatus()  == EnumStatus.N_EXPLORADO && nodoFrente != nodoAnterior) {
+		if(nodoAtual.getStatus() == EnumStatus.N_EXPLORADO)
+		{
+			
+			procuraProduto(nodoAtual);
+			
+			addAdjacentes(nodoAtual);
+			//Nodo nodoAnterior = null;	
+				
+			Nodo nodoFrente = nodoAtual.getNodoFrente();
+		    Nodo nodoEsquerda = nodoAtual.getNodoEsquerda();
+		    Nodo nodoDireita = nodoAtual.getNodoDireita();
+		    Nodo nodoTraz = nodoAtual.getNodoTraz();
+			caminho.add(nodoAtual);
+			
+			//System.out.println(robo.nodoAtual.getNome());
+	
+			if(nodoFrente!= null && nodoFrente.getStatus()  == EnumStatus.N_EXPLORADO && !nodoFrente.isNodoPercorrido() ) {
 				robo.Move4dDistancia(EnumDirecao.FRENTE, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
 				explorerMapa(nodoFrente, caminho);
 				
 			}
-			if(nodoEsquerda != null && nodoEsquerda.getStatus()  == EnumStatus.N_EXPLORADO && nodoEsquerda != nodoAnterior) {
+			if(nodoEsquerda != null && nodoEsquerda.getStatus()  == EnumStatus.N_EXPLORADO && !nodoEsquerda.isNodoPercorrido()) {
 				robo.Move4dDistancia(EnumDirecao.ESQUERDA, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
 				explorerMapa(nodoEsquerda,caminho);
 			}
-			if(nodoDireita!= null && nodoDireita.getStatus()  == EnumStatus.N_EXPLORADO && nodoDireita != nodoAnterior) {
+			if(nodoDireita!= null && nodoDireita.getStatus()  == EnumStatus.N_EXPLORADO && !nodoDireita.isNodoPercorrido()) {
 				robo.Move4dDistancia(EnumDirecao.DIREITA, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
 				explorerMapa(nodoDireita,caminho);
 				
 			}
-			if(nodoTraz != null && nodoTraz.getStatus()  == EnumStatus.N_EXPLORADO && nodoTraz != nodoAnterior) {
+			if(nodoTraz != null && nodoTraz.getStatus()  == EnumStatus.N_EXPLORADO && !nodoTraz.isNodoPercorrido()) {
 				robo.Move4dDistancia(EnumDirecao.TRAZ, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
 				explorerMapa(nodoTraz,caminho);
-			}	
-		
-			
+			}			
 			addNodoEplorado(nodoAtual);			
 			nodoAtual.setStatus(EnumStatus.EXPLORADO);
+			
 		}else {
 			
 		}
-		String mapaS = "\n"+ mapa.imprimeRoboEmString(robo.desenhaRobo(),robo.nodoAtual.getI(),robo.nodoAtual.getJ(),true);
 		
-		System.out.println(mapaS);
+		if(Mapa.isTodoExplorado()){
+			System.out.println("TODOS EXPLORADOS");
+				
+		}else{
+			robo.manager.andaCaminho(caminho, robo.getDirecaoRobo(), mapa.tamanhoQuadros, true);
+		}
+		//String mapaS = "\n"+ mapa.imprimeRoboEmString(robo.desenhaRobo(),robo.nodoAtual.getI(),robo.nodoAtual.getJ(),true);
+		
+		//System.out.println(mapaS);
 		
 		//caminho inverso
 		//volta o caminho percorrido
+		
+	}
+	
+	private boolean isNodoNoCaminho(Nodo nodo, ArrayList<Nodo> caminho){
+
+		boolean  isNodoInCaminho = false;
+		
+		for(int i = 0 ; i<caminho.size(); i++){
+		
+			if(caminho.get(i).equals(nodo)){
+			isNodoInCaminho = true;
+			break;
+			}
+		}
+		
+		return isNodoInCaminho;		
+	  
 		
 	}
 
@@ -153,7 +200,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 		
 		
-		System.out.println(nodoAtual.getNome() + adjacentes);
+		//System.out.println(nodoAtual.getNome() + adjacentes);
 	
 				
 	}
@@ -239,12 +286,6 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	
 	}
 	
-	
-
-	public static void setNodoListExplorados(ArrayList<Nodo> nodoListExplorados) {
-		nodoListExplorados = nodoListExplorados;
-	}
-	
 	public boolean isTodoExplorado(){
 		if(nodoListExplorados.size() == (mapa.sizeI * mapa.sizeJ)){
 			return true;
@@ -253,7 +294,44 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		}
 		
 	}
-				
 	
+	
+	public static void procuraProduto(Nodo nodo){
+		
+		if(isProduto(robo.observaCor(), nodo)){
+	
+		}
+		
+	}
+
+	public static boolean isProduto(int[] cor, Nodo nodo){
+		boolean isProduto = false;
+		int r = cor[0];
+		int g = cor[1];
+		int b = cor[2];
+		
+		if(r > 225){
+		
+			if(g >  225){
+				if(b > 225){					
+					nodo.setProduto(EnumProduto.PRODUTO_1_PRETO);
+					addProdutList(nodo);
+					isProduto = true;
+				}
+			}
+		}
+		return isProduto;
+		
+	}
+	
+	
+	
+	public static void addProdutList(Nodo nodo){		
+		produtoList.add(nodo);		
+	}
+				
+	public static void setNodoListExplorados(ArrayList<Nodo> nodoListExplorados) {
+		nodoListExplorados = nodoListExplorados;
+	}
 
 }

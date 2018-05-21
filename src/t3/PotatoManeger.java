@@ -3,6 +3,8 @@ package t3;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import t3.Mapa.EnumMapa;
+
 import com.intel.bluetooth.Utils;
 
 import lejos.nxt.Button;
@@ -462,6 +464,25 @@ public class PotatoManeger {
 
 	}
 	
+	
+	
+	/**Retorna um inr de taamnho 3 com as cores  observadas no sensor
+	 * R = [0]
+	 * g = [1]
+	 * G = [2]
+	 * @return
+	 */
+	public static int[] observaCor(){
+	
+	int[] cor = new int[3];
+	cor[0] = 0;//R;	
+	cor[1] = 0;//G;	
+	cor[2] = 0;//B;	
+
+	return cor;
+			
+		}
+	
 	/**
 	 * Percorre um  Array de caminho. 
 	 * @param caminho Aray com os nodos que compoem o caminho.
@@ -472,23 +493,24 @@ public class PotatoManeger {
 	 * @throws InterruptedException
 	 */
 	
-	public static void andaCaminho(ArrayList<Nodo> caminho,EnumDirecao direcaoRobo, int distanciaMapa, Boolean inverso) throws InterruptedException{
+public static void andaCaminho(ArrayList<Nodo> caminho,EnumDirecao direcaoRobo, int distanciaMapa, Boolean inverso) throws InterruptedException{
 
-		int posicaoRoboI = caminho.get(0).getI(); 
-		int posicaoRoboJ = caminho.get(0).getJ();
+		
 		int posicaoProximaI = 0;
 	    int posicaoProximaJ = 0;
-	   // int valoDirecional = 0;	    
-	  // System.out.println( posicaoRoboI +"," +  posicaoRoboJ + "-" + direcaoRobo);
 	    if(!inverso) {    	    
+	    	
+	    	int posicaoRoboI = caminho.get(0).getI(); 
+			int posicaoRoboJ = caminho.get(0).getJ();
 	   
-		for(Nodo p : caminho) {
+		for(int i = 1; i < caminho.size(); i++) {
 			
-			posicaoProximaI = p.getI();
-			posicaoProximaJ = p.getJ();			
+			posicaoProximaI = caminho.get(i).getI();
+			posicaoProximaJ = caminho.get(i).getJ();			
 		
 			EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
-			Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
+			robo.Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);
+			//Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
 			
 			posicaoRoboI = posicaoProximaI;
 			posicaoRoboJ = posicaoProximaJ;			
@@ -497,26 +519,29 @@ public class PotatoManeger {
 
 		}
 	    }else {
+	    	
+	    	int posicaoRoboI = caminho.get(caminho.size()-1).getI(); 
+			int posicaoRoboJ = caminho.get(caminho.size()-1).getJ();
 		
-		for(int i =  caminho.size(); i >= 0; i--)  {
+			for(int i =  caminho.size()-2; i >= 0; i--)  {
+				
+				Nodo p = caminho.get(i);
+				posicaoProximaI = p.getI();
+				posicaoProximaJ = p.getJ();			
 			
-			Nodo p = caminho.get(i);
-			posicaoProximaI = p.getI();
-			posicaoProximaJ = p.getJ();			
-		
-			EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
-			Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
-			
-			posicaoRoboI = posicaoProximaI;
-			posicaoRoboJ = posicaoProximaJ;			
-			
-			direcaoRobo = direcaoParaIr;
-
-			}	
+				EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
+				robo.Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);
+				//Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
+				
+				posicaoRoboI = posicaoProximaI;
+				posicaoRoboJ = posicaoProximaJ;			
+				
+				direcaoRobo = direcaoParaIr;
+	
+				}	
 		}	    
 
 	}
-	
 	
 	/**
 	 * Rotaciona o Robo 90 graus * valor direcional

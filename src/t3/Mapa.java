@@ -3,6 +3,7 @@ package t3;
 import java.util.ArrayList;
 
 import t1.EnumDirecao;
+import t3.Nodo.EnumStatus;
 /** * 
  * @author Francisca
  *
@@ -17,6 +18,8 @@ public class Mapa {
 	public static int sizeI =7;
 	public static int sizeJ =7;
 	public static int tamanhoQuadros =26;
+	
+	private static boolean isTodoExplorado = false;
 	//private static Nodo menorI = null;
 	//private static Nodo menorJ = null;
 	//private static int menorI_Int = Integer.MAX_VALUE;
@@ -54,15 +57,7 @@ public class Mapa {
 	
 	public static void create(int i, int j) {
 		matrizNavegacao = new Nodo[i][j];
-		/*
-		for(int ix = 0; ix < i ; ix++) {
-			for(int jx = 0; jx < j ; jx++) {
-				matrizNavegacao[ix][jx] = null;
-			}
-		}
-		*/
-		
-		
+			
 		setSizeI(i);
 		setSizej(j);	
 		
@@ -115,15 +110,15 @@ public class Mapa {
 			 {0,  0,    0,  0,    0,  0,   0,  0,   0,  0,   0,  0,   0, 0},
 			 {0, -1,    0,  0,    0, -1,   0,  0,   0, -1,   0,  0,   0, 0},
 			 {0, -1,    0,  0,    0, -1,   0,  0,   0, -1,   0,  0,   0, 0},
+			 {0, -1,    0,  0,    0, -1,   3,  0,   0, -1,   0,  0,   0, 0},
 			 {0, -1,    0,  0,    0, -1,   0,  0,   0, -1,   0,  0,   0, 0},
-			 {0, -1,    0,  0,    0, -1,   0,  0,   0, -1,   0,  0,   0, 0},
-			 {0, -1,    0,  0,    0, -1,   0,  0,   0, -1,   0,  0,   0, 0},
+			 {0, -1,    3,  0,    3, -1,   3,  0,   0, -1,   3,  0,   0, 0},
 			 {0, -1,    0,  0,    0, -1,   0,  0,   0, -1,   0,  0,   0, 0},
 			 {0, -1,    0,  0,    0, -1,   0,  0,   0, -1,   0,  0,   0, 0},
 			 {0, -1,    0,  0,    0, -1,   0,  0,   0, -1,   0,  0,   0, 0},
 			 {0,  0,    0,  0,    0,  0,   0,  0,   0,  0,   0,  0,   0, 0},
 			 {0,  0,   -1, -1,   -1, -1,  -1, -1,  -1, -1,  -1,  0,   0, 0},
-			 {0,  0,    0,  0,   -0,  0,   0,  0,   0,  0,   0,  0,   0, 0},
+			 {0,  0,    0,  0,   -0,  0,   3,  0,   0,  0,   0,  0,   0, 0},
 			 {0,  0,    0,  0,    0,  0,   0,  0,   0,  0,   0,  0,   0, 0},
 			 
 			 };
@@ -171,15 +166,19 @@ public class Mapa {
 
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < columns; j++) {
-					//if (j % 2 != 0  && m[i][j].contentEquals("-1")){
-					//str += " | "+ "\t";	
-					//}else{					
+					if (j % 2 != 0 || i % 2 != 0 ){
+						if( m[i][j].contentEquals("-1")){
+							str += "|_|"+ "\t";	
+						}else{
+							str += "--"+ "\t";	
+						}
+					}else{					
 					str += m[i][j] + "\t";
 						
-					//}
+					}
 						
 				}
-
+				
 				matriz += (str + "|\n");
 				str = "|\t";
 			}
@@ -228,6 +227,14 @@ public class Mapa {
 		return imprimeMatrizEmString(matrizS, isMapaDobrado);
 	}
 	
+	public static Nodo[][] getMatrizNavegacao() {
+	return matrizNavegacao;
+}
+
+public static void setMatrizNavegacao(Nodo[][] matrizNavegacao) {
+	Mapa.matrizNavegacao = matrizNavegacao;
+}
+
 	public static int[] procuraRobo(int[][] matriz) {
 		int[] robo = { -1, -1 };
 		int sizeI = matriz.length;
@@ -260,12 +267,38 @@ public static void setMatrizSimulacao(int[][] matrizSimulacao) {
 }
 
 public enum EnumMapa {
-	CAMINHO(0), OBJETIVO(2), OBSTACULO(-1), ROBO(1);
+	CAMINHO(0), OBJETIVO(2), OBSTACULO(-1), ROBO(1), PRODUTO(3);
 	int id;
 
 	private  EnumMapa(int i) {
 		this.id = i;
 	}
+}
+
+public static boolean isTodoExplorado() {
+	
+	if(!isTodoExplorado){
+		
+			int sizeI= matrizNavegacao.length;
+			int sizeJ = matrizNavegacao.length;			
+			
+
+			for (int i = 0; i < sizeI; i++) {
+				for (int j = 0; j < sizeJ; j++) {
+				
+					if(matrizNavegacao[i][j].isNodoPercorrido() == false){
+						return false;
+					}
+					
+				}
+				
+			}
+			
+			isTodoExplorado = true;
+		
+	}
+	
+	return isTodoExplorado;
 }
 
 

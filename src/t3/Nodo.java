@@ -17,6 +17,19 @@ public class Nodo {
 	private Nodo NodoDireita;
 	private Nodo NodoEsquerda;
 	private EnumStatus status = EnumStatus.N_EXPLORADO;
+
+
+	private boolean isNodoPercorrido = false;
+	private EnumProduto produto = EnumProduto.NENHUM;
+	
+	
+	
+	private double distancia;
+	private Nodo pai;		
+	private ArrayList<Nodo> nodosAdjacentes = new ArrayList<Nodo>();
+	//NodosA
+	
+	
 	public enum EnumStatus{
 		EXPLORADO,
 		N_EXPLORADO,		
@@ -52,7 +65,7 @@ public class Nodo {
 	public Nodo getNodoFrente() {
 		return NodoFrente;
 	}
-	public void setNodoFrente(Nodo nodoFrente) {		
+	public void setNodoFrente(Nodo nodoFrente) {			
 		NodoFrente = nodoFrente;
 	}
 	public Nodo getNodoTraz() {
@@ -80,6 +93,71 @@ public class Nodo {
 
 	public void setStatus(EnumStatus status) {
 		this.status = status;
+	}
+
+	public boolean isNodoPercorrido() {
+		return isNodoPercorrido;
+	}
+
+	public void setNodoPercorrido(boolean isNodoPercorrido) {
+		this.isNodoPercorrido = isNodoPercorrido;
+	}
+	
+	public ArrayList<Nodo> getNodosAdjacentes(){
+		if(nodosAdjacentes == null){
+			nodosAdjacentes = new ArrayList<Nodo>();
+			
+			if(NodoDireita != null){
+				nodosAdjacentes.add(NodoDireita);
+			}
+			if(NodoEsquerda != null){
+				nodosAdjacentes.add(NodoEsquerda);
+			}
+			if(NodoFrente != null){
+				nodosAdjacentes.add(NodoFrente);
+			}
+			
+			if(NodoTraz != null){
+				nodosAdjacentes.add(NodoTraz);
+			}
+		}
+		
+		
+		return  nodosAdjacentes;
+		}
+	
+	public int getGrau(){
+		int grau = 0;
+		if(nodosAdjacentes != null){
+			grau = getNodosAdjacentes().size();
+		}
+		
+		return grau;
+		
+	}
+	
+	public double getDistancia() {
+		return distancia;
+	}
+
+	public void setDistancia(double distancia) {
+		this.distancia = distancia;
+	}
+
+	public Nodo getPai() {
+		return pai;
+	}
+
+	public void setPai(Nodo pai) {
+		this.pai = pai;
+	}
+
+	public EnumProduto getProduto() {
+		return produto;
+	}
+
+	public void setProduto(EnumProduto produto) {
+		this.produto = produto;
 	}
 	
 	

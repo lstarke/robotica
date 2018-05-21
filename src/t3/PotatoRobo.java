@@ -36,7 +36,15 @@ public class PotatoRobo {
 	}
 	public static void setDirecaoCabeca(EnumDirecao direcaoCabeca) {
 		PotatoRobo.direcaoCabeca = direcaoCabeca;
+		
 	}
+	
+	public static int[] observaCor(){
+		
+		return manager.observaCor();
+		
+	}
+	
 	@SuppressWarnings("static-access")
 	public static void moveCabeca(EnumDirecao direcao) {		
 		
@@ -95,32 +103,11 @@ public class PotatoRobo {
 		default:
 			break;
 		}
-		
-	
-	
-		
+			
 				
 		return robo +"."+ cabeca;
 	}
-	/*
 	
-	private static String desenhaCabeca(){
-		
-		String cabeca = "";
-		switch (direcaoRobo) {
-		
-		case FRENTE: 
-				
-		
-		default:
-			break;
-		
-		}
-		
-		return cabeca;
-	}
-	
-	*/
 @SuppressWarnings("static-access")
 
 /**

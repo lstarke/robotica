@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.commons.cli.PosixParser;
 import org.jfree.chart.plot.dial.DialTextAnnotation;
 
+import t3.Mapa.EnumMapa;
 import lejos.nxt.ColorSensor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.UltrasonicSensor;
@@ -493,6 +494,35 @@ public class PotatoManegerTeste {
 
 	}
 	
+	/**Retorna um inr de taamnho 3 com as cores  observadas no sensor
+	 * R = [0]
+	 * g = [1]
+	 * G = [2]
+	 * @return
+	 */
+	@SuppressWarnings("static-access")
+	public static int[] observaCor(){
+		
+		int[] cor = new int[3];
+		cor[0] = 0;//R;	
+		cor[1] = 0;//G;
+		cor[2] = 0;//B;	
+		
+		
+	
+		int posicaoI = robo.nodoAtual.getI();
+		int posicaoJ = robo.nodoAtual.getJ();
+		
+		 if(Mapa.getMatrizSimulacao()[posicaoI*2][posicaoJ*2] == EnumMapa.PRODUTO.id){
+			 cor[0] = 255;//R;	
+			 cor[1] = 255;//G;
+			 cor[2] = 255;//B;	
+		 }		
+		
+
+		return cor;		
+	}
+	
 	/**
 	 * Percorre um  Array de caminho. 
 	 * @param caminho Aray com os nodos que compoem o caminho.
@@ -503,23 +533,25 @@ public class PotatoManegerTeste {
 	 * @throws InterruptedException
 	 */
 	
+	@SuppressWarnings("static-access")
 	public static void andaCaminho(ArrayList<Nodo> caminho,EnumDirecao direcaoRobo, int distanciaMapa, Boolean inverso) throws InterruptedException{
 
-		int posicaoRoboI = caminho.get(0).getI(); 
-		int posicaoRoboJ = caminho.get(0).getJ();
+		
 		int posicaoProximaI = 0;
 	    int posicaoProximaJ = 0;
-	   // int valoDirecional = 0;	    
-	  // System.out.println( posicaoRoboI +"," +  posicaoRoboJ + "-" + direcaoRobo);
 	    if(!inverso) {    	    
+	    	
+	    	int posicaoRoboI = caminho.get(0).getI(); 
+			int posicaoRoboJ = caminho.get(0).getJ();
 	   
-		for(Nodo p : caminho) {
+		for(int i = 1; i < caminho.size(); i++) {
 			
-			posicaoProximaI = p.getI();
-			posicaoProximaJ = p.getJ();			
+			posicaoProximaI = caminho.get(i).getI();
+			posicaoProximaJ = caminho.get(i).getJ();			
 		
 			EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
-			Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
+			robo.Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);
+			//Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
 			
 			posicaoRoboI = posicaoProximaI;
 			posicaoRoboJ = posicaoProximaJ;			
@@ -528,22 +560,26 @@ public class PotatoManegerTeste {
 
 		}
 	    }else {
+	    	
+	    	int posicaoRoboI = caminho.get(caminho.size()-1).getI(); 
+			int posicaoRoboJ = caminho.get(caminho.size()-1).getJ();
 		
-		for(int i =  caminho.size(); i >= 0; i--)  {
+			for(int i =  caminho.size()-2; i >= 0; i--)  {
+				
+				Nodo p = caminho.get(i);
+				posicaoProximaI = p.getI();
+				posicaoProximaJ = p.getJ();			
 			
-			Nodo p = caminho.get(i);
-			posicaoProximaI = p.getI();
-			posicaoProximaJ = p.getJ();			
-		
-			EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
-			Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
-			
-			posicaoRoboI = posicaoProximaI;
-			posicaoRoboJ = posicaoProximaJ;			
-			
-			direcaoRobo = direcaoParaIr;
-
-			}	
+				EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
+				robo.Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);
+				//Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
+				
+				posicaoRoboI = posicaoProximaI;
+				posicaoRoboJ = posicaoProximaJ;			
+				
+				direcaoRobo = direcaoParaIr;
+	
+				}	
 		}	    
 
 	}
