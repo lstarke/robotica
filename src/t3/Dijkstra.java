@@ -6,26 +6,36 @@ import java.util.Map;
 
 public class Dijkstra {
 
-	private HashMap<Integer, Nodo> grafo = new HashMap<Integer, Nodo>();// nome,Nodo
+	//private HashMap<Integer, Nodo> grafo = new HashMap<Integer, Nodo>();// nome,Nodo
+	private ArrayList<Nodo> grafo = new ArrayList<Nodo>();
 	private ArrayList<Nodo> Q = new ArrayList<Nodo>();
+	
+	private ArrayList<Nodo> fila;
 
-	public Dijkstra() {
+	public Dijkstra(ArrayList<Nodo> nodoList) {		
+		grafo = nodoList;
 
 	}
+	
+	/*
 
 	public HashMap<Integer, Nodo> getGrafo() {
 		return grafo;
 	}
+	
+	public void setGrafo(HashMap<Integer, Nodo> grafo) {
+		this.grafo = grafo;
+	}
+	
+	*/
+
 
 	public int getOrdem() {
 		return grafo.size();
 	}
 
 
-	public void setGrafo(HashMap<Integer, Nodo> grafo) {
-		this.grafo = grafo;
-	}
-
+	
 
  double calculaDistancia(Nodo A, Nodo B) {
 
@@ -41,11 +51,14 @@ public class Dijkstra {
 
 	
 	
-
+/***
+ *  nInicializa todos com a distancia maxima
+ */
 	private void initializeSingleSource(Nodo s) {
-		for (Map.Entry<Integer, Nodo> entry : grafo.entrySet()) {
-			entry.getValue().setDistancia(99);
-			entry.getValue().setPai(null);
+			for (Nodo n : grafo) {
+				n.setDistancia(99);
+				n.setPai(null);
+			
 		}
 		s.setDistancia(0);
 	}
@@ -53,10 +66,10 @@ public class Dijkstra {
 	
 	
 	private ArrayList<Nodo> addGrafoNaLista() {
-		for (Map.Entry<Integer, Nodo> entry : grafo.entrySet()) {
-
-			if (entry.getValue().getNodosAdjacentes().size() != 0)
-				Q.add(entry.getValue());
+				
+		for (Nodo n : grafo) {
+			if (n.getNodosAdjacentes().size() != 0)
+				Q.add(n);
 		}
 
 		return Q;
@@ -86,17 +99,9 @@ public class Dijkstra {
 		double w = calculaDistancia(u, v);
 
 		if (v.getDistancia() > (u.getDistancia() + w)) {
-			//String dV = ((v.getDistancia() == Double.MAX_VALUE) ? "  ∞ " : nf.format(v.getDistancia()));
-			//logging("dijkstra-relax", "[" + v.getNome() + "] (" + dV + " > " + nf.format(u.getDistancia()) + " + "
-				//	+ nf.format(w) + ") OK");
-
 			v.setDistancia(u.getDistancia() + w);
 			v.setPai(u);
 		} else {
-			//String dV = ((v.getDistancia() == Double.MAX_VALUE) ? "  ∞ " : nf.format(v.getDistancia()));
-			/*logging("dijkstra-relax",
-					"[" + v.getNome() + "] (" + dV + " > " + nf.format(u.getDistancia()) + " + " + nf.format(w) + ")");
-					*/
 		}
 
 	}
@@ -115,44 +120,70 @@ public class Dijkstra {
 		}
 	}
 
-	public void dijkstra(Nodo origem, Nodo destino) {
+	public void dijkstra(Nodo origem, Nodo destino, boolean imprime) {
+		fila =new ArrayList<Nodo>();
 		dijkstra(origem);
-		String str = "";
-		//str += String.format("%5s %5s %10s %25s", "X", "Y", "Vértice", "Distância");
-		//str += "\n";
+	
+		filaDijkstra(destino);
+		if (imprime) {
+		String str = "";	
 		str += imprimeDijkstra(destino);
-		//str += String.format("%5s %5s %10s %25s", "", "", "Total", destino.getDistancia());
+		str += "\nTotal:"+ destino.getDistancia();
+		str += "\n";
 		System.out.println(str);
+		}
+		
+				
 
 	}
 
 	public String imprimeDijkstra(Nodo v) {
 		String str = "";
-		if (v.getPai() != null)
+		if (v.getPai() != null) {
 			str += imprimeDijkstra(v.getPai());
-
-		//str += format("%5s %5s %10s %25s", v.getI(), v.getJ(), "V" + v.getNome(),
-		//		((v.getPai() == null) ? v.getDistancia() : v.getDistancia() - v.getPai().getDistancia()));
-		str += "\n";
+			str += "\nNodo" +  v.getNome() +", Pai: " + v.getPai().getNome();
+			fila.add(v);
+		}else {
+			fila.add(v);
+		}
 		return str;
 	}
+	
+	public void filaDijkstra(Nodo destino) {
+		
+		if (destino.getPai() != null) {
+			filaDijkstra(destino.getPai());		
+			fila.add(destino);
+		}else {
+			fila.add(destino);
+		}		
+	}
+	
+	
+	public ArrayList<Nodo> getFila() {
+		return fila;
+	}
+
+	public void setFila(ArrayList<Nodo> fila) {
+		this.fila = fila;
+	}
+
+	public String imprimeFila() {		
+		
+		String s = "";
+		for(Nodo n : fila) {
+			s += n.getNome() +";";
+		}
+		
+		
+		
+		return s;
+		
+	}
+	
+	
 
 	
-	/*
-	public String matrizDijkstra() {
-	//	NumberFormat nf = new DecimalFormat("#0.00");
-		String str = " ";
-		String str1 = "d";
-		String str2 = "π";
-
-		for (Map.Entry<Integer, Nodo> entry : grafo.entrySet()) {
-		//	str += String.format("%7s", entry.getValue().getNome());
-		//	str1 += String.format("%7s", nf.format(entry.getValue().getDistancia()));
-		//	str2 += String.format("%7s", entry.getValue().getPai());
-		}
-
-		return str + "\n" + str1 + "\n" + str2;
-	}
 	
 	
 	/*

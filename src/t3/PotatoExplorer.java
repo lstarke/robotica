@@ -6,6 +6,7 @@ import javax.microedition.location.Orientation;
 
 import org.apache.commons.cli.PosixParser;
 import org.jfree.date.AnnualDateRule;
+import org.jfree.date.RelativeDayOfWeekRule;
 
 import lejos.robotics.kinematics.RobotArm;
 import t3.Mapa.EnumMapa;
@@ -29,7 +30,9 @@ public static Mapa mapa = Mapa.getInstance();
 public static ArrayList<Nodo> nodoListExplorados = new ArrayList<Nodo>();
 private int cont = 0;
 
-public static ArrayList<Nodo> produtoList = new ArrayList<Nodo>();
+private static ArrayList<Nodo> produtoList = new ArrayList<Nodo>();
+private static ArrayList<EnumProduto> produtoToColetar = new ArrayList<EnumProduto>();
+private static ArrayList<ArrayList<Nodo>> caminhoProdutoList = new ArrayList<ArrayList<Nodo>>();
 
 @SuppressWarnings("static-access")
 public PotatoExplorer( int  posicaoRoboI, int posicaoRoboJ){
@@ -50,28 +53,24 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 	}	*/
 
-
-	public void menorCaminhoAteprodutos(Nodo nodoOrigem){
-		Dijkstra d = new Dijkstra();
-		for(Nodo objetivo : produtoList){
-			d.dijkstra(nodoOrigem, objetivo);
-			///retorna caminho e addnuma lista;
-			
-			nodoOrigem = objetivo;
-			
-		}
-	}
-
-	
 	
 	@SuppressWarnings("static-access")
 	public void explorerMapa(Nodo nodoAtual, ArrayList<Nodo> caminho) throws InterruptedException {
 	//System.out.println(cont++);
-		
-		mapa.getMatrizSimulacao()[nodoAtual.getI()*2][nodoAtual.getJ()*2] = 1;
-		nodoAtual.setNodoPercorrido(true);
-		
+		if(mapa.getMatrizSimulacao()[nodoAtual.getI()*2][nodoAtual.getJ()*2] == 0) {
+			mapa.getMatrizSimulacao()[nodoAtual.getI()*2][nodoAtual.getJ()*2] = 1;
+		}
+	
+		nodoAtual.setNodoPercorrido(true);		
 		robo.nodoAtual = nodoAtual;
+		
+		/*
+		if(caminho.size() > 0) {
+			nodoAtual.setPai(nodoAtual.getNodoTraz());
+		}
+		*/
+		
+		
 		
 	    
 		if(nodoAtual.getStatus() == EnumStatus.N_EXPLORADO)
@@ -116,8 +115,9 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		}
 		
 		if(Mapa.isTodoExplorado()){
-			System.out.println("TODOS EXPLORADOS");
+			//System.out.println("TODOS EXPLORADOS");			
 				
+			
 		}else{
 			robo.manager.andaCaminho(caminho, robo.getDirecaoRobo(), mapa.tamanhoQuadros, true);
 		}
@@ -130,6 +130,18 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 	}
 	
+	public static String imprimeProdutoPosiçoes() {
+		String listaProdutos = "Produtos:";
+		for(Nodo n : produtoList) {
+		 listaProdutos += n.getNome()+";"; 
+		}
+		
+		
+		return listaProdutos;
+	}
+
+
+
 	private boolean isNodoNoCaminho(Nodo nodo, ArrayList<Nodo> caminho){
 
 		boolean  isNodoInCaminho = false;
@@ -300,6 +312,10 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 		if(isProduto(robo.observaCor(), nodo)){
 	
+			//coletar produto
+			if(produtoToColetar.contains(nodo.getProduto())) {
+			addProdutList(nodo);
+			}
 		}
 		
 	}
@@ -314,24 +330,111 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 			if(g >  225){
 				if(b > 225){					
-					nodo.setProduto(EnumProduto.PRODUTO_1_PRETO);
-					addProdutList(nodo);
+					nodo.setProduto(EnumProduto.PRODUTO_1_PRETO);					
 					isProduto = true;
 				}
 			}
 		}
 		return isProduto;
 		
+		
 	}
 	
+	/**
+	 * Calcula o Menor caminho para o Objetivo e alimenta a list caminhoProdutoList
+	 * @param nodoOrigem
+	 */
+	
+	public static void menorCaminhoAteprodutos(Nodo nodoOrigem){
+		Dijkstra d = new Dijkstra(nodoListExplorados);
+		int tamanhoTotal = 0;
+		for(Nodo objetivo : produtoList){
+			
+			System.out.println("\nOrigem:"+ nodoOrigem.getNome() + ", Objetivo:" + objetivo.getNome());
+			d.dijkstra(nodoOrigem, objetivo, false);
+			
+			System.out.println("Fila:" + d.imprimeFila());
+			System.out.println("Tamanho:"+ d.getFila().size());
+			tamanhoTotal += d.getFila().size() -1;
+			
+			caminhoProdutoList.add(d.getFila());
+			
+			///retorna caminho e addnuma lista;
+			
+			nodoOrigem = objetivo;
+			
+		}
+		
+		System.out.println("TamanhoTotal:"+ tamanhoTotal);
+		
+		
+	}
+	
+	public static void menorCaminhoAteprodutos2(Nodo nodoOrigem, int tamanhoTotal){
+		Dijkstra d = new Dijkstra(nodoListExplorados);
+		ArrayList<Nodo> menorFila = null;
+		Nodo menorObjetivo = null;
+		int menorTamanho = Integer.MAX_VALUE;
+		
+		
+		for(Nodo objetivo : produtoList){
+			d.dijkstra(nodoOrigem, objetivo, false);
+			if(d.getFila().size() < menorTamanho) {
+				menorTamanho = d.getFila().size();
+				menorFila = d.getFila();
+				menorObjetivo = objetivo;
+			}
+		}
+		
+		produtoList.remove(menorObjetivo);
+		tamanhoTotal += menorFila.size() -1;
+		caminhoProdutoList.add(menorFila);
+		
+		System.out.println("\nOrigem:"+ nodoOrigem.getNome() + ", Objetivo:" + menorObjetivo.getNome());
+		System.out.println("Fila:" + d.imprimeFila());
+		System.out.println("Tamanho:"+ menorFila.size());		
+		
+		if(produtoList.size() > 0) {
+			menorCaminhoAteprodutos2(menorObjetivo, tamanhoTotal);
+		}
+		
+		System.out.println("TamanhoTotal:"+ tamanhoTotal);
+		
+	
+	}	
 	
 	
+	
+	public static ArrayList<ArrayList<Nodo>> getCaminhoProdutoList(Nodo nodoOrigem) {
+		if(caminhoProdutoList.size() < 0) {
+			menorCaminhoAteprodutos(nodoOrigem);
+			System.err.println("ESCOLHER UM DOS CAMINHOS!");
+			menorCaminhoAteprodutos2(nodoOrigem, 0);
+		}
+		
+		return caminhoProdutoList;
+	}
+
+
+
 	public static void addProdutList(Nodo nodo){		
 		produtoList.add(nodo);		
 	}
 				
 	public static void setNodoListExplorados(ArrayList<Nodo> nodoListExplorados) {
 		nodoListExplorados = nodoListExplorados;
+	}
+
+
+
+	public static ArrayList<EnumProduto> getProdutoToColetar() {
+		return produtoToColetar;
+	}
+
+
+
+	public static void setProdutoToColetar(ArrayList<EnumProduto> produtoToColetar) {
+		PotatoExplorer.produtoToColetar = produtoToColetar;
 	}
 
 }

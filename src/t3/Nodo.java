@@ -26,7 +26,7 @@ public class Nodo {
 	
 	private double distancia;
 	private Nodo pai;		
-	private ArrayList<Nodo> nodosAdjacentes = new ArrayList<Nodo>();
+	private ArrayList<Nodo> nodosAdjacentes;
 	//NodosA
 	
 	
@@ -126,6 +126,16 @@ public class Nodo {
 		return  nodosAdjacentes;
 		}
 	
+	public String imprimeAdjacentes() {
+		String s= "Adjacentes:";
+		
+		for(Nodo n :nodosAdjacentes) {
+			s += n.getNome() + ";";
+		}
+		
+		return s;
+	}
+	
 	public int getGrau(){
 		int grau = 0;
 		if(nodosAdjacentes != null){
@@ -140,8 +150,8 @@ public class Nodo {
 		return distancia;
 	}
 
-	public void setDistancia(double distancia) {
-		this.distancia = distancia;
+	public void setDistancia(double d) {
+		this.distancia = d;
 	}
 
 	public Nodo getPai() {
@@ -160,6 +170,15 @@ public class Nodo {
 		this.produto = produto;
 	}
 	
+	@Override
+	public String toString() {
+		String s = "Nodo:" + this.getNome() + ".";
+		s += "\nPai:" + this.pai.getNome();
+		s += "\n" +imprimeAdjacentes();
+		
+		return nome;
+		
+	}
 	
 	
 	

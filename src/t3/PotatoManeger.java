@@ -195,6 +195,40 @@ public class PotatoManeger {
 		
 	}
 
+	public static void para(){
+		//while (
+		//}
+		motorRodaDireita.stop(true);
+		motorRodaEsquerda.stop(true);
+	}
+
+	/**Retorna um inr de taamnho 3 com as cores  observadas no sensor
+	 * R = [0]
+	 * g = [1]
+	 * G = [2]
+	 * @return
+	 */
+	public static int[] observaCor(){
+	
+	int[] cor = new int[3];
+	cor[0] = 0;//R;	
+	cor[1] = 0;//G;	
+	cor[2] = 0;//B;	
+	
+	return cor;
+			
+		}
+
+	public static Boolean encontrouParede() {
+		//sensorUltrasonico.capture();
+		if(sensorUltrasonico.getDistance()< distancia_paredeUltraSonico) {
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
+
 	/**
  	*  Motor do robo rotaciona o angulo do motor "motorRotade" para direita ou para esquerda.	
  	* @param motorRotate rotacoes do motor
@@ -236,22 +270,6 @@ public class PotatoManeger {
 						
 	}
 	
-	public static void para(){
-		//while (
-		//}
-		motorRodaDireita.stop(true);
-		motorRodaEsquerda.stop(true);
-	}
-	
-	/**
-	 * Anda para frente 
-	 * @param distancia cm
-	 */
-	public static void andarDistancia(int distancia){
-		andarRotate(dintanceToMotorRotate(distancia));
-	}
-	
-
 	/**
 	 * Anda para frente  
 	 * @param motorRotate rotacao do motor
@@ -262,7 +280,231 @@ public class PotatoManeger {
 		
 	}
 
+	/**
+	 * Anda para frente 
+	 * @param distancia cm
+	 */
+	public static void andarDistancia(int distancia){
+		andarRotate(dintanceToMotorRotate(distancia));
+	}
 	
+
+	/**
+	 *  rotaciona angulo da cabeca "motorRotade" para direita ou para esqueça. 
+	 *  
+	 * @param motorRotate quantidade de angulos do
+	 * @param direcao
+	 */
+	
+	public static void viraCabeca(int motorRotate, EnumDirecao direcao) {		
+		
+		if(direcao == EnumDirecao.DIREITA){
+		motorCabeca.rotate(motorRotate);
+		
+		}else if(direcao == EnumDirecao.ESQUERDA){
+			motorCabeca.rotate(-motorRotate);
+		}				
+	
+	}
+
+	/**
+	 * Rotaciona o Robo 90 graus * valor direcional
+	 * ex:/n
+	 *  0, não rotaciona	 *  
+	 *  1 , rotaciona 90 , 90 graus para direita
+	 *  2 , rotaciona 180, 180 graus para direita
+	 *  -1 , rotaciona -90 , 90 graus para esquerda
+	 *  -2 , rotaciona -180, 180 graus para esquerda.
+	 * @param valorDirecional
+	 */
+	
+	public static void viraDirecionada4d(int valorDirecional) {		
+		
+		viraAngulo(90 * valorDirecional, EnumDirecao.DIREITA);		
+		
+	}
+
+	public static void viraDirecionadaCabeca4d(int valorDirecional) {		
+		
+		viraCabeca(grausToCabecaMotorRotate(90 * valorDirecional), EnumDirecao.DIREITA);	
+		
+	}
+
+	/**
+	 * Movimenta robo para tal direção especificada em relação ao corpo do robo.
+	 * @param direcao
+	 * @param distancia   Distancia em cm a ser percorrida.
+	 */
+	public static void Move4dDistancia(EnumDirecao direcao, int distancia) {
+		
+		switch (direcao) {
+		
+		case FRENTE:
+			andarDistancia(distancia);			
+			break;
+		case TRAZ:
+			viraAngulo(180, EnumDirecao.DIREITA);
+			andarDistancia(distancia);
+			break;
+			
+		case DIREITA:
+			viraAngulo(90, EnumDirecao.DIREITA);
+			andarDistancia(distancia);
+			break;
+			
+		case ESQUERDA:
+			viraAngulo(90, EnumDirecao.ESQUERDA );
+			andarDistancia(distancia);
+			break;
+	
+		default:
+			break;
+		}
+		
+	}
+
+	/**
+	 * Movimenta o Robo em uma das quatros direções baseado na Posicao atual, e Posicao objetiva do robo. 
+	 * @param posicaoAtualI
+	 * @param posicaoAtualJ
+	 * @param posicaoProximaI
+	 * @param posicaoProximaJ
+	 * @param direcaoRobo Posicao atual do robo.
+	 * @param distancia Distancia em cm a ser percorrida.
+	 */
+	
+	public static void Move4dDistancia(int posicaoAtualI, int posicaoAtualJ, int posicaoProximaI, int posicaoProximaJ, EnumDirecao direcaoRobo, int distancia){
+		
+		EnumDirecao direcaoParaIr= direcaoParaIr(posicaoAtualI, posicaoAtualJ, posicaoProximaI, posicaoProximaJ);
+		 Move4dDistancia(direcaoParaIr, direcaoRobo, distancia );
+		 }
+
+	/**
+	 * Movimenta o Robo em uma das quatros direções baseado na direcao para ir e direção objetiva do robo.
+	 * @param direcaoParaIr Direção que o robo deve Ir.
+	 * @param direcaoRobo Posicao atual do robo.
+	 * @param distancia Distancia em cm a ser percorrida.
+	 */
+	
+	public static void Move4dDistancia(EnumDirecao direcaoParaIr, EnumDirecao direcaoRobo, int distancia){
+		
+		int valoDirecional  =  direcaoParaIr.valorDirecional(direcaoRobo.valor);	
+		viraDirecionada4d(valoDirecional);
+	}
+
+	/**
+		 * Percorre um  Array de caminho. 
+		 * @param caminho Aray com os nodos que compoem o caminho.
+		 * @param direcaoRobo
+		 * @param distanciaMapa
+		 * @param posicaoRoboI
+		 * @param posicaoRoboJ
+		 * @throws InterruptedException
+		 */
+		
+	public static void andaCaminho(ArrayList<Nodo> caminho,EnumDirecao direcaoRobo, int distanciaMapa, Boolean inverso) throws InterruptedException{
+	
+			
+			int posicaoProximaI = 0;
+		    int posicaoProximaJ = 0;
+		    if(!inverso) {    	    
+		    	
+		    	int posicaoRoboI = caminho.get(0).getI(); 
+				int posicaoRoboJ = caminho.get(0).getJ();
+		   
+			for(int i = 1; i < caminho.size(); i++) {
+				
+				posicaoProximaI = caminho.get(i).getI();
+				posicaoProximaJ = caminho.get(i).getJ();			
+			
+				EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
+				robo.Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);
+				//Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
+				
+				posicaoRoboI = posicaoProximaI;
+				posicaoRoboJ = posicaoProximaJ;			
+				
+				direcaoRobo = direcaoParaIr;
+	
+			}
+		    }else {
+		    	
+		    	int posicaoRoboI = caminho.get(caminho.size()-1).getI(); 
+				int posicaoRoboJ = caminho.get(caminho.size()-1).getJ();
+			
+				for(int i =  caminho.size()-2; i >= 0; i--)  {
+					
+					Nodo p = caminho.get(i);
+					posicaoProximaI = p.getI();
+					posicaoProximaJ = p.getJ();			
+				
+					EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
+					robo.Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);
+					//Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
+					
+					posicaoRoboI = posicaoProximaI;
+					posicaoRoboJ = posicaoProximaJ;			
+					
+					direcaoRobo = direcaoParaIr;
+		
+					}	
+			}	    
+	
+		}
+
+	/**
+	 * Percorre um ArrayList de Int
+	 * @param caminho
+	 * @param direcaoRobo
+	 * @param distanciaMapa
+	 * @param posicaoRoboI
+	 * @param posicaoRoboJ
+	 * @throws InterruptedException
+	 */
+		public static void andaCaminho(ArrayList<int[]> caminho,EnumDirecao direcaoRobo, int distanciaMapa, int posicaoRoboI, int posicaoRoboJ) throws InterruptedException{
+	
+			//direcaoAtual = EnumDirecao.FRENTE;
+			////Adicionar posicao inical do robo no caminho
+	
+			//int posicaoAtualI = 0; 
+			//int posicaoAtualJ = 0;
+			int posicaoProximaI = 0;
+		    int posicaoProximaJ = 0;
+		    int valoDirecional = 0;
+		    
+		   System.out.println( posicaoRoboI +"," +  posicaoRoboJ + "-" + direcaoRobo);
+		   
+			for(int[] p : caminho) {
+	
+				
+				posicaoProximaI = p[0];
+				posicaoProximaJ = p[1];		
+				
+				EnumDirecao direcao= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
+				
+			
+				valoDirecional  =  direcao.valorDirecional(direcaoRobo.valor);	
+				viraDirecionada4d(valoDirecional);
+				
+				System.out.println( "Rotaciona:" + valoDirecional * 90);			
+	
+				andarDistancia(distanciaMapa);
+				//System.out.println( "Andar:" + distanciaMapa );
+				//System.out.println(  p[0] +"," + p[1]+ "-" + direcao);
+				//Thread.sleep(1000);
+				
+				posicaoRoboI = posicaoProximaI;
+				posicaoRoboJ = posicaoProximaJ;
+				
+				direcaoRobo = direcao;
+	
+	
+			}
+	
+			
+	
+		}
+
 	/**Tranforma o valor do angulo em valores de rotacoes do motor
 	 * 
 	 * @param grau quantidade de graus que deseja obter o valor em rotacoes do motor
@@ -302,69 +544,6 @@ public class PotatoManeger {
 	}
 	
 
-	
-	/**
-	 * Movimenta robo para tal direção especificada em relação ao corpo do robo.
-	 * @param direcao
-	 * @param distancia   Distancia em cm a ser percorrida.
-	 */
-	public static void Move4dDistancia(EnumDirecao direcao, int distancia) {
-		
-		switch (direcao) {
-		
-		case FRENTE:
-			andarDistancia(distancia);			
-			break;
-		case TRAZ:
-			viraAngulo(180, EnumDirecao.DIREITA);
-			andarDistancia(distancia);
-			break;
-			
-		case DIREITA:
-			viraAngulo(90, EnumDirecao.DIREITA);
-			andarDistancia(distancia);
-			break;
-			
-		case ESQUERDA:
-			viraAngulo(90, EnumDirecao.ESQUERDA );
-			andarDistancia(distancia);
-			break;
-
-		default:
-			break;
-		}
-		
-	}
-	
-	/**
-	 * Movimenta o Robo em uma das quatros direções baseado na Posicao atual, e Posicao objetiva do robo. 
-	 * @param posicaoAtualI
-	 * @param posicaoAtualJ
-	 * @param posicaoProximaI
-	 * @param posicaoProximaJ
-	 * @param direcaoRobo Posicao atual do robo.
-	 * @param distancia Distancia em cm a ser percorrida.
-	 */
-	
-	public static void Move4dDistancia(int posicaoAtualI, int posicaoAtualJ, int posicaoProximaI, int posicaoProximaJ, EnumDirecao direcaoRobo, int distancia){
-		
-		EnumDirecao direcaoParaIr= direcaoParaIr(posicaoAtualI, posicaoAtualJ, posicaoProximaI, posicaoProximaJ);
-		 Move4dDistancia(direcaoParaIr, direcaoRobo, distancia );
-		 }
-	
-	
-	/**
-	 * Movimenta o Robo em uma das quatros direções baseado na direcao para ir e direção objetiva do robo.
-	 * @param direcaoParaIr Direção que o robo deve Ir.
-	 * @param direcaoRobo Posicao atual do robo.
-	 * @param distancia Distancia em cm a ser percorrida.
-	 */
-	
-	public static void Move4dDistancia(EnumDirecao direcaoParaIr, EnumDirecao direcaoRobo, int distancia){
-		
-		int valoDirecional  =  direcaoParaIr.valorDirecional(direcaoRobo.valor);	
-		viraDirecionada4d(valoDirecional);
-	}
 	
 	/**
 	 * Defifine que direcao ele deve ir, baseado na posicao atual dele e na posicao do objetivo.
@@ -407,190 +586,6 @@ public class PotatoManeger {
 
 		return direcaoParaIr;
 
-	}
-	
-
-	
-/**
- * Percorre um ArrayList de Int
- * @param caminho
- * @param direcaoRobo
- * @param distanciaMapa
- * @param posicaoRoboI
- * @param posicaoRoboJ
- * @throws InterruptedException
- */
-	public static void andaCaminho(ArrayList<int[]> caminho,EnumDirecao direcaoRobo, int distanciaMapa, int posicaoRoboI, int posicaoRoboJ) throws InterruptedException{
-
-		//direcaoAtual = EnumDirecao.FRENTE;
-		////Adicionar posicao inical do robo no caminho
-
-		//int posicaoAtualI = 0; 
-		//int posicaoAtualJ = 0;
-		int posicaoProximaI = 0;
-	    int posicaoProximaJ = 0;
-	    int valoDirecional = 0;
-	    
-	   System.out.println( posicaoRoboI +"," +  posicaoRoboJ + "-" + direcaoRobo);
-	   
-		for(int[] p : caminho) {
-
-			
-			posicaoProximaI = p[0];
-			posicaoProximaJ = p[1];		
-			
-			EnumDirecao direcao= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
-			
-		
-			valoDirecional  =  direcao.valorDirecional(direcaoRobo.valor);	
-			viraDirecionada4d(valoDirecional);
-			
-			System.out.println( "Rotaciona:" + valoDirecional * 90);			
-
-			andarDistancia(distanciaMapa);
-			//System.out.println( "Andar:" + distanciaMapa );
-			//System.out.println(  p[0] +"," + p[1]+ "-" + direcao);
-			//Thread.sleep(1000);
-			
-			posicaoRoboI = posicaoProximaI;
-			posicaoRoboJ = posicaoProximaJ;
-			
-			direcaoRobo = direcao;
-
-
-		}
-
-		
-
-	}
-	
-	
-	
-	/**Retorna um inr de taamnho 3 com as cores  observadas no sensor
-	 * R = [0]
-	 * g = [1]
-	 * G = [2]
-	 * @return
-	 */
-	public static int[] observaCor(){
-	
-	int[] cor = new int[3];
-	cor[0] = 0;//R;	
-	cor[1] = 0;//G;	
-	cor[2] = 0;//B;	
-
-	return cor;
-			
-		}
-	
-	/**
-	 * Percorre um  Array de caminho. 
-	 * @param caminho Aray com os nodos que compoem o caminho.
-	 * @param direcaoRobo
-	 * @param distanciaMapa
-	 * @param posicaoRoboI
-	 * @param posicaoRoboJ
-	 * @throws InterruptedException
-	 */
-	
-public static void andaCaminho(ArrayList<Nodo> caminho,EnumDirecao direcaoRobo, int distanciaMapa, Boolean inverso) throws InterruptedException{
-
-		
-		int posicaoProximaI = 0;
-	    int posicaoProximaJ = 0;
-	    if(!inverso) {    	    
-	    	
-	    	int posicaoRoboI = caminho.get(0).getI(); 
-			int posicaoRoboJ = caminho.get(0).getJ();
-	   
-		for(int i = 1; i < caminho.size(); i++) {
-			
-			posicaoProximaI = caminho.get(i).getI();
-			posicaoProximaJ = caminho.get(i).getJ();			
-		
-			EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
-			robo.Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);
-			//Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
-			
-			posicaoRoboI = posicaoProximaI;
-			posicaoRoboJ = posicaoProximaJ;			
-			
-			direcaoRobo = direcaoParaIr;
-
-		}
-	    }else {
-	    	
-	    	int posicaoRoboI = caminho.get(caminho.size()-1).getI(); 
-			int posicaoRoboJ = caminho.get(caminho.size()-1).getJ();
-		
-			for(int i =  caminho.size()-2; i >= 0; i--)  {
-				
-				Nodo p = caminho.get(i);
-				posicaoProximaI = p.getI();
-				posicaoProximaJ = p.getJ();			
-			
-				EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
-				robo.Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);
-				//Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
-				
-				posicaoRoboI = posicaoProximaI;
-				posicaoRoboJ = posicaoProximaJ;			
-				
-				direcaoRobo = direcaoParaIr;
-	
-				}	
-		}	    
-
-	}
-	
-	/**
-	 * Rotaciona o Robo 90 graus * valor direcional
-	 * ex:/n
-	 *  0, não rotaciona	 *  
-	 *  1 , rotaciona 90 , 90 graus para direita
-	 *  2 , rotaciona 180, 180 graus para direita
-	 *  -1 , rotaciona -90 , 90 graus para esquerda
-	 *  -2 , rotaciona -180, 180 graus para esquerda.
-	 * @param valorDirecional
-	 */
-	
-	public static void viraDirecionada4d(int valorDirecional) {		
-		
-		viraAngulo(90 * valorDirecional, EnumDirecao.DIREITA);		
-		
-	}
-	
-	public static void viraDirecionadaCabeca4d(int valorDirecional) {		
-		
-		viraCabeca(grausToCabecaMotorRotate(90 * valorDirecional), EnumDirecao.DIREITA);	
-		
-	}
-	/**
-	 *  rotaciona angulo da cabeca "motorRotade" para direita ou para esqueça. 
-	 *  
-	 * @param motorRotate quantidade de angulos do
-	 * @param direcao
-	 */
-
-	public static void viraCabeca(int motorRotate, EnumDirecao direcao) {		
-		
-		if(direcao == EnumDirecao.DIREITA){
-		motorCabeca.rotate(motorRotate);
-		
-		}else if(direcao == EnumDirecao.ESQUERDA){
-			motorCabeca.rotate(-motorRotate);
-		}				
-
-	}
-	
-	public static Boolean encontrouParede() {
-		//sensorUltrasonico.capture();
-		if(sensorUltrasonico.getDistance()< distancia_paredeUltraSonico) {
-			return true;
-		}else {
-			return false;
-		}
-		
 	}
 	
 	

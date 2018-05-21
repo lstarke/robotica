@@ -4,6 +4,6 @@ public enum EnumProduto {
 
 		NENHUM,
 		PRODUTO_1_PRETO,
-		PRODUTO_2
+		PRODUTO_2;		
 	
 }

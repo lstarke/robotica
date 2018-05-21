@@ -20,8 +20,16 @@ public class Teste {
 		
 		System.out.println(mapaS);
 		
-		
+		pe.getProdutoToColetar().add(EnumProduto.PRODUTO_1_PRETO);
 		pe.explorerMapa(pe.robo.nodoAtual, new ArrayList<Nodo>());
+		
+		
+		///pe.menorCaminhoAteprodutos(Mapa.getNodo(6, 0));
+		//System.out.println("\n/////////MENOR CAMINHO ////////////");
+		//pe.menorCaminhoAteprodutos2(Mapa.getNodo(6, 0),0);
+		
+		//System.out.println(pe.imprimeProdutoPosiçoes());
+		
 		/*Nodo nodoAtual = mapa.getNodo(0, 2);
 		
 				
