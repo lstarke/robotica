@@ -1,5 +1,7 @@
 package t3;
 
+import java.util.ArrayList;
+
 import org.apache.bcel.generic.CALOAD;
 import org.apache.bcel.generic.SWITCH;
 
@@ -119,22 +121,35 @@ public class PotatoRobo {
 @SuppressWarnings("static-access")
 
 /**
- * Movimentação Global do RObo
+ * Movimentação Global do RObo, e movimenta a cabeça para frente Relativa do Robo
  * @param direcaoParaIr
  * @param direcaoRobo
  * @param distancia
  */
 public static void Move4dDistancia(EnumDirecao direcaoParaIr, EnumDirecao direcaoRobo, int distancia){
 		//PotatoRobo.direcaoRobo = direcaoParaIr;
-		//EnumDirecao direcaoParaIrCabeca = manager.direcaoParaIrGlobal(direcaoCabeca , direcaoParaIr);	
-		int valoDirecional  =  direcaoParaIr.valorDirecional(direcaoRobo.valor);
-		//int valoDirecional  =  EnumDirecao.ESQUERDA.valorDirecional(direcaoRobo.valor);
-		direcaoCabeca = giraDirecao(valoDirecional,  direcaoCabeca);
+		//EnumDirecao direcaoParaIrCabeca = manager.direcaoParaIrGlobal(direcaoCabeca , direcaoParaIr);
+		moveCabeca(direcaoRobo);
+		
+		//int valoDirecional  =  direcaoParaIr.valorDirecional(direcaoRobo.valor);
+		//direcaoCabeca = giraDirecao(valoDirecional,  direcaoCabeca);
+		//System.out.println(valoDirecional);
+				
+		//System.out.println(direcaoCabeca.valorDirecional(direcaoRobo.valor));
 		manager.Move4dDistancia(direcaoParaIr, direcaoRobo, distancia);
+		
+
+		
 	
 	
 		//viraDirecionada4d(valoDirecional);
 	}
+
+@SuppressWarnings("static-access")
+public static void andaCaminho(ArrayList<Nodo> caminho, EnumDirecao direcao, int tamanhoQuadros, boolean inverso) throws InterruptedException {
+	
+	manager.andaCaminho(caminho, direcao, tamanhoQuadros, inverso);
+}
 
 public static EnumDirecao direcaoPorID(int direcaoId){
 
@@ -152,6 +167,13 @@ public static EnumDirecao direcaoPorID(int direcaoId){
 		}
 	
 }
+
+/***
+ * GiraA direção relativa ao valor direcional executado 
+ * @param valorDirecional
+ * @param direcaoAtual
+ * @return
+ */
 
 public static EnumDirecao giraDirecao(int valorDirecional, EnumDirecao direcaoAtual){
 	

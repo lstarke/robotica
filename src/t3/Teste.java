@@ -10,6 +10,8 @@ public class Teste {
 	public static void main(String[] args) throws InterruptedException {
 
 
+		
+		
 		PotatoExplorer pe = new PotatoExplorer(6,0, EnumDirecao.DIREITA, false);		
 		
 		String mapaS = "";
@@ -20,10 +22,16 @@ public class Teste {
 		
 		System.out.println(mapaS);
 		
-		pe.getProdutoToColetar().add(EnumProduto.PRODUTO_1_PRETO);
+		/*pe.getProdutoToColetar().add(EnumProduto.PRODUTO_1_PRETO);
 		pe.explorerMapa(pe.robo.nodoAtual, new ArrayList<Nodo>(),0);
+		*/
 		
-		Thread.sleep(400);
+		ArrayList<EnumProduto> produtoToColetar = new ArrayList<EnumProduto>();
+		produtoToColetar.add(EnumProduto.PRODUTO_1_PRETO);
+		
+		pe.explorerMapa(pe.robo.nodoAtual,produtoToColetar);
+		
+		//Thread.sleep(400);
 		
 		pe.coletaProduto(Mapa.getNodo(6, 0));
 		

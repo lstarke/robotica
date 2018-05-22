@@ -239,12 +239,10 @@ public class PotatoManeger {
 		motorRodaDireita.stop(true);
 		motorRodaEsquerda.stop(true);
 		
-		boolean isMoving = false;
+		/*boolean isMoving = false;
 		while (isMoving){	
 		isMoving = motorRodaDireita.isMoving() ||  motorRodaEsquerda.isMoving();			
-		}	
-	
-		
+		}*/		
 		
 		switch (direcao) {
 			case DIREITA:
@@ -259,8 +257,42 @@ public class PotatoManeger {
 
 		default:
 			break;
-		}
+		}		
+		
+		ViraRotateAtualizaGlobais(motorRotate, direcao);
+
 				
+	}
+	
+	@SuppressWarnings({"static-access" })
+	/**Atualiza as variáveis globais após movimentar o robo
+	 * 
+	 * @param motorRotate
+	 * @param direcao
+	 */
+	private static void ViraRotateAtualizaGlobais(int motorRotate, EnumDirecao direcao) {
+		
+		int mod = 0;
+		mod  = motorRotate/ grausToMotorRotate(90) ;
+		
+		if(mod < 0){
+			mod = -mod;
+			if(direcao == EnumDirecao.DIREITA){
+				direcao = EnumDirecao.ESQUERDA;
+			}else{
+				direcao = EnumDirecao.DIREITA;
+			}
+		}				
+			
+			for (int i = 0; i < mod; i++) {				
+	
+				EnumDirecao direcaoParaIr = direcaoParaIrGlobal(PotatoRobo.getDirecaoRobo(), direcao);	
+				
+				int valoDirecional  =  direcaoParaIr.valorDirecional(PotatoRobo.getDirecaoRobo().valor);
+				robo.setDirecaoCabeca(PotatoRobo.giraDirecao(valoDirecional,  PotatoRobo.getDirecaoCabeca()));				
+				robo.setDirecaoRobo(direcaoParaIr);
+			}		
+		
 	}
 	
 	
@@ -304,8 +336,41 @@ public class PotatoManeger {
 		}else if(direcao == EnumDirecao.ESQUERDA){
 			motorCabeca.rotate(-motorRotate);
 		}				
-	
+		viraCabecaAtualizaGlobais(motorRotate, direcao);
 	}
+	
+	/**
+	 * Atualiza as vriáveis globais da cabeça
+	 * @param motorRotate
+	 * @param direcao
+	 */
+	public static void viraCabecaAtualizaGlobais(int motorRotate, EnumDirecao direcao) {		
+		
+		int mod = 0;
+		mod  = motorRotate/ grausToCabecaMotorRotate(90) ;
+		
+
+		if(mod < 0){
+			mod = -mod;
+			if(direcao == EnumDirecao.DIREITA){
+				direcao = EnumDirecao.ESQUERDA;
+			}else{
+				direcao = EnumDirecao.DIREITA;
+			}
+		}
+			
+		for (int i = 0; i < mod; i++) {
+			
+			EnumDirecao direcaoRobo = PotatoRobo.getDirecaoCabeca();
+			EnumDirecao direcaoParaIr = direcaoParaIrGlobal(direcaoRobo, direcao);
+			PotatoRobo.setDirecaoCabeca(direcaoParaIr);	
+		}		
+
+		
+				
+
+	}
+	
 
 	/**
 	 * Rotaciona o Robo 90 graus * valor direcional
@@ -393,8 +458,8 @@ public class PotatoManeger {
 	}
 
 	/**
-		 * Percorre um  Array de caminho. 
-		 * @param caminho Aray com os nodos que compoem o caminho.
+		  * Percorre um  Array de caminho. 
+		 * @param caminho Array com os nodos que compoem o caminho.Considera o objeto de Posição "0" como a posicao atual;
 		 * @param direcaoRobo
 		 * @param distanciaMapa
 		 * @param posicaoRoboI
@@ -402,6 +467,7 @@ public class PotatoManeger {
 		 * @throws InterruptedException
 		 */
 		
+	@SuppressWarnings("static-access")
 	public static void andaCaminho(ArrayList<Nodo> caminho,EnumDirecao direcaoRobo, int distanciaMapa, Boolean inverso) throws InterruptedException{
 	
 			
@@ -419,6 +485,7 @@ public class PotatoManeger {
 			
 				EnumDirecao direcaoParaIr= direcaoParaIr(posicaoRoboI, posicaoRoboJ, posicaoProximaI, posicaoProximaJ);
 				robo.Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);
+				
 				//Move4dDistancia(direcaoParaIr, direcaoRobo, distanciaMapa);			
 				
 				posicaoRoboI = posicaoProximaI;
@@ -587,6 +654,105 @@ public class PotatoManeger {
 		return direcaoParaIr;
 
 	}
+	
+
+	
+	public static EnumDirecao direcaoParaIrGlobal(EnumDirecao direcao, EnumDirecao direcaoProxima){
+
+		EnumDirecao direcaoParaIr = null;
+		
+		switch (direcao) {
+		case FRENTE:		
+			
+			switch (direcaoProxima) {
+			case FRENTE:		
+				direcaoParaIr = EnumDirecao.FRENTE; 
+				break;
+			case TRAZ:
+				direcaoParaIr = EnumDirecao.TRAZ;
+				break;
+			case DIREITA:
+				direcaoParaIr = EnumDirecao.ESQUERDA;
+				break;
+			case ESQUERDA:
+				direcaoParaIr = EnumDirecao.DIREITA;
+				break;			
+
+			default:
+				break;
+			}		
+			
+			break;
+		case TRAZ:
+			
+			switch (direcaoProxima) {
+			case FRENTE:		
+				direcaoParaIr = EnumDirecao.TRAZ; 
+				break;
+			case TRAZ:
+				direcaoParaIr = EnumDirecao.FRENTE;
+				break;
+			case DIREITA:
+				direcaoParaIr = EnumDirecao.DIREITA;
+				break;
+			case ESQUERDA:
+				direcaoParaIr = EnumDirecao.ESQUERDA;
+				break;			
+
+			default:
+				break;
+			}	
+			break;
+		case DIREITA:
+			switch (direcaoProxima) {
+			case FRENTE:		
+				direcaoParaIr = EnumDirecao.DIREITA; 
+				break;
+			case TRAZ:
+				direcaoParaIr = EnumDirecao.ESQUERDA;
+				break;
+			case DIREITA:
+				direcaoParaIr = EnumDirecao.FRENTE;
+				break;
+			case ESQUERDA:
+				direcaoParaIr = EnumDirecao.TRAZ;
+				break;			
+
+			default:
+				break;
+			}		
+			break;
+		case ESQUERDA:
+			switch (direcaoProxima) {
+			case FRENTE:		
+				direcaoParaIr = EnumDirecao.ESQUERDA; 
+				break;
+			case TRAZ:
+				direcaoParaIr = EnumDirecao.DIREITA;
+				break;
+			case DIREITA:
+				direcaoParaIr = EnumDirecao.TRAZ;
+				break;
+			case ESQUERDA:
+				direcaoParaIr = EnumDirecao.FRENTE;
+				break;			
+
+			default:
+				break;
+			}		
+			break;			
+
+		default:
+			break;
+		}		
+		
+
+		return direcaoParaIr;
+
+	}
+	
+	
+	
 	
 	
 	

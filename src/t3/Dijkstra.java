@@ -126,11 +126,11 @@ public class Dijkstra {
 	
 		filaDijkstra(destino);
 		if (imprime) {
-		String str = "";	
-		str += imprimeDijkstra(destino);
-		str += "\nTotal:"+ destino.getDistancia();
-		str += "\n";
-		System.out.println(str);
+			String str = "";	
+			str += imprimeDijkstra(destino);
+			str += "\nTotal:"+ destino.getDistancia();
+			str += "\n";
+			System.out.println(str);
 		}
 		
 				
@@ -142,9 +142,9 @@ public class Dijkstra {
 		if (v.getPai() != null) {
 			str += imprimeDijkstra(v.getPai());
 			str += "\nNodo" +  v.getNome() +", Pai: " + v.getPai().getNome();
-			fila.add(v);
+			//fila.add(v);
 		}else {
-			fila.add(v);
+			//fila.add(v);
 		}
 		return str;
 	}

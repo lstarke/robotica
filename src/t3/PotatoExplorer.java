@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import javax.microedition.location.Orientation;
 
+import org.apache.bcel.generic.CALOAD;
+import org.apache.bcel.verifier.VerifierAppFrame;
 import org.apache.commons.cli.PosixParser;
 import org.jfree.date.AnnualDateRule;
 import org.jfree.date.RelativeDayOfWeekRule;
@@ -29,11 +31,21 @@ public static PotatoRobo robo = PotatoRobo.getInstance();
 public static Mapa mapa = Mapa.getInstance();
 public static ArrayList<Nodo> nodoListExplorados = new ArrayList<Nodo>();
 private int cont = 0;
-private static boolean olharParaTraz =  true;
+private static boolean olharParaTraz =  false;
 
 private static ArrayList<Nodo> produtoList = new ArrayList<Nodo>();
 private static ArrayList<EnumProduto> produtoToColetar = new ArrayList<EnumProduto>();
 private static ArrayList<ArrayList<Nodo>> caminhoProdutoList = new ArrayList<ArrayList<Nodo>>();
+private static Nodo nodoInicio = null;
+
+public enum EnumStatusExploracao{
+ INDEFINIDO,
+ EXPLORA,
+ VOLTA,
+ COLETA;
+}
+
+public static EnumStatusExploracao statusExploracao = EnumStatusExploracao.INDEFINIDO  ;
 
 @SuppressWarnings("static-access")
 public PotatoExplorer( int  posicaoRoboI, int posicaoRoboJ, EnumDirecao direcaoRobo, boolean olharParaTraz){
@@ -42,6 +54,7 @@ public PotatoExplorer( int  posicaoRoboI, int posicaoRoboJ, EnumDirecao direcaoR
 	//A direção da cabeça é global e não em relação ao robo
 	robo.setDirecaoCabeca(direcaoRobo);
 	robo.nodoAtual = Mapa.getNodo(posicaoRoboI, posicaoRoboJ);
+	nodoInicio = robo.nodoAtual;
 	mapa.setMatrizSimulacao(mapa.createDefaultMapa());
 	
 		
@@ -57,9 +70,25 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 	}	*/
 
-	
 	@SuppressWarnings("static-access")
-	public void explorerMapa(Nodo nodoAtual, ArrayList<Nodo> caminho,int volta) throws InterruptedException {
+	public void explorerMapa(Nodo nodoOrigem, ArrayList<EnumProduto> produtoToColetar) throws InterruptedException {
+		statusExploracao = statusExploracao.EXPLORA;
+		System.out.println("---EXPLORER-MAP---");
+		
+		setProdutoToColetar(produtoToColetar);
+		explorerMapa(robo.nodoAtual, new ArrayList<Nodo>(),0);
+	}
+
+	/**
+	 * explora todos os lados do nodo atual
+	 * @param nodoAtual
+	 * @param caminho
+	 * @param volta
+	 * @throws InterruptedException
+	 */
+	 
+	@SuppressWarnings("static-access")
+	private void explorerMapa(Nodo nodoAtual, ArrayList<Nodo> caminho,int volta) throws InterruptedException {
 	//System.out.println(cont++);
 		if(mapa.getMatrizSimulacao()[nodoAtual.getI()*2][nodoAtual.getJ()*2] == 0) {
 			mapa.getMatrizSimulacao()[nodoAtual.getI()*2][nodoAtual.getJ()*2] = 1;
@@ -115,7 +144,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			
 		}else{
 			volta++;
-			voltaCaminho(nodoAtual, caminho, volta);
+			explorerVoltaCaminho(nodoAtual, caminho, volta);
 			
 			//robo.manager.andaCaminho(caminho, robo.getDirecaoRobo(), mapa.tamanhoQuadros, true);
 		}
@@ -128,7 +157,15 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 	}
 	
-	public void voltaCaminho(Nodo nodoAtual, ArrayList<Nodo> caminho, int volta) throws InterruptedException {
+	/**
+	 * Retorna o Caminho percorrido pelo explorer
+	 * @param nodoAtual nodo em que o explorerMapa se encontra
+	 * @param caminho / caminho percorido no momento
+	 * @param volta contador de volta, referente a quantas casa teve de retornar
+	 * @throws InterruptedException
+	 */
+	@SuppressWarnings("static-access")
+	private void explorerVoltaCaminho(Nodo nodoAtual, ArrayList<Nodo> caminho, int volta) throws InterruptedException {
 		robo.nodoAtual = nodoAtual;
 		int idx = caminho.size()- (volta +1);		
 		Nodo nodoAnterior = caminho.get(idx);
@@ -137,10 +174,40 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		//caminho.add(volta);
 		//caminho.remove(caminho.size()-1);
 		
-		
+
 		robo.Move4dDistancia(direcao, robo.getDirecaoRobo(), mapa.tamanhoQuadros);	
 		explorerMapa(nodoAnterior, caminho, volta);
 	}
+	
+	@SuppressWarnings("static-access")
+	/***
+	 * Anda Caminho de um ponto Rogigem até um ponto objetivo
+	 * @param nodoOrigem
+	 * @param nodoObjetivo
+	 * @throws InterruptedException
+	 */
+	 
+	public static void andaCaminho(Nodo nodoOrigem, Nodo nodoObjetivo ) throws InterruptedException {		
+		//ajusta a cabeça para a posicao atual do robo
+		
+		robo.andaCaminho(menorCaminho(nodoOrigem, nodoObjetivo),robo.getDirecaoRobo(), mapa.tamanhoQuadros, false);
+		
+		
+	}
+	
+	@SuppressWarnings("static-access")
+	public static void voltaInicio() {
+		statusExploracao = statusExploracao.VOLTA;
+		System.out.println("----VOLTA-INICIO--");
+		try {
+			andaCaminho(robo.nodoAtual, nodoInicio);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 	
 	public EnumDirecao direcaoNodoAdjacente(Nodo pai ,Nodo adjacente) {
 		
@@ -170,12 +237,14 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	
 	@SuppressWarnings("static-access")
 	public static void coletaProduto(Nodo nodoOrigem) {
-		robo.nodoAtual = Mapa.getNodo(6, 0);		
+		statusExploracao = statusExploracao.COLETA;
+		System.out.println("--COLETA-PRODUTOS");
+		//robo.nodoAtual = Mapa.getNodo(6, 0);		
 		ArrayList<ArrayList<Nodo>>  caminhosList = getCaminhoProdutoList(nodoOrigem);
 		
 		for(ArrayList<Nodo> caminho : caminhosList) {
 			try {
-				robo.manager.andaCaminho(caminho, robo.getDirecaoRobo(), Mapa.tamanhoQuadros, false);
+				robo.manager.andaCaminho(caminho, robo.getDirecaoRobo(), mapa.tamanhoQuadros, false);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -184,8 +253,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 		
 		
-	}
-	
+	}	
 	
 
 /**
@@ -194,6 +262,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
  * @param caminho
  * @return
  */
+	@SuppressWarnings("unused")
 	private boolean isNodoNoCaminho(Nodo nodo, ArrayList<Nodo> caminho){
 
 		boolean  isNodoInCaminho = false;
@@ -211,6 +280,10 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 	}
 
+
+	
+	
+	
 	/**
 	 * Adiona Ajacentes de cada direcao encontrada em relação ao mapa global
 	 * @param nodoAtual
@@ -220,7 +293,10 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	private void addAdjacentes(Nodo nodoAtual) {
 		int i = nodoAtual.getI();
 		int j = nodoAtual.getJ();
+		
 		String adjacentes = "";		
+		
+		
 	
 		if(isCaminho(EnumDirecao.DIREITA, nodoAtual) ) {
 			
@@ -243,7 +319,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			
 		}
 		
-		if(isCaminho(EnumDirecao.TRAZ, nodoAtual) && olharParaTraz) {
+		if(isCaminho(EnumDirecao.TRAZ, nodoAtual)) {
 			
 			Nodo n = Mapa.getNodo(i -1, j);
 			
@@ -263,9 +339,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		}	
 		
 		
-		
-		
-		//System.out.println(nodoAtual.getNome() + adjacentes);
+		System.out.println(nodoAtual.getNome() + adjacentes);
 	
 				
 	}
@@ -280,9 +354,21 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		boolean iscaminho = false;
 		// verifica se lugar esta dentro do mapa
 		if(isDirecaoDentroMapSize(nodoAtual.getI(), nodoAtual.getJ(), direcao)) {
+			
+			
+			if(!olharParaTraz) {
+				int valorDicional = 0;
+				valorDicional = direcao.valorDirecional(robo.getDirecaoRobo().valor);
+				valorDicional =  Math.abs(valorDicional);
+				if(valorDicional <2) {
+					robo.moveCabeca(direcao);
+					iscaminho = ! robo.manager.encontrouParede();
+				}
+			}else {
 			//busca parade;
-			robo.moveCabeca(direcao);
-			iscaminho = ! robo.manager.encontrouParede();	
+				robo.moveCabeca(direcao);
+				iscaminho = ! robo.manager.encontrouParede();
+			}
 		}
 			
 		
@@ -320,6 +406,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	 * @return
 	 */
 	
+	@SuppressWarnings("static-access")
 	private boolean isDentroMapSize(int i, int j) {
 		boolean retorno = true;
 		
@@ -342,9 +429,16 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		return retorno;
 	}	
 	
+	/**
+	 * Adiciona nodo apenas uma vez a lista de explorados
+	 * @param nodo
+	 */
+	
 	public static void addNodoEplorado(Nodo nodo){
-		if(nodoListExplorados != null){
-		nodoListExplorados.add(nodo);	
+		if(nodoListExplorados != null) {
+			if(!nodoListExplorados.contains(nodo)){
+				nodoListExplorados.add(nodo);	
+			}
 		}else{
 			nodoListExplorados = new ArrayList<Nodo>();
 		}
@@ -361,6 +455,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	}
 	
 	
+	@SuppressWarnings("static-access")
 	public static void procuraProduto(Nodo nodo){
 		
 		if(isProduto(robo.observaCor(), nodo)){
@@ -393,12 +488,24 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 	}
 	
+	private static ArrayList<Nodo> menorCaminho(Nodo nodoOrigem,Nodo nodoObjetivo) {
+		ArrayList<Nodo> caminho = new ArrayList<Nodo>();
+		Dijkstra d = new Dijkstra(nodoListExplorados);
+		d.dijkstra(nodoOrigem, nodoObjetivo, false);
+		caminho = d.getFila();
+		return caminho;
+		
+		
+	}
+	
+	
 	/**
 	 * Calcula o Menor caminho para o Objetivo e alimenta a list caminhoProdutoList
 	 * @param nodoOrigem
 	 */
 	
-	public static void menorCaminhoAteprodutos(Nodo nodoOrigem){
+	@SuppressWarnings("unused")
+	private static void menorCaminhoAteprodutos(Nodo nodoOrigem){
 		Dijkstra d = new Dijkstra(nodoListExplorados);
 		int tamanhoTotal = 0;
 		for(Nodo objetivo : produtoList){
@@ -410,12 +517,9 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			System.out.println("Tamanho:"+ d.getFila().size());
 			tamanhoTotal += d.getFila().size() -1;
 			
-			caminhoProdutoList.add(d.getFila());
-			
-			///retorna caminho e addnuma lista;
-			
-			nodoOrigem = objetivo;
-			
+			caminhoProdutoList.add(d.getFila());			
+			///retorna caminho e addnuma lista;			
+			nodoOrigem = objetivo;			
 		}
 		
 		System.out.println("TamanhoTotal:"+ tamanhoTotal);
@@ -423,9 +527,15 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 	}
 	
-	public static void menorCaminhoAteprodutos2(Nodo nodoOrigem, int tamanhoTotal){
+	 /***
+	  * Calcula o Menor caminho para o Objetivo e alimenta a list caminhoProdutoList partindo do produto mais próximo
+	  * @param nodoOrigem
+	  * @param tamanhoTotal
+	  */
+	
+	private static void menorCaminhoAteprodutos2(Nodo nodoOrigem, int tamanhoTotal){
 		Dijkstra d = new Dijkstra(nodoListExplorados);
-		ArrayList<Nodo> menorFila = null;
+		ArrayList<Nodo> menorFila =new ArrayList<Nodo>();
 		Nodo menorObjetivo = null;
 		int menorTamanho = Integer.MAX_VALUE;
 		
@@ -439,13 +549,17 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			}
 		}
 		
+		if(menorFila.size() > 0) {
+		
 		produtoList.remove(menorObjetivo);
-		tamanhoTotal += menorFila.size() -1;
 		caminhoProdutoList.add(menorFila);
 		
-		System.out.println("\nOrigem:"+ nodoOrigem.getNome() + ", Objetivo:" + menorObjetivo.getNome());
-		System.out.println("Fila:" + d.imprimeFila());
-		System.out.println("Tamanho:"+ menorFila.size());		
+		//System.out.println("\nOrigem:"+ nodoOrigem.getNome() + ", Objetivo:" + menorObjetivo.getNome());
+		//System.out.println("Fila:" + d.imprimeFila());
+		//System.out.println("Tamanho:"+ menorFila.size());	
+		}else {
+			System.out.println("---Não existe Caminho--");
+		}
 		
 		if(produtoList.size() > 0) {
 			menorCaminhoAteprodutos2(menorObjetivo, tamanhoTotal);
@@ -475,7 +589,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		produtoList.add(nodo);		
 	}
 				
-	public static void setNodoListExplorados(ArrayList<Nodo> nodoListExplorados) {
+	public void setNodoListExplorados(ArrayList<Nodo> nodoListExplorados) {
 		nodoListExplorados = nodoListExplorados;
 	}
 
