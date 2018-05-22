@@ -144,7 +144,15 @@ public static void Move4dDistancia(EnumDirecao direcaoParaIr, EnumDirecao direca
 	
 		//viraDirecionada4d(valoDirecional);
 	}
-
+/**
+ * Percorre um  Array de caminho. 
+ * @param caminho Array com os nodos que compoem o caminho.Considera o objeto de Posição "0" como a posicao atual;
+ * @param direcaoRobo
+ * @param distanciaMapa
+ * @param posicaoRoboI
+ * @param posicaoRoboJ
+ * @throws InterruptedException
+ */
 @SuppressWarnings("static-access")
 public static void andaCaminho(ArrayList<Nodo> caminho, EnumDirecao direcao, int tamanhoQuadros, boolean inverso) throws InterruptedException {
 	

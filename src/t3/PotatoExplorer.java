@@ -144,7 +144,8 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			
 		}else{
 			volta++;
-			explorerVoltaCaminho(nodoAtual, caminho, volta);
+			//explorerVoltaCaminho(nodoAtual, caminho, volta);
+			explorerVoltaCaminho(nodoAtual, caminho);
 			
 			//robo.manager.andaCaminho(caminho, robo.getDirecaoRobo(), mapa.tamanhoQuadros, true);
 		}
@@ -177,6 +178,42 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 
 		robo.Move4dDistancia(direcao, robo.getDirecaoRobo(), mapa.tamanhoQuadros);	
 		explorerMapa(nodoAnterior, caminho, volta);
+	}
+	
+	
+	/**Encontra o nodo que tem caminho não explorado e  voolta o percure anda o menor caminho até ele
+	 * @param nodoAtual
+	 * @param caminho
+	 * @throws InterruptedException
+	 */
+	@SuppressWarnings("static-access")
+	private void explorerVoltaCaminho(Nodo nodoAtual, ArrayList<Nodo> caminho) throws InterruptedException {
+		
+		Nodo nodoObjetivo = nodoAtual;
+		for(int i = caminho.size()-1; i>=  0; i--) {
+			
+			if(caminho.get(i).getNodoFrente() !=null && !caminho.get(i).getNodoFrente().isNodoPercorrido()) {				
+				nodoObjetivo = caminho.get(i).getNodoFrente(); 
+				break;
+				
+			}else if (caminho.get(i).getNodoDireita()!= null && !caminho.get(i).getNodoDireita().isNodoPercorrido()) {
+				nodoObjetivo = caminho.get(i).getNodoDireita();
+				break;
+				
+			}else if (caminho.get(i).getNodoEsquerda()!= null && !caminho.get(i).getNodoEsquerda().isNodoPercorrido()) {
+				nodoObjetivo = caminho.get(i).getNodoEsquerda();
+				break;
+				
+			}else if (caminho.get(i).getNodoTraz() != null && !caminho.get(i).getNodoTraz().isNodoPercorrido()) {
+				nodoObjetivo = caminho.get(i).getNodoTraz();
+				break;
+				
+			}
+		}		
+		
+		menorCaminho(nodoAtual, nodoObjetivo);
+		robo.andaCaminho(caminho, robo.getDirecaoRobo(), mapa.tamanhoQuadros, false);
+		
 	}
 	
 	@SuppressWarnings("static-access")
