@@ -181,7 +181,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	}
 	
 	
-	/**Encontra o nodo que tem caminho não explorado e  voolta o percure anda o menor caminho até ele
+	/**Encontra o nodo que tem caminho não explorado e precorre o menor caminho até ele
 	 * @param nodoAtual
 	 * @param caminho
 	 * @throws InterruptedException
@@ -211,8 +211,9 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			}
 		}		
 		
-		menorCaminho(nodoAtual, nodoObjetivo);
-		robo.andaCaminho(caminho, robo.getDirecaoRobo(), mapa.tamanhoQuadros, false);
+		ArrayList<Nodo> menorCaminho = menorCaminho(nodoAtual, nodoObjetivo);
+		robo.andaCaminho(menorCaminho, robo.getDirecaoRobo(), mapa.tamanhoQuadros, false);
+		explorerMapa(nodoObjetivo, caminho,0);
 		
 	}
 	
