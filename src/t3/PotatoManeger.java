@@ -3,11 +3,14 @@ package t3;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.microedition.sensor.ColorIndexChannelInfo;
+
 import t3.Mapa.EnumMapa;
 
 import com.intel.bluetooth.Utils;
 
 import lejos.nxt.Button;
+import lejos.nxt.ButtonListener;
 import lejos.nxt.ColorSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
@@ -24,14 +27,20 @@ public class PotatoManeger {
 	
 	public static void main(String[] args) {
 		
-		//defineVelocidade(100);
-		//motorCabeca.setSpeed(70);
-		//motorCabeca.lock(70);
-		/*String cor ="";
+		
+	
+		Button.ENTER.callListeners();
+	
+		String corId = "";
+		String cor ="";
 
 		cor += ",R"+ sensorCor.getColor().getRed();
 		cor += ",G"+ sensorCor.getColor().getGreen();
 		cor += ",B"+ sensorCor.getColor().getBlue()+"\n";
+		
+		corId = sensorCor.getColor().toString();
+		
+		
 		
 		
 		int redmin = 999;
@@ -46,36 +55,19 @@ public class PotatoManeger {
 		while(!Button.ENTER.isDown()){
 		
 		System.out.println(cor);
+		System.out.println(corId);
 		
 		}
 		
-		while(!Button.ENTER.isDown()){
-			
-		}*/
 		
-		for (int i = 1 ; i<7; i++){
-		andarRotate(PotatoManeger.dintanceToMotorRotate(26));
-		motorCabeca.setSpeed(100);
-		PotatoManeger.viraCabeca(PotatoManeger.grausToCabecaMotorRotate(90),EnumDirecao.DIREITA);
-		System.out.println("   "+sensorUltrasonico.getDistance());
-		//PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.DIREITA);
-		//PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.ESQUERDA);
-		PotatoManeger.viraCabeca(PotatoManeger.grausToCabecaMotorRotate(90),EnumDirecao.ESQUERDA);
-		System.out.println("   "+sensorUltrasonico.getDistance());
-		PotatoManeger.viraCabeca(PotatoManeger.grausToCabecaMotorRotate(90),EnumDirecao.ESQUERDA);
-		System.out.println("   "+sensorUltrasonico.getDistance());
-		PotatoManeger.viraCabeca(PotatoManeger.grausToCabecaMotorRotate(90),EnumDirecao.DIREITA);
-		System.out.println("   "+sensorUltrasonico.getDistance());
-		}
-		//para();
-		//motorCabeca.rotate(10);
-		//Motor.A.rotate(3000);
 		
 		
 		//PotatoManager.viraCabeca(PotatoManager.grausToCabecaMotorRotate(90),EnumDirecao.DIREITA);
+	
+	
 	}
 	
-	/**
+	/*
 	 * Parametros de calibragem baseados na rotacao do motor
 	 * 
 	 *
@@ -210,13 +202,29 @@ public class PotatoManeger {
 	 */
 	public static int[] observaCor(){
 	
+		int r = 0;
+		int g = 0;
+		int b = 0;
+		
+		r = sensorCor.getColor().getRed();
+		g = sensorCor.getColor().getBlue();
+		b = sensorCor.getColor().getBlue();
+		
+		
 	int[] cor = new int[3];
-	cor[0] = 0;//R;	
-	cor[1] = 0;//G;	
-	cor[2] = 0;//B;	
+	cor[0] = r;//R;	
+	cor[1] = g;//G;	
+	cor[2] = b;//B;
 	
-	return cor;
-			
+	return cor;			
+		}
+	
+	
+	public static ColorSensor.Color observaCorx(){
+		
+		ColorSensor.Color colorId = sensorCor.getColor();		
+	
+	return colorId;			
 		}
 
 	public static Boolean encontrouParede() {
