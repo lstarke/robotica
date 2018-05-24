@@ -74,7 +74,7 @@ public class PotatoManeger {
 	 */	
 	
 	private static final int VELOCIDADE = 150 ;
-	private static int grau_90_MotorRotate_100  = 190;
+	private static int grau_90_MotorRotate_100  = 200;
 	private static int grau_90_CabecaMotorRotate =100 ;
 	///private static int distancia_10_MotorRotate_100 = 2400; 
 	private static int distancia_10_MotorRotate_100 = 265; 
@@ -82,7 +82,7 @@ public class PotatoManeger {
 	private static NXTRegulatedMotor motorRodaDireita = Motor.B;
 	private static NXTRegulatedMotor motorRodaEsquerda = Motor.C;
 	private static NXTRegulatedMotor motorCabeca = Motor.A;
-	private static int distancia_paredeUltraSonico;
+	private static int distancia_paredeUltraSonico = 20;
 	
 	public static ColorSensor sensorCor = new ColorSensor(SensorPort.S4);
 	public static UltrasonicSensor sensorUltrasonico = new UltrasonicSensor(SensorPort.S3);	
@@ -98,7 +98,7 @@ public class PotatoManeger {
 	}
 	
 	public PotatoManeger(){
-		motorCabeca.setSpeed(70);
+		motorCabeca.setSpeed(700);
 	}
 	
 	public static void  menuCalibragemDistanca(){
@@ -230,6 +230,7 @@ public class PotatoManeger {
 	public static Boolean encontrouParede() {
 		//sensorUltrasonico.capture();
 		if(sensorUltrasonico.getDistance()< distancia_paredeUltraSonico) {
+			System.out.println("EncontrouParede");
 			return true;
 		}else {
 			return false;
@@ -254,13 +255,13 @@ public class PotatoManeger {
 		
 		switch (direcao) {
 			case DIREITA:
-			motorRodaDireita.rotate(motorRotate);			
-			motorRodaEsquerda.rotate(-motorRotate);
+			motorRodaDireita.rotate(-motorRotate);			
+			motorRodaEsquerda.rotate(motorRotate);
 			break;
 			
 			case ESQUERDA:
-				motorRodaDireita.rotate(-motorRotate);
-				motorRodaEsquerda.rotate(motorRotate);
+				motorRodaDireita.rotate(motorRotate);
+				motorRodaEsquerda.rotate(-motorRotate);
 			break;	
 
 		default:
@@ -339,12 +340,13 @@ public class PotatoManeger {
 	public static void viraCabeca(int motorRotate, EnumDirecao direcao) {		
 		
 		if(direcao == EnumDirecao.DIREITA){
-		motorCabeca.rotate(motorRotate);
+		motorCabeca.rotate(-motorRotate);
 		
 		}else if(direcao == EnumDirecao.ESQUERDA){
-			motorCabeca.rotate(-motorRotate);
+			motorCabeca.rotate(motorRotate);
 		}				
 		viraCabecaAtualizaGlobais(motorRotate, direcao);
+		
 	}
 	
 	/**
@@ -374,7 +376,7 @@ public class PotatoManeger {
 			PotatoRobo.setDirecaoCabeca(direcaoParaIr);	
 		}		
 
-		
+		//System.out.println("Global"+ robo.getDirecaoCabeca());
 				
 
 	}
@@ -392,13 +394,13 @@ public class PotatoManeger {
 	 */
 	
 	public static void viraDirecionada4d(int valorDirecional) {		
-		
+		//System.out.println(valorDirecional);
 		viraAngulo(90 * valorDirecional, EnumDirecao.DIREITA);		
 		
 	}
 
 	public static void viraDirecionadaCabeca4d(int valorDirecional) {		
-		
+		//System.out.println(valorDirecional);
 		viraCabeca(grausToCabecaMotorRotate(90 * valorDirecional), EnumDirecao.DIREITA);	
 		
 	}
@@ -463,6 +465,7 @@ public class PotatoManeger {
 		
 		int valoDirecional  =  direcaoParaIr.valorDirecional(direcaoRobo.valor);	
 		viraDirecionada4d(valoDirecional);
+		andarDistancia(distancia);
 	}
 
 	/**

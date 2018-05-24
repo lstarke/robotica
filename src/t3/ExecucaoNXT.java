@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import lejos.nxt.Button;
 
-public class Execucao {
+public class ExecucaoNXT {
 	
 	private static int posicaoRoboI =6;
 	private static int posicaoRoboJ =0;
@@ -12,9 +12,11 @@ public class Execucao {
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
 	
-		//Button.ENTER.callListeners();
 		
-		PotatoExplorer pe = new PotatoExplorer(posicaoRoboI,posicaoRoboJ, EnumDirecao.DIREITA, false);		
+		PotatoExplorer pe = new PotatoExplorer(posicaoRoboI,posicaoRoboJ, EnumDirecao.DIREITA, false);	
+		
+		//PotatoRobo.moveCabeca(EnumDirecao.TRAZ);;
+		
 		ArrayList<EnumProduto> produtoToColetar = new ArrayList<EnumProduto>();
 		produtoToColetar.add(EnumProduto.PRODUTO_1_PRETO);
 		
@@ -30,6 +32,8 @@ public class Execucao {
 
 		pe.voltaInicio();
 		pe.coletaProduto(Mapa.getNodo(posicaoRoboI, posicaoRoboJ));
+		
+		
 		
 		
 	}

@@ -112,24 +112,31 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			caminho.add(nodoAtual);
 			
 			//System.out.println(robo.nodoAtual.getNome());
-	
+			//System.out.println("yEEP");
 			if(nodoFrente!= null && nodoFrente.getStatus()  == EnumStatus.N_EXPLORADO && !nodoFrente.isNodoPercorrido() ) {
 				robo.Move4dDistancia(EnumDirecao.FRENTE, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
+				//System.out.println("MOVEFRENTE");
 				explorerMapa(nodoFrente, caminho, 0);
+				
 				
 			}
 			if(nodoEsquerda != null && nodoEsquerda.getStatus()  == EnumStatus.N_EXPLORADO && !nodoEsquerda.isNodoPercorrido()) {
 				robo.Move4dDistancia(EnumDirecao.ESQUERDA, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
+				//System.out.println("MOVEeSQUERDA");
 				explorerMapa(nodoEsquerda,caminho, 0);
+				
 			}
 			if(nodoDireita!= null && nodoDireita.getStatus()  == EnumStatus.N_EXPLORADO && !nodoDireita.isNodoPercorrido()) {
 				robo.Move4dDistancia(EnumDirecao.DIREITA, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
+				//System.out.println("MOVEDIREITA");
 				explorerMapa(nodoDireita,caminho, 0);
+				
 				
 			}
 			if(nodoTraz != null && nodoTraz.getStatus()  == EnumStatus.N_EXPLORADO && !nodoTraz.isNodoPercorrido()) {
 				robo.Move4dDistancia(EnumDirecao.TRAZ, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
 				explorerMapa(nodoTraz,caminho , 0);
+				
 			}			
 			addNodoEplorado(nodoAtual);			
 			nodoAtual.setStatus(EnumStatus.EXPLORADO);
@@ -377,7 +384,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		}	
 		
 		
-		System.out.println(nodoAtual.getNome() + adjacentes);
+	//	System.out.println(nodoAtual.getNome() + adjacentes);
 	
 				
 	}
@@ -392,19 +399,44 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		boolean iscaminho = false;
 		// verifica se lugar esta dentro do mapa
 		if(isDirecaoDentroMapSize(nodoAtual.getI(), nodoAtual.getJ(), direcao)) {
-			
+			//System.out.println("Cab"+ direcao);
 			
 			if(!olharParaTraz) {
-				int valorDicional = 0;
-				valorDicional = direcao.valorDirecional(robo.getDirecaoRobo().valor);
-				valorDicional =  Math.abs(valorDicional);
-				if(valorDicional <2) {
+				//int valorDicional = 0;
+				//valorDicional = direcao.valorDirecional(robo.getDirecaoRobo().valor);
+				//valorDicional =  Math.abs(valorDicional);
+				int valorDirecional = robo.getDirecaoCabeca().valorDirecional(direcao.valor);
+				
+				
+				
+				int valor = Math.abs(valorDirecional);
+				
+				//System.out.println(direcao);
+				//System.out.println("dir" + valor) ;
+				//System.out.println(" " ) ;
+				if(valor  < 2){		
+						
+					EnumDirecao direcaoParair = robo.giraDirecao(valorDirecional,robo.getDirecaoCabeca());
+					//robo.moveCabeca(direcaoParair);
 					robo.moveCabeca(direcao);
+					
+					//System.out.println("Executa " ) ;
+					//System.out.println("" ) ;
+					}					
+					
+					//System.out.println( direcaoParair);
+					
+					//System.out.println("2"+robo.getDirecaoCabeca());
+					//System.out.println("Cab"+ direcaoParair);
+					//robo.moveCabeca(direcao);
 					iscaminho = ! robo.manager.encontrouParede();
-				}
+				//}
 			}else {
 			//busca parade;
-				robo.moveCabeca(direcao);
+				int valorDirecional = robo.getDirecaoCabeca().valorDirecional(robo.getDirecaoCabeca().valor);
+				EnumDirecao direcaoParair = robo.giraDirecao(valorDirecional,robo.getDirecaoCabeca());
+				robo.moveCabeca(direcaoParair);
+				//robo.moveCabeca(direcao);
 				iscaminho = ! robo.manager.encontrouParede();
 			}
 		}

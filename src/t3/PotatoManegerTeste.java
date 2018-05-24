@@ -48,7 +48,7 @@ public class PotatoManegerTeste {
 	public static PotatoRobo robo = PotatoRobo.getInstance();
 	
 	private static boolean  sleepMode = false;
-	private static float 	slowMod = 3;
+	private static float 	slowMod = 1;
 	
 	public static void calibragemTeste() throws InterruptedException {
 		
@@ -488,7 +488,7 @@ public class PotatoManegerTeste {
 				
 				direcaoRobo = direcaoParaIr;
 				
-				System.out.println( Mapa.imprimeRoboEmString(robo.desenhaRobo(), robo.nodoAtual.getI(), robo.nodoAtual.getJ(), true));
+				//System.out.println( Mapa.imprimeRoboEmString(robo.desenhaRobo(), robo.nodoAtual.getI(), robo.nodoAtual.getJ(), true));
 	
 				}	
 		}	    
