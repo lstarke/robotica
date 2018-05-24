@@ -95,7 +95,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		}
 	
 		nodoAtual.setNodoPercorrido(true);		
-		robo.nodoAtual = nodoAtual;
+		robo.nodoAtual = nodoAtual;		
 		
 		if(nodoAtual.getStatus() == EnumStatus.N_EXPLORADO)
 		{
@@ -120,12 +120,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 				
 				
 			}
-			if(nodoEsquerda != null && nodoEsquerda.getStatus()  == EnumStatus.N_EXPLORADO && !nodoEsquerda.isNodoPercorrido()) {
-				robo.Move4dDistancia(EnumDirecao.ESQUERDA, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
-				//System.out.println("MOVEeSQUERDA");
-				explorerMapa(nodoEsquerda,caminho, 0);
-				
-			}
+			
 			if(nodoDireita!= null && nodoDireita.getStatus()  == EnumStatus.N_EXPLORADO && !nodoDireita.isNodoPercorrido()) {
 				robo.Move4dDistancia(EnumDirecao.DIREITA, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
 				//System.out.println("MOVEDIREITA");
@@ -133,6 +128,14 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 				
 				
 			}
+			
+			if(nodoEsquerda != null && nodoEsquerda.getStatus()  == EnumStatus.N_EXPLORADO && !nodoEsquerda.isNodoPercorrido()) {
+				robo.Move4dDistancia(EnumDirecao.ESQUERDA, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
+				//System.out.println("MOVEeSQUERDA");
+				explorerMapa(nodoEsquerda,caminho, 0);
+				
+			}
+			
 			if(nodoTraz != null && nodoTraz.getStatus()  == EnumStatus.N_EXPLORADO && !nodoTraz.isNodoPercorrido()) {
 				robo.Move4dDistancia(EnumDirecao.TRAZ, robo.getDirecaoRobo(), mapa.tamanhoQuadros);
 				explorerMapa(nodoTraz,caminho , 0);
@@ -349,10 +352,12 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			
 			nodoAtual.setNodoDireita(n);
 			nodoAtual.getNodoDireita().setNodoEsquerda(nodoAtual);
-			adjacentes+= ";Direita"+ n.getNome();;
-			
+			adjacentes+= ";Direita"+ n.getNome();			
 			
 		}
+		
+		EnumDirecao direcaoCabeca = robo.getDirecaoCabeca();
+		EnumDirecao direcaoRobo = robo.getDirecaoRobo();
 		
 		if(isCaminho(EnumDirecao.ESQUERDA, nodoAtual)) {
 			
@@ -360,9 +365,12 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			
 			nodoAtual.setNodoEsquerda(n);
 			nodoAtual.getNodoEsquerda().setNodoDireita(nodoAtual);
-			adjacentes+= ";Esquerda"+ n.getNome();;
+			adjacentes+= ";Esquerda"+ n.getNome();
 			
 		}
+		
+		direcaoCabeca = robo.getDirecaoCabeca();
+		direcaoRobo = robo.getDirecaoRobo();
 		
 		if(isCaminho(EnumDirecao.TRAZ, nodoAtual)) {
 			
@@ -370,9 +378,12 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			
 			nodoAtual.setNodoTraz(n);
 			nodoAtual.getNodoTraz().setNodoFrente(nodoAtual);	
-			adjacentes+= ";traz"+ n.getNome();;
+			adjacentes+= ";traz"+ n.getNome();
 			
 		}
+		
+		direcaoCabeca = robo.getDirecaoCabeca();
+		direcaoRobo = robo.getDirecaoRobo();
 		
 		if(isCaminho(EnumDirecao.FRENTE, nodoAtual)){
 			
@@ -383,6 +394,8 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			adjacentes+= ";Frente-" + n.getNome();
 		}	
 		
+		direcaoCabeca = robo.getDirecaoCabeca();
+		direcaoRobo = robo.getDirecaoRobo();
 		
 	//	System.out.println(nodoAtual.getNome() + adjacentes);
 	
@@ -405,7 +418,8 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 				//int valorDicional = 0;
 				//valorDicional = direcao.valorDirecional(robo.getDirecaoRobo().valor);
 				//valorDicional =  Math.abs(valorDicional);
-				int valorDirecional = robo.getDirecaoCabeca().valorDirecional(direcao.valor);
+			//	int valorDirecional = robo.getDirecaoCabeca().valorDirecional(direcao.valor);
+				int valorDirecional = robo.getDirecaoRobo().valorDirecional(direcao.valor); //verifica tra em relação ao robo
 				
 				
 				
@@ -416,12 +430,12 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 				//System.out.println(" " ) ;
 				if(valor  < 2){		
 						
-					EnumDirecao direcaoParair = robo.giraDirecao(valorDirecional,robo.getDirecaoCabeca());
+					//EnumDirecao direcaoParair = robo.giraDirecao(valorDirecional,robo.getDirecaoCabeca());
 					//robo.moveCabeca(direcaoParair);
-					robo.moveCabeca(direcao);
-					
+					robo.moveCabeca(direcao);					
 					//System.out.println("Executa " ) ;
 					//System.out.println("" ) ;
+					iscaminho = ! robo.manager.encontrouParede();
 					}					
 					
 					//System.out.println( direcaoParair);
@@ -429,7 +443,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 					//System.out.println("2"+robo.getDirecaoCabeca());
 					//System.out.println("Cab"+ direcaoParair);
 					//robo.moveCabeca(direcao);
-					iscaminho = ! robo.manager.encontrouParede();
+					
 				//}
 			}else {
 			//busca parade;

@@ -298,7 +298,8 @@ public class PotatoManeger {
 				EnumDirecao direcaoParaIr = direcaoParaIrGlobal(PotatoRobo.getDirecaoRobo(), direcao);	
 				
 				int valoDirecional  =  direcaoParaIr.valorDirecional(PotatoRobo.getDirecaoRobo().valor);
-				robo.setDirecaoCabeca(PotatoRobo.giraDirecao(valoDirecional,  PotatoRobo.getDirecaoCabeca()));				
+				//robo.setDirecaoCabeca(PotatoRobo.giraDirecao(valoDirecional,  PotatoRobo.getDirecaoCabeca()));				
+				robo.setDirecaoRobo(direcaoParaIr);
 				robo.setDirecaoRobo(direcaoParaIr);
 			}		
 		
@@ -371,8 +372,8 @@ public class PotatoManeger {
 			
 		for (int i = 0; i < mod; i++) {
 			
-			EnumDirecao direcaoRobo = PotatoRobo.getDirecaoCabeca();
-			EnumDirecao direcaoParaIr = direcaoParaIrGlobal(direcaoRobo, direcao);
+			EnumDirecao direcaoCabeca = PotatoRobo.getDirecaoCabeca();
+			EnumDirecao direcaoParaIr = direcaoParaIrGlobal(direcaoCabeca, direcao);
 			PotatoRobo.setDirecaoCabeca(direcaoParaIr);	
 		}		
 

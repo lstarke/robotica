@@ -190,10 +190,12 @@ public class PotatoManegerTeste {
 	
 				EnumDirecao direcaoParaIr = direcaoParaIrGlobal(PotatoRobo.getDirecaoRobo(), direcao);	
 				
-				int valoDirecional  =  direcaoParaIr.valorDirecional(PotatoRobo.getDirecaoRobo().valor);
-				PotatoRobo.setDirecaoCabeca(PotatoRobo.giraDirecao(valoDirecional,  PotatoRobo.getDirecaoCabeca()));
-				
+				int valoDirecional  =  direcao.valorDirecional(PotatoRobo.getDirecaoRobo().valor);
+				//int valoDirecional  =  direcaoParaIr.valorDirecional(PotatoRobo.getDirecaoRobo().valor);
+				//Não esta saindo certo PotatoRobo.setDirecaoCabeca(PotatoRobo.giraDirecao(valoDirecional,  PotatoRobo.getDirecaoCabeca()));
+				PotatoRobo.setDirecaoCabeca(direcaoParaIr);
 				PotatoRobo.setDirecaoRobo(direcaoParaIr);	
+			//	PotatoRobo.setDirecaoRobo(direcao);
 				//System.out.println("VIRAMotor: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoRobo());
 				System.out.println(Mapa.imprimeRoboEmString());
 			}		
@@ -277,14 +279,17 @@ public class PotatoManegerTeste {
 				
 				dorme(300);
 				
-				EnumDirecao direcaoRobo = PotatoRobo.getDirecaoCabeca();
-				EnumDirecao direcaoParaIr = direcaoParaIrGlobal(direcaoRobo, direcao);				
+				EnumDirecao direcaoCabeca = PotatoRobo.getDirecaoCabeca();
+				EnumDirecao direcaoParaIr = direcaoParaIrGlobal(direcaoCabeca, direcao);				
 				//System.out.println("VIRACabeca: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoCabeca());
 				PotatoRobo.setDirecaoCabeca(direcaoParaIr);	
 				//System.out.println("VIRACabeca: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoCabeca());
 				System.out.println(Mapa.imprimeRoboEmString());
 				
-			}		
+			}
+			if(mod == 0) {
+				System.out.println(Mapa.imprimeRoboEmString());
+			}
 	
 			
 					
