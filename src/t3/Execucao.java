@@ -16,7 +16,7 @@ public class Execucao {
 		
 		PotatoExplorer pe = new PotatoExplorer(posicaoRoboI,posicaoRoboJ, EnumDirecao.DIREITA, false);		
 		ArrayList<EnumProduto> produtoToColetar = new ArrayList<EnumProduto>();
-		produtoToColetar.add(EnumProduto.PRODUTO_1_PRETO);
+		produtoToColetar.add(EnumProduto.PRODUTO_0_PADRAO);
 		
 		try {
 			pe.explorerMapa(pe.robo.nodoAtual,produtoToColetar);		

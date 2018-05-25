@@ -47,7 +47,7 @@ public class PotatoManegerTeste {
 	public static boolean modoTeste = false;
 	public static PotatoRobo robo = PotatoRobo.getInstance();
 	
-	private static boolean  sleepMode = false;
+	private static boolean  sleepMode =  true;
 	private static float 	slowMod = 1;
 	
 	public static void calibragemTeste() throws InterruptedException {

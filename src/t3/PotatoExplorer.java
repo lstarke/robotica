@@ -89,7 +89,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	 
 	@SuppressWarnings("static-access")
 	private void explorerMapa(Nodo nodoAtual, ArrayList<Nodo> caminho,int volta) throws InterruptedException {
-	//System.out.println(cont++);
+	System.out.println(nodoAtual.getNome());
 		if(mapa.getMatrizSimulacao()[nodoAtual.getI()*2][nodoAtual.getJ()*2] == 0) {
 			mapa.getMatrizSimulacao()[nodoAtual.getI()*2][nodoAtual.getJ()*2] = 1;
 		}
@@ -153,7 +153,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 				
 			
 		}else{
-			volta++;
+			//volta++;
 			//explorerVoltaCaminho(nodoAtual, caminho, volta);
 			explorerVoltaCaminho(nodoAtual, caminho);
 			
@@ -345,6 +345,11 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		String adjacentes = "";		
 		
 		
+		if(nodoAtual.getI()  == 5 && nodoAtual.getJ() == 4) {
+		adjacentes = "";		
+			//
+		}
+		
 	
 		if(isCaminho(EnumDirecao.DIREITA, nodoAtual) ) {
 			
@@ -419,16 +424,16 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 				//valorDicional = direcao.valorDirecional(robo.getDirecaoRobo().valor);
 				//valorDicional =  Math.abs(valorDicional);
 			//	int valorDirecional = robo.getDirecaoCabeca().valorDirecional(direcao.valor);
-				int valorDirecional = robo.getDirecaoRobo().valorDirecional(direcao.valor); //verifica tra em relação ao robo
+				//int valorDirecional = robo.getDirecaoRobo().valorDirecional(direcao.valor); //verifica tra em relação ao robo
+				int valorRotacao = robo.getDirecaoRobo().valor - direcao.valor;
 				
 				
-				
-				int valor = Math.abs(valorDirecional);
+				int valor = Math.abs(valorRotacao);
 				
 				//System.out.println(direcao);
 				//System.out.println("dir" + valor) ;
 				//System.out.println(" " ) ;
-				if(valor  < 2){		
+				if(valor != 2){		
 						
 					//EnumDirecao direcaoParair = robo.giraDirecao(valorDirecional,robo.getDirecaoCabeca());
 					//robo.moveCabeca(direcaoParair);
@@ -436,14 +441,16 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 					//System.out.println("Executa " ) ;
 					//System.out.println("" ) ;
 					iscaminho = ! robo.manager.encontrouParede();
-					}					
+								
 					
 					//System.out.println( direcaoParair);
 					
 					//System.out.println("2"+robo.getDirecaoCabeca());
 					//System.out.println("Cab"+ direcaoParair);
 					//robo.moveCabeca(direcao);
-					
+				}else {
+					iscaminho = false;
+				}
 				//}
 			}else {
 			//busca parade;
@@ -540,7 +547,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	
 	
 	@SuppressWarnings("static-access")
-	public static void procuraProduto(Nodo nodo){
+	public static void procuraProduto(Nodo nodo) throws InterruptedException{
 		
 		if(isProduto(robo.observaCor(), nodo)){
 	
@@ -552,21 +559,29 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		
 	}
 
-	public static boolean isProduto(int[] cor, Nodo nodo){
+	public static boolean isProduto(int[] cor, Nodo nodo) throws InterruptedException{
 		boolean isProduto = false;
 		int r = cor[0];
 		int g = cor[1];
 		int b = cor[2];
 		
-		if(r > 225){
+		if(r > 100){
 		
-			if(g >  225){
-				if(b > 225){					
-					nodo.setProduto(EnumProduto.PRODUTO_1_PRETO);					
+			if(g >  100){
+				if(b > 100){					
+					nodo.setProduto(EnumProduto.PRODUTO_0_PADRAO);					
 					isProduto = true;
+					
+					System.out.println("PRODUTO");
+					System.out.println("R" + r );
+					System.out.println("G" + g );
+					System.out.println("B" + b );
+					Thread.sleep(500);
 				}
 			}
 		}
+		
+		
 		return isProduto;
 		
 		
