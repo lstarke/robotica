@@ -28,8 +28,8 @@ public class Execucao {
 			e.printStackTrace();
 		}
 
-		pe.voltaInicio();
-		pe.coletaProduto(Mapa.getNodo(posicaoRoboI, posicaoRoboJ));
+		//pe.voltaInicio();
+		//pe.coletaProduto(Mapa.getNodo(posicaoRoboI, posicaoRoboJ));
 		
 		
 	}

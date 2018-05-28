@@ -46,6 +46,8 @@ public class PotatoManegerTeste {
 	//public static UltrasonicSensor sensorUltrasonico;	
 	public static boolean modoTeste = false;
 	public static PotatoRobo robo = PotatoRobo.getInstance();
+	public static boolean log = false;
+	public static boolean map = true;		
 	
 	private static boolean  sleepMode =  true;
 	private static float 	slowMod = 1;
@@ -197,8 +199,23 @@ public class PotatoManegerTeste {
 				PotatoRobo.setDirecaoRobo(direcaoParaIr);	
 			//	PotatoRobo.setDirecaoRobo(direcao);
 				//System.out.println("VIRAMotor: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoRobo());
+				
+				if(map) {
 				System.out.println(Mapa.imprimeRoboEmString());
-			}		
+				} 
+				
+			}
+			
+			
+			if(mod == 0 && map) {				
+				dorme(100);	
+				System.out.println(Mapa.imprimeRoboEmString());
+			}
+			if(log) {
+				System.out.println("\n---Vira:");
+				System.out.println("Direcao:"+ direcao +"\nGraus:" + (motorRotate/grau_90_MotorRotate_100 *90)+ "\nRoboDirecao:"
+			+ PotatoRobo.getDirecaoRobo() + "\nCabecaDirecao:"+ PotatoRobo.getDirecaoCabeca()+ "\nmod:"+ mod );
+			}
 		
 	
 		
@@ -232,8 +249,18 @@ public class PotatoManegerTeste {
 			
 			//Robo já foi virado;
 			moveMatriz( PotatoRobo.getDirecaoRobo(), 1);
+			
+			if(map) {
 			System.out.println(Mapa.imprimeRoboEmString());
+			}
+			
 			//robo.nodoAtual
+		}
+		
+		if(log) {
+			System.out.println("\n---Anda:");
+			System.out.println("Distancia:"+ ((motorRotate/ distancia_10_MotorRotate_100) *10) + "\nRoboDirecao:"
+		+ PotatoRobo.getDirecaoRobo() + "\nCabecaDirecao:"+ PotatoRobo.getDirecaoCabeca() );
 		}
 			// motorRodaDireita.rotate(motorRotate,true);
 			 //motorRodaEsquerda.rotate(motorRotate);	
@@ -284,11 +311,21 @@ public class PotatoManegerTeste {
 				//System.out.println("VIRACabeca: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoCabeca());
 				PotatoRobo.setDirecaoCabeca(direcaoParaIr);	
 				//System.out.println("VIRACabeca: MotorRotate" + motorRotate + ", mod:" + mod+ ",dir:" + direcao +", ir:"+ direcaoParaIr + ", Robo:" + PotatoRobo.getDirecaoCabeca());
+				
+				if(map) {
 				System.out.println(Mapa.imprimeRoboEmString());
+				}
 				
 			}
-			if(mod == 0) {
+			if(mod == 0 && map) {
+				dorme(300);
 				System.out.println(Mapa.imprimeRoboEmString());
+			}
+			
+			if(log) {
+				System.out.println("---\nViraCabeca:");
+				System.out.println("ViraCabeca:"+ direcao +"\nGraus:" +(motorRotate/grau_90_CabecaMotorRotate*90) + "\nRoboDirecao:"
+			+ PotatoRobo.getDirecaoRobo() + "\nCabecaDirecao:"+ PotatoRobo.getDirecaoCabeca() );
 			}
 	
 			
@@ -615,6 +652,12 @@ public class PotatoManegerTeste {
 
 	}
 	
+	/**
+	 * Retorna a direcao que precisa seguir globalmente para executar um movimento local
+	 * @param direcao direção global atual
+	 * @param direcaoProxima direção para qual deseja seguir independente da direcao atual
+	 * @return
+	 */
 	public static EnumDirecao direcaoParaIrGlobal(EnumDirecao direcao, EnumDirecao direcaoProxima){
 
 		EnumDirecao direcaoParaIr = null;

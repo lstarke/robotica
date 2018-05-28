@@ -38,6 +38,7 @@ private static ArrayList<EnumProduto> produtoToColetar = new ArrayList<EnumProdu
 private static ArrayList<ArrayList<Nodo>> caminhoProdutoList = new ArrayList<ArrayList<Nodo>>();
 private static Nodo nodoInicio = null;
 
+
 public enum EnumStatusExploracao{
  INDEFINIDO,
  EXPLORA,
@@ -110,6 +111,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		    Nodo nodoDireita = nodoAtual.getNodoDireita();
 		    Nodo nodoTraz = nodoAtual.getNodoTraz();
 			caminho.add(nodoAtual);
+			addNodoEplorado(nodoAtual);	
 			
 			//System.out.println(robo.nodoAtual.getNome());
 			//System.out.println("yEEP");
@@ -141,7 +143,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 				explorerMapa(nodoTraz,caminho , 0);
 				
 			}			
-			addNodoEplorado(nodoAtual);			
+					
 			nodoAtual.setStatus(EnumStatus.EXPLORADO);
 			
 		}else {
@@ -199,7 +201,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	@SuppressWarnings("static-access")
 	private void explorerVoltaCaminho(Nodo nodoAtual, ArrayList<Nodo> caminho) throws InterruptedException {
 		
-		Nodo nodoObjetivo = nodoAtual;
+		Nodo nodoObjetivo = nodoInicio;
 		for(int i = caminho.size()-1; i>=  0; i--) {
 			
 			if(caminho.get(i).getNodoFrente() !=null && !caminho.get(i).getNodoFrente().isNodoPercorrido()) {				
@@ -332,6 +334,9 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	
 	
 	
+	
+	
+
 	/**
 	 * Adiona Ajacentes de cada direcao encontrada em relação ao mapa global
 	 * @param nodoAtual
@@ -342,6 +347,8 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		int i = nodoAtual.getI();
 		int j = nodoAtual.getJ();
 		
+		EnumDirecao direcaoCabeca = robo.getDirecaoCabeca();
+		EnumDirecao direcaoRobo = robo.getDirecaoRobo();
 		String adjacentes = "";		
 		
 		
@@ -361,19 +368,6 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			
 		}
 		
-		EnumDirecao direcaoCabeca = robo.getDirecaoCabeca();
-		EnumDirecao direcaoRobo = robo.getDirecaoRobo();
-		
-		if(isCaminho(EnumDirecao.ESQUERDA, nodoAtual)) {
-			
-			Nodo n = Mapa.getNodo(i, j - 1);
-			
-			nodoAtual.setNodoEsquerda(n);
-			nodoAtual.getNodoEsquerda().setNodoDireita(nodoAtual);
-			adjacentes+= ";Esquerda"+ n.getNome();
-			
-		}
-		
 		direcaoCabeca = robo.getDirecaoCabeca();
 		direcaoRobo = robo.getDirecaoRobo();
 		
@@ -386,6 +380,22 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			adjacentes+= ";traz"+ n.getNome();
 			
 		}
+		
+		
+		direcaoCabeca = robo.getDirecaoCabeca();
+		direcaoRobo = robo.getDirecaoRobo();
+		
+		if(isCaminho(EnumDirecao.ESQUERDA, nodoAtual)) {
+			
+			Nodo n = Mapa.getNodo(i, j - 1);
+			
+			nodoAtual.setNodoEsquerda(n);
+			nodoAtual.getNodoEsquerda().setNodoDireita(nodoAtual);
+			adjacentes+= ";Esquerda"+ n.getNome();
+			
+		}
+		
+		
 		
 		direcaoCabeca = robo.getDirecaoCabeca();
 		direcaoRobo = robo.getDirecaoRobo();
@@ -430,24 +440,11 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 				
 				int valor = Math.abs(valorRotacao);
 				
-				//System.out.println(direcao);
-				//System.out.println("dir" + valor) ;
-				//System.out.println(" " ) ;
 				if(valor != 2){		
 						
-					//EnumDirecao direcaoParair = robo.giraDirecao(valorDirecional,robo.getDirecaoCabeca());
-					//robo.moveCabeca(direcaoParair);
 					robo.moveCabeca(direcao);					
-					//System.out.println("Executa " ) ;
-					//System.out.println("" ) ;
 					iscaminho = ! robo.manager.encontrouParede();
-								
 					
-					//System.out.println( direcaoParair);
-					
-					//System.out.println("2"+robo.getDirecaoCabeca());
-					//System.out.println("Cab"+ direcaoParair);
-					//robo.moveCabeca(direcao);
 				}else {
 					iscaminho = false;
 				}
@@ -532,6 +529,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			}
 		}else{
 			nodoListExplorados = new ArrayList<Nodo>();
+			nodoListExplorados.add(nodo);	
 		}
 	
 	}
@@ -572,11 +570,12 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 					nodo.setProduto(EnumProduto.PRODUTO_0_PADRAO);					
 					isProduto = true;
 					
-					System.out.println("PRODUTO");
+				/*	System.out.println("PRODUTO");
 					System.out.println("R" + r );
 					System.out.println("G" + g );
 					System.out.println("B" + b );
 					Thread.sleep(500);
+					*/
 				}
 			}
 		}
@@ -589,8 +588,10 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	
 	private static ArrayList<Nodo> menorCaminho(Nodo nodoOrigem,Nodo nodoObjetivo) {
 		ArrayList<Nodo> caminho = new ArrayList<Nodo>();
+		nodoListExplorados.add(nodoObjetivo);
 		Dijkstra d = new Dijkstra(nodoListExplorados);
-		d.dijkstra(nodoOrigem, nodoObjetivo, false);
+		d.dijkstra(nodoOrigem, nodoObjetivo,false);
+		System.out.println("Caminho:"+d.imprimeDijkstra(nodoOrigem));
 		caminho = d.getFila();
 		return caminho;
 		

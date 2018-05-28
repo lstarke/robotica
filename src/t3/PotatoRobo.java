@@ -58,11 +58,50 @@ public class PotatoRobo {
 	@SuppressWarnings("static-access")
 	public static void moveCabeca(EnumDirecao direcao) {		
 		
+		
+		
 		//direcaoCabeca = direcao;		
 		int valorDirecional = direcao.valorDirecional(direcaoCabeca.valor);
+		valorDirecional = modifica(valorDirecional, direcao);
 		manager.viraDirecionadaCabeca4d(valorDirecional);		
 		
 	}
+	
+	/**ajuste de direcao.
+	 * força que a rotação seja feita pelo o lado da frente do robo
+	 * 
+	 * @param valorDirecional
+	 * @param direcao
+	 * @return
+	 */
+	private static int modifica(int valorDirecional, EnumDirecao direcao) {
+		if(direcaoCabeca == EnumDirecao.TRAZ && direcao == EnumDirecao.FRENTE && direcaoRobo == EnumDirecao.ESQUERDA) {
+			if(valorDirecional > 0) {
+			valorDirecional= - valorDirecional;
+			System.out.print("INVERTE1");
+			}
+		}else if(direcaoCabeca == EnumDirecao.FRENTE && direcao == EnumDirecao.TRAZ && direcaoRobo == EnumDirecao.DIREITA) {
+			if(valorDirecional < 0) {
+			valorDirecional= - valorDirecional;
+			System.out.print("INVERTE2");
+			}
+		}else if(direcaoCabeca == EnumDirecao.DIREITA && direcao == EnumDirecao.ESQUERDA && direcaoRobo == EnumDirecao.TRAZ) {
+			if(valorDirecional > 0) {
+			valorDirecional= - valorDirecional;
+			System.out.print("INVERTE3");
+			}	
+		}else if(direcaoCabeca == EnumDirecao.ESQUERDA && direcao == EnumDirecao.DIREITA && direcaoRobo == EnumDirecao.FRENTE) {
+			if(valorDirecional < 0) {
+			valorDirecional= - valorDirecional;
+			System.out.print("INVERTE4");
+			}
+		}
+		
+		return valorDirecional;
+	}
+	
+	
+	
 	/**
 	 * Em relação a matriz Global
 	 * @return

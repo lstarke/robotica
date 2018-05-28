@@ -668,6 +668,12 @@ public class PotatoManeger {
 	}
 	
 
+	/**
+	 * Retorna a direcao que precisa seguir globalmente para executar um movimento local
+	 * @param direcao direção global atual
+	 * @param direcaoProxima direção para qual deseja seguir independente da direcao atual
+	 * @return
+	 */
 	
 	public static EnumDirecao direcaoParaIrGlobal(EnumDirecao direcao, EnumDirecao direcaoProxima){
 

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import lejos.pc.tools.NXJImageConverter;
+
 public class Dijkstra {
 
 	//private HashMap<Integer, Nodo> grafo = new HashMap<Integer, Nodo>();// nome,Nodo
@@ -95,13 +97,15 @@ public class Dijkstra {
 	
 
 	private void relax(Nodo u, Nodo v) {
-		//NumberFormat nf = new DecimalFormat("#0.00");
+		//
 		double w = calculaDistancia(u, v);
 
 		if (v.getDistancia() > (u.getDistancia() + w)) {
 			v.setDistancia(u.getDistancia() + w);
 			v.setPai(u);
 		} else {
+			//ajuste para teste
+		
 		}
 
 	}
@@ -115,6 +119,12 @@ public class Dijkstra {
 			u = extractMin();
 			//logging("dijkstra", "[" + u.getNome() + "]");
 			for (Nodo v : u.getNodosAdjacentes()) {
+				
+			//	if(u.getI() == 3 && u.getJ() == 0) {
+					///
+				//	System.out.println(v.getNome());
+					///
+			//	}
 				relax(u, v);
 			}
 		}
