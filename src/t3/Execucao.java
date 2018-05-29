@@ -7,7 +7,7 @@ import lejos.nxt.Button;
 public class Execucao {
 	
 	private static int posicaoRoboI =6;
-	private static int posicaoRoboJ =0;
+	private static int posicaoRoboJ =6;
 
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
@@ -28,8 +28,8 @@ public class Execucao {
 			e.printStackTrace();
 		}
 
-		//pe.voltaInicio();
-		//pe.coletaProduto(Mapa.getNodo(posicaoRoboI, posicaoRoboJ));
+		pe.voltaInicio();
+		pe.coletaProduto(Mapa.getNodo(posicaoRoboI, posicaoRoboJ));
 		
 		
 	}

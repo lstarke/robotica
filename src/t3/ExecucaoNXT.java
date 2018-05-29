@@ -7,13 +7,17 @@ import lejos.nxt.Button;
 public class ExecucaoNXT {
 	
 	private static int posicaoRoboI =6;
-	private static int posicaoRoboJ =0;
+	private static int posicaoRoboJ =6;
 
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
 	
 		
-		PotatoExplorer pe = new PotatoExplorer(posicaoRoboI,posicaoRoboJ, EnumDirecao.DIREITA, false);	
+		PotatoExplorer pe = new PotatoExplorer(posicaoRoboI,posicaoRoboJ, EnumDirecao.DIREITA, false);
+		/*pe.robo.setDirecaoRobo(EnumDirecao.TRAZ);
+		pe.robo.setDirecaoCabeca(EnumDirecao.TRAZ);
+		pe.addAdjacentes(pe.mapa.getNodo(posicaoRoboI, posicaoRoboJ));
+		*/
 		
 		//PotatoRobo.moveCabeca(EnumDirecao.TRAZ);;
 		

@@ -11,8 +11,8 @@ public class PotatoRobo {
 	//posicaoGlobal
 	private static EnumDirecao direcaoCabeca = EnumDirecao.FRENTE;
 	private static PotatoRobo instance = null;
-	public static PotatoManegerTeste manager = new  PotatoManegerTeste();//new PotatoManager();	
-	//public static PotatoManeger manager = new PotatoManeger();	
+	//public static PotatoManegerTeste manager = new  PotatoManegerTeste();//new PotatoManager();	
+	public static PotatoManeger manager = new PotatoManeger();	
 	public static Nodo nodoAtual;
 
 	//private static NodoAtual;
@@ -65,6 +65,7 @@ public class PotatoRobo {
 		valorDirecional = modifica(valorDirecional, direcao);
 		manager.viraDirecionadaCabeca4d(valorDirecional);		
 		
+		
 	}
 	
 	/**ajuste de direcao.
@@ -81,7 +82,7 @@ public class PotatoRobo {
 			System.out.print("INVERTE1");
 			}
 		}else if(direcaoCabeca == EnumDirecao.FRENTE && direcao == EnumDirecao.TRAZ && direcaoRobo == EnumDirecao.DIREITA) {
-			if(valorDirecional < 0) {
+			if(valorDirecional > 0) {
 			valorDirecional= - valorDirecional;
 			System.out.print("INVERTE2");
 			}
@@ -153,6 +154,7 @@ public class PotatoRobo {
 			break;
 		}
 			
+		
 				
 		return robo +"."+ cabeca;
 	}
@@ -168,7 +170,7 @@ public class PotatoRobo {
 public static void Move4dDistancia(EnumDirecao direcaoParaIr, EnumDirecao direcaoRobo, int distancia){
 		//PotatoRobo.direcaoRobo = direcaoParaIr;
 		//EnumDirecao direcaoParaIrCabeca = manager.direcaoParaIrGlobal(direcaoCabeca , direcaoParaIr);
-		moveCabeca(direcaoRobo);
+		//moveCabeca(direcaoRobo);
 		
 		//int valoDirecional  =  direcaoParaIr.valorDirecional(direcaoRobo.valor);
 		//direcaoCabeca = giraDirecao(valoDirecional,  direcaoCabeca);

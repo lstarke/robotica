@@ -91,6 +91,9 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	@SuppressWarnings("static-access")
 	private void explorerMapa(Nodo nodoAtual, ArrayList<Nodo> caminho,int volta) throws InterruptedException {
 	System.out.println(nodoAtual.getNome());
+
+	
+	
 		if(mapa.getMatrizSimulacao()[nodoAtual.getI()*2][nodoAtual.getJ()*2] == 0) {
 			mapa.getMatrizSimulacao()[nodoAtual.getI()*2][nodoAtual.getJ()*2] = 1;
 		}
@@ -343,7 +346,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 	 */
 
 
-	private void addAdjacentes(Nodo nodoAtual) {
+	public void addAdjacentes(Nodo nodoAtual) {
 		int i = nodoAtual.getI();
 		int j = nodoAtual.getJ();
 		
@@ -412,6 +415,8 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 		direcaoCabeca = robo.getDirecaoCabeca();
 		direcaoRobo = robo.getDirecaoRobo();
 		
+		robo.moveCabeca(robo.getDirecaoRobo());	
+		
 	//	System.out.println(nodoAtual.getNome() + adjacentes);
 	
 				
@@ -431,10 +436,7 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 			
 			if(!olharParaTraz) {
 				//int valorDicional = 0;
-				//valorDicional = direcao.valorDirecional(robo.getDirecaoRobo().valor);
-				//valorDicional =  Math.abs(valorDicional);
-			//	int valorDirecional = robo.getDirecaoCabeca().valorDirecional(direcao.valor);
-				//int valorDirecional = robo.getDirecaoRobo().valorDirecional(direcao.valor); //verifica tra em relação ao robo
+				
 				int valorRotacao = robo.getDirecaoRobo().valor - direcao.valor;
 				
 				
@@ -444,18 +446,19 @@ public PotatoExplorer(PotatoRobo robo, Mapa mapa) {
 						
 					robo.moveCabeca(direcao);					
 					iscaminho = ! robo.manager.encontrouParede();
-					
+					System.out.println("Caminho:"+iscaminho);
 				}else {
 					iscaminho = false;
 				}
 				//}
 			}else {
 			//busca parade;
-				int valorDirecional = robo.getDirecaoCabeca().valorDirecional(robo.getDirecaoCabeca().valor);
+			/*	int valorDirecional = robo.getDirecaoCabeca().valorDirecional(robo.getDirecaoCabeca().valor);
 				EnumDirecao direcaoParair = robo.giraDirecao(valorDirecional,robo.getDirecaoCabeca());
 				robo.moveCabeca(direcaoParair);
 				//robo.moveCabeca(direcao);
 				iscaminho = ! robo.manager.encontrouParede();
+				*/
 			}
 		}
 			

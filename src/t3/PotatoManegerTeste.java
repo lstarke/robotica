@@ -46,10 +46,10 @@ public class PotatoManegerTeste {
 	//public static UltrasonicSensor sensorUltrasonico;	
 	public static boolean modoTeste = false;
 	public static PotatoRobo robo = PotatoRobo.getInstance();
-	public static boolean log = false;
-	public static boolean map = true;		
+	public static boolean log = true;
+	public static boolean map = false;		
 	
-	private static boolean  sleepMode =  true;
+	private static boolean  sleepMode =  false;
 	private static float 	slowMod = 1;
 	
 	public static void calibragemTeste() throws InterruptedException {
