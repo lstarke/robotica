@@ -11,8 +11,8 @@ public class PotatoRobo {
 	//posicaoGlobal
 	private static EnumDirecao direcaoCabeca = EnumDirecao.FRENTE;
 	private static PotatoRobo instance = null;
-	//public static PotatoManegerTeste manager = new  PotatoManegerTeste();//new PotatoManager();	
-	public static PotatoManeger manager = new PotatoManeger();	
+	public static PotatoManegerTeste manager = new  PotatoManegerTeste();//new PotatoManager();	
+	//public static PotatoManeger manager = new PotatoManeger();	
 	public static Nodo nodoAtual;
 
 	//private static NodoAtual;
@@ -56,6 +56,10 @@ public class PotatoRobo {
 	}
 	
 	@SuppressWarnings("static-access")
+	/**
+	 * Move a cabeça do povo para 
+	 * @param direcao
+	 */
 	public static void moveCabeca(EnumDirecao direcao) {		
 		
 		
@@ -79,22 +83,22 @@ public class PotatoRobo {
 		if(direcaoCabeca == EnumDirecao.TRAZ && direcao == EnumDirecao.FRENTE && direcaoRobo == EnumDirecao.ESQUERDA) {
 			if(valorDirecional > 0) {
 			valorDirecional= - valorDirecional;
-			System.out.print("INVERTE1");
+			//System.out.print("INVERTE1");
 			}
 		}else if(direcaoCabeca == EnumDirecao.FRENTE && direcao == EnumDirecao.TRAZ && direcaoRobo == EnumDirecao.DIREITA) {
 			if(valorDirecional > 0) {
 			valorDirecional= - valorDirecional;
-			System.out.print("INVERTE2");
+			//System.out.print("INVERTE2");
 			}
 		}else if(direcaoCabeca == EnumDirecao.DIREITA && direcao == EnumDirecao.ESQUERDA && direcaoRobo == EnumDirecao.TRAZ) {
 			if(valorDirecional > 0) {
 			valorDirecional= - valorDirecional;
-			System.out.print("INVERTE3");
+			//System.out.print("INVERTE3");
 			}	
 		}else if(direcaoCabeca == EnumDirecao.ESQUERDA && direcao == EnumDirecao.DIREITA && direcaoRobo == EnumDirecao.FRENTE) {
 			if(valorDirecional < 0) {
 			valorDirecional= - valorDirecional;
-			System.out.print("INVERTE4");
+			//System.out.print("INVERTE4");
 			}
 		}
 		
@@ -178,6 +182,9 @@ public static void Move4dDistancia(EnumDirecao direcaoParaIr, EnumDirecao direca
 				
 		//System.out.println(direcaoCabeca.valorDirecional(direcaoRobo.valor));
 		manager.Move4dDistancia(direcaoParaIr, direcaoRobo, distancia);
+		if(direcaoParaIr != direcaoRobo){
+			manager.andarDistancia(5);
+		}
 		
 
 		

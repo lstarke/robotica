@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import lejos.nxt.Button;
 
-public class Execucao {
+public class ExecucaoTeste {
 	
 	private static int posicaoRoboI =6;
-	private static int posicaoRoboJ =6;
+	private static int posicaoRoboJ =0;
 
 	@SuppressWarnings("static-access")
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 	
 		//Button.ENTER.callListeners();
 		

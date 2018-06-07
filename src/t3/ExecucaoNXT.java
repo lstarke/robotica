@@ -4,25 +4,19 @@ import java.util.ArrayList;
 
 import lejos.nxt.Button;
 
-public class ExecucaoNXT {
+public class ExecucaoNXT  {
 	
 	private static int posicaoRoboI =6;
-	private static int posicaoRoboJ =6;
+	private static int posicaoRoboJ = 0;
 
 	@SuppressWarnings("static-access")
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 	
-		
 		PotatoExplorer pe = new PotatoExplorer(posicaoRoboI,posicaoRoboJ, EnumDirecao.DIREITA, false);
-		/*pe.robo.setDirecaoRobo(EnumDirecao.TRAZ);
-		pe.robo.setDirecaoCabeca(EnumDirecao.TRAZ);
-		pe.addAdjacentes(pe.mapa.getNodo(posicaoRoboI, posicaoRoboJ));
-		*/
-		
-		//PotatoRobo.moveCabeca(EnumDirecao.TRAZ);;
+				
 		
 		ArrayList<EnumProduto> produtoToColetar = new ArrayList<EnumProduto>();
-		produtoToColetar.add(EnumProduto.PRODUTO_1_PRETO);
+		produtoToColetar.add(EnumProduto.PRODUTO_0_PADRAO);
 		
 		try {
 			pe.explorerMapa(pe.robo.nodoAtual,produtoToColetar);		

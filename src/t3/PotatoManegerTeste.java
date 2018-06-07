@@ -46,11 +46,11 @@ public class PotatoManegerTeste {
 	//public static UltrasonicSensor sensorUltrasonico;	
 	public static boolean modoTeste = false;
 	public static PotatoRobo robo = PotatoRobo.getInstance();
-	public static boolean log = true;
+	public static boolean log = false;
 	public static boolean map = false;		
 	
 	private static boolean  sleepMode =  false;
-	private static float 	slowMod = 1;
+	private static float 	slowMod = 0.1f;
 	
 	public static void calibragemTeste() throws InterruptedException {
 		
@@ -238,8 +238,11 @@ public class PotatoManegerTeste {
 		
 		int mod = 0;
 		int mod2  = motorRotate/ distancia_10_MotorRotate_100 ;
+		if(mod2 != 0){
 		mod  = (Mapa.tamanhoQuadros /10) /mod2 ;
-		
+		}else{
+			mod = 0;
+		}
 		//System.out.println("Anda : MotorRotae:" + motorRotate + ", mod:" + mod + ",Direcao:" + PotatoRobo.getDirecaoRobo());	
 		//EnumDirecao direcaoParaIr = direcaoParaIrGlobal(PotatoRobo.getDirecaoRobo(), EnumDirecao.FRENTE);
 		
@@ -537,6 +540,7 @@ public class PotatoManegerTeste {
 	
 	}
 
+	
 	private static void moveMatriz( EnumDirecao direcao, int distancia){
 		
 		int posI = PotatoRobo.nodoAtual.getI();

@@ -22,7 +22,7 @@ import lejos.nxt.UltrasonicSensor;
  *
  */
 
-public class PotatoManeger {
+public class PotatoManeger extends PotatoManegerTeste {
 	
 	
 	public static void main(String[] args) {
@@ -82,7 +82,7 @@ public class PotatoManeger {
 	private static NXTRegulatedMotor motorRodaDireita = Motor.B;
 	private static NXTRegulatedMotor motorRodaEsquerda = Motor.C;
 	private static NXTRegulatedMotor motorCabeca = Motor.A;
-	private static int distancia_paredeUltraSonico = 30;
+	private static int distancia_paredeUltraSonico = 25;
 	
 	public static ColorSensor sensorCor = new ColorSensor(SensorPort.S4);
 	public static UltrasonicSensor sensorUltrasonico = new UltrasonicSensor(SensorPort.S3);	
@@ -180,7 +180,6 @@ public class PotatoManeger {
 			
 		}	
 	
-	
 	public static void defineVelocidade(int velocidade) {
 		motorRodaDireita.setSpeed(velocidade);
 		motorRodaEsquerda.setSpeed(velocidade);
@@ -230,7 +229,7 @@ public class PotatoManeger {
 	public static Boolean encontrouParede() {
 		//sensorUltrasonico.capture();
 		if(sensorUltrasonico.getDistance()< distancia_paredeUltraSonico) {
-			System.out.println("EncontrouParede");
+			//System.out.println("EncontrouParede");
 			return true;
 		}else {
 			return false;
